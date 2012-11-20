@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6324FAF8-42AF-4C47-AE53-DD41B5F7D87A}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMDB.DataService.WindowsService", "MMDB.DataService.WindowsService\MMDB.DataService.WindowsService.csproj", "{F1AEA647-197C-4E2E-AB51-49DFCEA1FBAB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMDB.DataService.Data", "MMDB.DataService.Data\MMDB.DataService.Data.csproj", "{948C1F2B-7562-4F84-8521-4B151CF6AE6D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMDB.DataService.Data.Tests", "MMDB.DataService.Data.Tests\MMDB.DataService.Data.Tests.csproj", "{684AF4C7-8A83-4F4C-A29D-35122631AD18}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "git", "git", "{D852550D-981F-433A-866B-3D948C446DF3}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F1AEA647-197C-4E2E-AB51-49DFCEA1FBAB}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{F1AEA647-197C-4E2E-AB51-49DFCEA1FBAB}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{F1AEA647-197C-4E2E-AB51-49DFCEA1FBAB}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{F1AEA647-197C-4E2E-AB51-49DFCEA1FBAB}.Debug|x86.ActiveCfg = Debug|x86
+		{F1AEA647-197C-4E2E-AB51-49DFCEA1FBAB}.Debug|x86.Build.0 = Debug|x86
+		{F1AEA647-197C-4E2E-AB51-49DFCEA1FBAB}.Release|Any CPU.ActiveCfg = Release|x86
+		{F1AEA647-197C-4E2E-AB51-49DFCEA1FBAB}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{F1AEA647-197C-4E2E-AB51-49DFCEA1FBAB}.Release|Mixed Platforms.Build.0 = Release|x86
+		{F1AEA647-197C-4E2E-AB51-49DFCEA1FBAB}.Release|x86.ActiveCfg = Release|x86
+		{F1AEA647-197C-4E2E-AB51-49DFCEA1FBAB}.Release|x86.Build.0 = Release|x86
+		{948C1F2B-7562-4F84-8521-4B151CF6AE6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{948C1F2B-7562-4F84-8521-4B151CF6AE6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{948C1F2B-7562-4F84-8521-4B151CF6AE6D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{948C1F2B-7562-4F84-8521-4B151CF6AE6D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{948C1F2B-7562-4F84-8521-4B151CF6AE6D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{948C1F2B-7562-4F84-8521-4B151CF6AE6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{948C1F2B-7562-4F84-8521-4B151CF6AE6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{948C1F2B-7562-4F84-8521-4B151CF6AE6D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{948C1F2B-7562-4F84-8521-4B151CF6AE6D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{948C1F2B-7562-4F84-8521-4B151CF6AE6D}.Release|x86.ActiveCfg = Release|Any CPU
+		{684AF4C7-8A83-4F4C-A29D-35122631AD18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{684AF4C7-8A83-4F4C-A29D-35122631AD18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{684AF4C7-8A83-4F4C-A29D-35122631AD18}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{684AF4C7-8A83-4F4C-A29D-35122631AD18}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{684AF4C7-8A83-4F4C-A29D-35122631AD18}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{684AF4C7-8A83-4F4C-A29D-35122631AD18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{684AF4C7-8A83-4F4C-A29D-35122631AD18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{684AF4C7-8A83-4F4C-A29D-35122631AD18}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{684AF4C7-8A83-4F4C-A29D-35122631AD18}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{684AF4C7-8A83-4F4C-A29D-35122631AD18}.Release|x86.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
