@@ -109,7 +109,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="DataProvider\RavenServerProvider.cs" />
+    <Compile Include="Dto\JobDefinition.cs" />
+    <Compile Include="DataProvider\IRavenProvider.cs" />
+    <Compile Include="JobManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
