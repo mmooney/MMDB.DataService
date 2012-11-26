@@ -114,6 +114,7 @@
     <Compile Include="DataProvider\IRavenProvider.cs" />
     <Compile Include="JobManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScheduleManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

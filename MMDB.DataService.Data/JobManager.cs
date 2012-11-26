@@ -29,5 +29,9 @@ namespace MMDB.DataService.Data
 			this.DocumentSession.Store(item);
 			return item;
 		}
+		public List<JobDefinition> LoadJobList()
+		{
+			return this.DocumentSession.Query<JobDefinition>().ToList();
+		}
 	}
 }
