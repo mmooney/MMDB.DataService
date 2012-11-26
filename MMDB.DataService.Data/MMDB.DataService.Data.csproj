@@ -110,8 +110,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataProvider\RavenServerProvider.cs" />
+    <Compile Include="Dto\Enums.cs" />
+    <Compile Include="Dto\JobCronSchedule.cs" />
     <Compile Include="Dto\JobDefinition.cs" />
     <Compile Include="DataProvider\IRavenProvider.cs" />
+    <Compile Include="Dto\JobSchedule.cs" />
+    <Compile Include="Dto\JobSimpleSchedule.cs" />
     <Compile Include="JobManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduleManager.cs" />

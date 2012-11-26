@@ -17,14 +17,34 @@ namespace MMDB.DataService.Data
 			this.DocumentSession = documentSession;
 		}
 
-		public JobDefinition CreateJob(string jobName, string assemblyName, string className, string scheduleExpression)
+		public JobDefinition CreateSimpleJob(string jobName, string assemblyName, string className, int intervalMinutes, int delayStartMinutes)
+		{
+			var item = new JobDefinition
+			{
+				JobName = jobName,
+				AssemblyName = assemblyName,
+				ClassName = className,
+				Schedule = new JobSimpleSchedule
+				{
+					IntervalMinutes = intervalMinutes,
+					DelayStartMinutes = delayStartMinutes
+				}
+			};
+			this.DocumentSession.Store(item);
+			return item;
+		}
+
+		public JobDefinition CreateCronJob(string jobName, string assemblyName, string className, string cronScheduleExpression)
 		{
 			var item = new JobDefinition
 			{
 				JobName = jobName,
 				AssemblyName = assemblyName,
 				ClassName = className, 
-				ScheduleExpression = scheduleExpression
+				Schedule  = new JobCronSchedule
+				{
+					CronScheduleExpression = cronScheduleExpression
+				}
 			};
 			this.DocumentSession.Store(item);
 			return item;
@@ -33,5 +53,6 @@ namespace MMDB.DataService.Data
 		{
 			return this.DocumentSession.Query<JobDefinition>().ToList();
 		}
+
 	}
 }

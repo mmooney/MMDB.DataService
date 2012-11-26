@@ -11,6 +11,6 @@ namespace MMDB.DataService.Data.Dto
 		public string JobName { get; set; }
 		public string AssemblyName { get; set; }
 		public string ClassName { get; set; }
-		public string ScheduleExpression { get; set; }
+		public JobSchedule Schedule { get; set; }
 	}
 }
