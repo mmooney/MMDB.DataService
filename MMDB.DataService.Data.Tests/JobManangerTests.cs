@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using MMDB.DataService.Data.Dto;
+using MMDB.DataService.Data.Dto.Jobs;
 
 namespace MMDB.DataService.Data.Tests
 {

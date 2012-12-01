@@ -5,6 +5,7 @@ using System.Text;
 using MMDB.DataService.Data.DataProvider;
 using MMDB.DataService.Data.Dto;
 using Raven.Client;
+using MMDB.DataService.Data.Dto.Jobs;
 
 namespace MMDB.DataService.Data
 {

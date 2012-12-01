@@ -4,6 +4,10 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Raven.Client.Document;
+using System.Configuration;
+using Raven.Client;
+using MMDB.RavenDB.DynamicData;
 
 namespace MMDB.DataService.Web
 {
@@ -12,6 +16,8 @@ namespace MMDB.DataService.Web
 
 	public class MvcApplication : System.Web.HttpApplication
 	{
+		private IDocumentStore DocumentStore { get; set; }
+
 		public static void RegisterGlobalFilters(GlobalFilterCollection filters)
 		{
 			filters.Add(new HandleErrorAttribute());
@@ -35,6 +41,9 @@ namespace MMDB.DataService.Web
 
 			RegisterGlobalFilters(GlobalFilters.Filters);
 			RegisterRoutes(RouteTable.Routes);
+
+			this.DocumentStore = new DocumentStore() { Url=ConfigurationManager.AppSettings["RavenUrl"] };
+			RavenDataHandler.Register(this.DocumentStore, "admin", new RazorViewEngine());
 		}
 	}
 }
