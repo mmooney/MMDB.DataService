@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace MMDB.RavenDB.DynamicData
 {
-	public class RavenDataViewEngine : IViewEngine
-	{
-	}
+	//public class RavenDataViewEngine : IViewEngine
+	//{
+	//}
 }
