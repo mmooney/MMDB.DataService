@@ -1,0 +1,42 @@
+﻿@model IEnumerable<MMDB.DataService.Data.Dto.Jobs.JobDefinition>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            Job Name
+        </th>
+		<th>
+			Assembly/Class
+		</th>
+		<th>Schedule</th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.JobName)
+        </td>
+		<td>
+			@Html.DisplayFor(modelItem => item.AssemblyName) - @Html.DisplayFor(modelitem=>item.ClassName);
+		</td>
+		<td>
+			@Html.DisplayFor(modelItem => item.Schedule.DisplayValue); 
+		</td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

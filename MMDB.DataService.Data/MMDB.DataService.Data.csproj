@@ -109,8 +109,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyManager.cs" />
     <Compile Include="DataProvider\RavenServerProvider.cs" />
     <Compile Include="DataServiceLogger.cs" />
+    <Compile Include="Dto\Assemblies\AssemblyImportResult.cs" />
+    <Compile Include="Dto\Assemblies\JobAssembly.cs" />
     <Compile Include="Dto\Enums.cs" />
     <Compile Include="Dto\Jobs\JobCronSchedule.cs" />
     <Compile Include="Dto\Jobs\JobDefinition.cs" />
@@ -123,6 +126,7 @@
     <Compile Include="IDataServiceJob.cs" />
     <Compile Include="JobManager.cs" />
     <Compile Include="JobWrapper.cs" />
+    <Compile Include="JsonExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduleManager.cs" />
     <Compile Include="TypeLoader.cs" />
