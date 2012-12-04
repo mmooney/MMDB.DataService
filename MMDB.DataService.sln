@@ -17,7 +17,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "git", "git", "{D852550D-981F-433A-866B-3D948C446DF3}"
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
-		.gitignore = .gitignore
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMDB.DataService.Web", "MMDB.DataService.Web\MMDB.DataService.Web.csproj", "{920BFBC6-3E92-4D53-AC8D-29E72E9E0326}"
