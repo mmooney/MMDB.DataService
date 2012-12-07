@@ -7,7 +7,7 @@ namespace MMDB.DataService.Data
 {
 	public class ExceptionReporter
 	{
-		public void Exception(Exception err)
+		internal void Exception(Exception err, object dataObject = null)
 		{
 			throw new NotImplementedException();
 		}

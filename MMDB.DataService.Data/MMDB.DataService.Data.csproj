@@ -117,11 +117,13 @@
     <Compile Include="Dto\Assemblies\JobAssembly.cs" />
     <Compile Include="Dto\Enums.cs" />
     <Compile Include="Dto\Jobs\JobCronSchedule.cs" />
+    <Compile Include="Dto\Jobs\JobData.cs" />
     <Compile Include="Dto\Jobs\JobDefinition.cs" />
     <Compile Include="DataProvider\IRavenProvider.cs" />
     <Compile Include="Dto\Jobs\JobSchedule.cs" />
     <Compile Include="Dto\Jobs\JobSimpleSchedule.cs" />
-    <Compile Include="Dto\Logging\TraceMessage.cs" />
+    <Compile Include="Dto\Logging\Enums.cs" />
+    <Compile Include="Dto\Logging\ServiceMessage.cs" />
     <Compile Include="EventReporter.cs" />
     <Compile Include="ExceptionReporter.cs" />
     <Compile Include="IDataServiceJob.cs" />
