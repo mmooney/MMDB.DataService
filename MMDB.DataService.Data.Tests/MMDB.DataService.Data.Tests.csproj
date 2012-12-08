@@ -103,6 +103,8 @@
     <Compile Include="JobManangerTests.cs" />
     <Compile Include="EmbeddedRavenProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="X12\X12TestBase.cs" />
+    <Compile Include="X12\X12Verifier.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
