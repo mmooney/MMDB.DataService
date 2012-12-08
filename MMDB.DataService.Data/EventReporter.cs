@@ -26,6 +26,12 @@ namespace MMDB.DataService.Data
 			this.ExceptionReporter.Exception(err);
 		}
 
+		public void ExceptionForObject(Exception err, object dataObject)
+		{
+			this.Logger.Exception(err, dataObject);
+			this.ExceptionReporter.Exception(err, dataObject);
+		}
+
 		public void ExceptionForObject(string errorMessage, object dataObject)
 		{
 			var err = new Exception(errorMessage);
