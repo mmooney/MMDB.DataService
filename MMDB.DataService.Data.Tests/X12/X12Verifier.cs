@@ -8,7 +8,7 @@ namespace MMDB.DataService.Data.Tests.X12
 {
 	public class X12Verifier
 	{
-		private char[] LineSeperators { get; set; }
+		public char[] LineSeperators { get; set; }
 
 		public X12Verifier(params char[] lineSeperators)
 		{
@@ -18,7 +18,7 @@ namespace MMDB.DataService.Data.Tests.X12
 		public void VerifyLine(string expectedData, string actualData, string segmentID, IEnumerable<string> preceedingTags = null, int expectedOccurance = 0)
 		{
 			Assert.IsNotNullOrEmpty(actualData);
-			string[] arrLines = actualData.Split(this.LineSeperators);
+			string[] arrLines = actualData.Split(this.LineSeperators, StringSplitOptions.RemoveEmptyEntries);
 			Queue<string> preceedingQueue = new Queue<string>(preceedingTags ?? new string[] {});
 			int actualOccurances = 0;
 			foreach(string line in arrLines)
