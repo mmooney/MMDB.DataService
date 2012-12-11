@@ -25,4 +25,12 @@ namespace MMDB.DataService.Data.Dto
 		[EnumDisplayValue("Error")]
 		Error
 	}
+
+	public enum EnumSettingSource
+	{
+		AppSetting,
+		ConnectionString,
+		Database
+	}
+
 }
