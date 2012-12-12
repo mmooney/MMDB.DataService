@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MMDB.DataService.Data.Dto.Logging;
 
 namespace MMDB.DataService.Data
 {
@@ -15,38 +16,41 @@ namespace MMDB.DataService.Data
 			this.Logger = logger;
 		}
 
-		public void Trace(string message, params object[] args)
+		public ServiceMessage Trace(string message, params object[] args)
 		{
-			this.Logger.Trace(message, args);
+			return this.Logger.Trace(message, args);
 		}
 
-		public void Exception(Exception err)
+		public ServiceMessage Exception(Exception err)
 		{
-			this.Logger.Exception(err);
+			var returnValue = this.Logger.Exception(err);
 			this.ExceptionReporter.Exception(err);
+			return returnValue;
 		}
 
-		public void ExceptionForObject(Exception err, object dataObject)
+		public ServiceMessage ExceptionForObject(Exception err, object dataObject)
 		{
-			this.Logger.Exception(err, dataObject);
+			var returnValue = this.Logger.Exception(err, dataObject);
 			this.ExceptionReporter.Exception(err, dataObject);
+			return returnValue;
 		}
 
-		public void ExceptionForObject(string errorMessage, object dataObject)
+		public ServiceMessage ExceptionForObject(string errorMessage, object dataObject)
 		{
 			var err = new Exception(errorMessage);
-			this.Logger.Exception(err, dataObject);
+			var returnValue = this.Logger.Exception(err, dataObject);
 			this.ExceptionReporter.Exception(err, dataObject);
+			return returnValue;
 		}
 
-		public void InfoForObject(string message, object dataObject)
+		public ServiceMessage InfoForObject(string message, object dataObject)
 		{
-			this.Logger.InfoForObject(message, dataObject);
+			return this.Logger.InfoForObject(message, dataObject);
 		}
 
-		public void WarningForObject(string message, object dataObject)
+		public ServiceMessage WarningForObject(string message, object dataObject)
 		{
-			this.Logger.WarningForObject(message, dataObject);
+			return this.Logger.WarningForObject(message, dataObject);
 		}
 	}
 }

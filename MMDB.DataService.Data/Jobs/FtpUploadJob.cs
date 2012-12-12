@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MMDB.DataService.Data.Dto.Ftp;
 
 namespace MMDB.DataService.Data.Jobs
 {
-	public class FtpUploadJob : IDataServiceJob
+	public class FtpUploadJob : ProcessingJob<FtpOutboundData>
 	{
 		private FtpManager FtpManager { get; set; }
 		
@@ -14,21 +15,24 @@ namespace MMDB.DataService.Data.Jobs
 			this.FtpManager = ftpManager;
 		}
 
-		public void Run(Quartz.IJobExecutionContext context)
+		protected override FtpOutboundData GetNextItemToProcess()
 		{
-			bool done = false;
-			while(!done)
-			{
-				var jobItem = this.FtpManager.GetNextUploadItem();
-				if(jobItem == null)
-				{
-					done = true;
-				}
-				else 
-				{
-					this.FtpManager.UploadFile(jobItem);
-				}
-			}
+			return this.FtpManager.GetNextUploadItem();
+		}
+
+		protected override void ProcessItem(FtpOutboundData jobItem)
+		{
+			this.FtpManager.UploadFile(jobItem);
+		}
+
+		protected override void MarkItemSuccessful(FtpOutboundData jobItem)
+		{
+			this.FtpManager.MarkJobSuccessful(jobItem);
+		}
+
+		protected override void MarkItemFailed(FtpOutboundData jobData, Exception err)
+		{
+			this.FtpManager.MarkJobFailed(jobData, err);
 		}
 	}
 }

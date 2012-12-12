@@ -16,7 +16,7 @@ namespace MMDB.DataService.Data
 			this.DocumentSession = documentSession;
 		}
 
-		public void Trace(string message, object[] args)
+		public ServiceMessage Trace(string message, object[] args)
 		{
 			string formattedMessage;
 			if (args == null || args.Length == 0)
@@ -36,9 +36,10 @@ namespace MMDB.DataService.Data
 			};
 			this.DocumentSession.Store(traceMessage);
 			this.DocumentSession.SaveChanges();
+			return traceMessage;
 		}
 
-		public void InfoForObject(string message, object dataObject)
+		public ServiceMessage InfoForObject(string message, object dataObject)
 		{
 			var infoMessage = new ServiceMessage
 			{
@@ -50,9 +51,10 @@ namespace MMDB.DataService.Data
 			};
 			this.DocumentSession.Store(infoMessage);
 			this.DocumentSession.SaveChanges();
+			return infoMessage;
 		}
 
-		public void WarningForObject(string message, object dataObject)
+		public ServiceMessage WarningForObject(string message, object dataObject)
 		{
 			var warningMessage = new ServiceMessage
 			{
@@ -64,9 +66,10 @@ namespace MMDB.DataService.Data
 			};
 			this.DocumentSession.Store(warningMessage);
 			this.DocumentSession.SaveChanges();
+			return warningMessage;
 		}
 
-		public void Exception(Exception err, object dataObject = null)
+		public ServiceMessage Exception(Exception err, object dataObject = null)
 		{
 			var exceptionMessage = new ServiceMessage
 			{
@@ -78,6 +81,7 @@ namespace MMDB.DataService.Data
 			};
 			this.DocumentSession.Store(exceptionMessage);
 			this.DocumentSession.SaveChanges();
+			return exceptionMessage;
 		}
 
 	}

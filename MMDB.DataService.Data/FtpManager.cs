@@ -15,11 +15,13 @@ namespace MMDB.DataService.Data
 	{
 		private IDocumentSession DocumentSession { get; set; }
 		private SettingsManager SettingsManager { get; set; }
+		private EventReporter EventReporter { get; set; }
 
-		public FtpManager(IDocumentSession documentSession, SettingsManager settingsManager)
+		public FtpManager(IDocumentSession documentSession, SettingsManager settingsManager, EventReporter eventReporter)
 		{
 			this.DocumentSession = documentSession;
 			this.SettingsManager = settingsManager;
+			this.EventReporter = eventReporter;
 		}
 
 		public FtpOutboundData GetNextUploadItem()
@@ -84,6 +86,19 @@ namespace MMDB.DataService.Data
 				}
 				catch {}
 			}
+		}
+
+		public void MarkJobSuccessful(FtpOutboundData jobItem)
+		{
+			jobItem.Status = EnumJobStatus.Complete;
+			this.DocumentSession.SaveChanges();
+		}
+
+		public void MarkJobFailed(FtpOutboundData jobItem, Exception err)
+		{
+			var errorObject = this.EventReporter.ExceptionForObject(err, jobItem);
+			jobItem.Status = EnumJobStatus.Error;
+			jobItem.ExceptionIdList.Add(errorObject.Id);
 		}
 	}
 }

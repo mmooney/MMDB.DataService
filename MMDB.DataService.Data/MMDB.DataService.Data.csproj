@@ -100,6 +100,7 @@
     <Compile Include="IDataServiceJob.cs" />
     <Compile Include="JobManager.cs" />
     <Compile Include="Jobs\FtpUploadJob.cs" />
+    <Compile Include="Jobs\ProcessingJobBase.cs" />
     <Compile Include="JobWrapper.cs" />
     <Compile Include="JsonExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

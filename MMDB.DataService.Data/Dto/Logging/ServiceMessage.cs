@@ -7,6 +7,7 @@ namespace MMDB.DataService.Data.Dto.Logging
 {
 	public class ServiceMessage
 	{
+		public string Id { get; set; }
 		public EnumServiceMessageLevel Level { get; set; }
 		public DateTime MessageDateTimeUtc { get; set; }
 		public string Message { get; set; }

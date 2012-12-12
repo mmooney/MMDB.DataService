@@ -8,6 +8,6 @@ namespace MMDB.DataService.Data
 {
 	public interface IDataServiceJob
 	{
-		void Run(IJobExecutionContext context);
+		void Run();
 	}
 }

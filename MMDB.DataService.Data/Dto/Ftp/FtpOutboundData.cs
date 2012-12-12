@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MMDB.DataService.Data.Dto.Jobs;
 
 namespace MMDB.DataService.Data.Dto.Ftp
 {
-	public class FtpOutboundData
+	public class FtpOutboundData : JobData
 	{
-		public string Id { get; set; }
 		public EnumSettingSource SettingSource { get; set; }
 		public string SettingKey { get; set; }
-		//public string FtpUserName { get; set; }
-		//public string FtpPassword { get; set; }
-		//public string FtpHost { get; set; }
 		public string TargetDirectory { get; set; }
 		public string TargetFileName { get; set; }
 		public string AttachementId { get; set; }
