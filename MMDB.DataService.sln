@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMDB.DataService.Web", "MMD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMDB.RavenDB.DynamicData", "MMDB.RavenDB.DynamicData\MMDB.RavenDB.DynamicData.csproj", "{F7C0C907-571E-467A-A792-C84D33B9A989}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "X12Parser", "X12Parser", "{0D790769-2AD4-4F5F-957A-10516629AB5F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
