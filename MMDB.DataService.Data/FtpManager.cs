@@ -43,6 +43,34 @@ namespace MMDB.DataService.Data
 			return returnValue;
 		}
 
+		public FtpOutboundData QueueUploadItem(string fileData, string targetDirectory, string targetFileName, string ftpSettingsKey, EnumSettingSource ftpSettingsSource)
+		{
+			string attachmentID = Guid.NewGuid().ToString();
+			using(var stream = new MemoryStream())
+			{
+				using(var writer = new StreamWriter(stream))
+				{
+					writer.Write(fileData);
+					writer.Flush();
+					stream.Position = 0;
+					this.DocumentSession.Advanced.DatabaseCommands.PutAttachment(attachmentID, null, stream, new Raven.Json.Linq.RavenJObject());
+				}
+			}
+			var newItem = new FtpOutboundData
+			{
+				AttachementId = attachmentID,
+				QueuedDateTimeUtc = DateTime.UtcNow,
+				SettingKey = ftpSettingsKey,
+				SettingSource = ftpSettingsSource,
+				Status = EnumJobStatus.New,
+				TargetDirectory = targetDirectory,
+				TargetFileName = targetFileName
+			};
+			this.DocumentSession.Store(newItem);
+			this.DocumentSession.SaveChanges();
+			return newItem;
+		}
+
 		public void UploadFile(FtpOutboundData jobItem)
 		{
 			var settings = this.SettingsManager.Load<FtpSettings>(jobItem.SettingSource, jobItem.SettingKey);
@@ -50,13 +78,14 @@ namespace MMDB.DataService.Data
 			ftp.Connect();
 
 			string targetFilePath;
+			string targetFileName = jobItem.TargetFileName.Replace("/","_");
 			if(!string.IsNullOrEmpty(jobItem.TargetDirectory))
 			{
-				targetFilePath = jobItem.TargetDirectory + jobItem.TargetFileName;
+				targetFilePath = jobItem.TargetDirectory + targetFileName;
 			}
 			else 
 			{
-				targetFilePath = jobItem.TargetFileName;
+				targetFilePath = targetFileName;
 			}
 
 			string tempDirectory = Path.Combine(Path.GetTempPath(), "MMDB.DataService");
@@ -64,7 +93,7 @@ namespace MMDB.DataService.Data
 			{
 				Directory.CreateDirectory(tempDirectory);
 			}
-			string tempPath = Path.Combine(tempDirectory, Guid.NewGuid().ToString() + "." + jobItem.TargetFileName);
+			string tempPath = Path.Combine(tempDirectory, Guid.NewGuid().ToString() + "." + targetFileName);
 			try 
 			{
 				var attachment = this.DocumentSession.Advanced.DatabaseCommands.GetAttachment(jobItem.AttachementId);
