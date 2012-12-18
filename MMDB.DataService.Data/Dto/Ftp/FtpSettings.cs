@@ -10,5 +10,6 @@ namespace MMDB.DataService.Data.Dto.Ftp
 		public string FtpUserName { get; set; }
 		public string FtpPassword { get; set; }
 		public string FtpHost { get; set; }
+		public string DownloadDirectory { get; set; }
 	}
 }

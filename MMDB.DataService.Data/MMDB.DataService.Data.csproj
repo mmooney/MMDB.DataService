@@ -83,6 +83,8 @@
     <Compile Include="Dto\Assemblies\AssemblyImportResult.cs" />
     <Compile Include="Dto\Assemblies\JobAssembly.cs" />
     <Compile Include="Dto\Enums.cs" />
+    <Compile Include="Dto\Ftp\FtpDownloadMetadata.cs" />
+    <Compile Include="Dto\Ftp\FtpInboundData.cs" />
     <Compile Include="Dto\Ftp\FtpOutboundData.cs" />
     <Compile Include="Dto\Ftp\FtpSettings.cs" />
     <Compile Include="Dto\Jobs\JobCronSchedule.cs" />
@@ -99,8 +101,11 @@
     <Compile Include="FtpManager.cs" />
     <Compile Include="IDataServiceJob.cs" />
     <Compile Include="JobManager.cs" />
+    <Compile Include="Jobs\FtpDownloadJob.cs" />
+    <Compile Include="Jobs\FtpDownloadSettings.cs" />
     <Compile Include="Jobs\FtpUploadJob.cs" />
-    <Compile Include="Jobs\ProcessingJobBase.cs" />
+    <Compile Include="Jobs\ItemProcessingJobBase.cs" />
+    <Compile Include="Jobs\ListImportJobBase.cs" />
     <Compile Include="JobWrapper.cs" />
     <Compile Include="JsonExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

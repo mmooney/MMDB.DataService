@@ -8,6 +8,7 @@ using MMDB.DataService.Data.Dto;
 using System.Transactions;
 using Raven.Client;
 using System.IO;
+using MMDB.DataService.Data.Jobs;
 
 namespace MMDB.DataService.Data
 {
@@ -58,7 +59,7 @@ namespace MMDB.DataService.Data
 			}
 			var newItem = new FtpOutboundData
 			{
-				AttachementId = attachmentID,
+				AttachmentId = attachmentID,
 				QueuedDateTimeUtc = DateTime.UtcNow,
 				SettingKey = ftpSettingsKey,
 				SettingSource = ftpSettingsSource,
@@ -69,6 +70,79 @@ namespace MMDB.DataService.Data
 			this.DocumentSession.Store(newItem);
 			this.DocumentSession.SaveChanges();
 			return newItem;
+		}
+
+		public List<FtpDownloadMetadata> GetAvailableDownloadList(FtpDownloadSettings ftpDownloadSettings)
+		{
+			var settings = this.SettingsManager.Load<FtpSettings>(ftpDownloadSettings.SettingSource, ftpDownloadSettings.SettingKey);
+			Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
+			ftp.Connect();
+
+			var list = ftp.GetFileList(ftpDownloadSettings.DownloadDirectory);
+			var returnList = new List<FtpDownloadMetadata>();
+			foreach(string fileName in list)
+			{
+				var newItem =new FtpDownloadMetadata
+				{
+					Directory = ftpDownloadSettings.DownloadDirectory,
+					FileName = fileName
+				};
+				returnList.Add(newItem);
+			}
+			return returnList;
+		}
+
+		public string DownloadFile(FtpDownloadMetadata item, FtpDownloadSettings ftpDownloadSettings)
+		{
+			var settings = this.SettingsManager.Load<FtpSettings>(ftpDownloadSettings.SettingSource, ftpDownloadSettings.SettingKey);
+			Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
+			ftp.Connect();
+
+			string ftpFilePath;
+			if (!string.IsNullOrEmpty(item.Directory))
+			{
+				if(item.Directory.EndsWith("/"))
+				{
+					ftpFilePath = item.Directory + item.FileName;
+				}
+				else 
+				{
+					ftpFilePath = item.Directory + "/" + item.FileName;
+				}
+			}
+			else
+			{
+				ftpFilePath = item.FileName;
+			}
+
+			string tempDirectory = Path.Combine(Path.GetTempPath(), "MMDB.DataService");
+			if (!Directory.Exists(tempDirectory))
+			{
+				Directory.CreateDirectory(tempDirectory);
+			}
+			string tempPath = Path.Combine(tempDirectory, Guid.NewGuid().ToString() + "." + item.FileName);
+			try
+			{
+				ftp.Get(ftpFilePath, tempPath);
+				string attachmentID = Guid.NewGuid().ToString();
+				using(FileStream stream = new FileStream(tempPath, FileMode.Open))
+				{
+					this.DocumentSession.Advanced.DatabaseCommands.PutAttachment(attachmentID, null, stream, new Raven.Json.Linq.RavenJObject());
+				}
+				return attachmentID;
+			}
+			finally
+			{
+				try
+				{
+					if (File.Exists(tempPath))
+					{
+						File.Delete(tempPath);
+						tempPath = null;
+					}
+				}
+				catch { }
+			}
 		}
 
 		public void UploadFile(FtpOutboundData jobItem)
@@ -96,7 +170,7 @@ namespace MMDB.DataService.Data
 			string tempPath = Path.Combine(tempDirectory, Guid.NewGuid().ToString() + "." + targetFileName);
 			try 
 			{
-				var attachment = this.DocumentSession.Advanced.DatabaseCommands.GetAttachment(jobItem.AttachementId);
+				var attachment = this.DocumentSession.Advanced.DatabaseCommands.GetAttachment(jobItem.AttachmentId);
 				using (var fileStream = File.Create(tempPath))
 				{
 					attachment.Data().CopyTo(fileStream);

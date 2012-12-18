@@ -9,6 +9,7 @@ namespace MMDB.DataService.Data.Dto.Jobs
 	{
 		public string Id { get; set; }
 		public List<string> ExceptionIdList { get; set; }
+		public EnumJobStatus Status { get; set; }
 
 		public JobData()
 		{

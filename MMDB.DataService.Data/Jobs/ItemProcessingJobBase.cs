@@ -6,7 +6,7 @@ using MMDB.DataService.Data.Dto.Jobs;
 
 namespace MMDB.DataService.Data.Jobs
 {
-	public abstract class ProcessingJob<T>: IDataServiceJob where T:JobData
+	public abstract class ItemProcessingJob<T>: IDataServiceJob where T:JobData
 	{
 		public void Run()
 		{

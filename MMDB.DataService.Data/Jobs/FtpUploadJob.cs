@@ -6,7 +6,7 @@ using MMDB.DataService.Data.Dto.Ftp;
 
 namespace MMDB.DataService.Data.Jobs
 {
-	public class FtpUploadJob : ProcessingJob<FtpOutboundData>
+	public class FtpUploadJob : ItemProcessingJob<FtpOutboundData>
 	{
 		private FtpManager FtpManager { get; set; }
 		
