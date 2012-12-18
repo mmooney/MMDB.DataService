@@ -78,11 +78,31 @@ namespace MMDB.DataService.Data
 			Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
 			ftp.Connect();
 
-			var list = ftp.GetFileList(ftpDownloadSettings.DownloadDirectory);
+			string path;
+			if(string.IsNullOrEmpty(ftpDownloadSettings.DownloadDirectory))
+			{
+				path = ftpDownloadSettings.FilePattern;
+			}
+			else if(string.IsNullOrEmpty(ftpDownloadSettings.FilePattern))
+			{
+				path = ftpDownloadSettings.DownloadDirectory;
+			}
+			else 
+			{
+				if(ftpDownloadSettings.DownloadDirectory.EndsWith("/"))
+				{
+					path = ftpDownloadSettings.DownloadDirectory + ftpDownloadSettings.FilePattern;
+				}
+				else 
+				{
+					path = ftpDownloadSettings.DownloadDirectory + "/" + ftpDownloadSettings.FilePattern;
+				}
+			}
+			var list = ftp.GetFileList(path);
 			var returnList = new List<FtpDownloadMetadata>();
 			foreach(string fileName in list)
 			{
-				var newItem =new FtpDownloadMetadata
+				var newItem = new FtpDownloadMetadata
 				{
 					Directory = ftpDownloadSettings.DownloadDirectory,
 					FileName = fileName

@@ -24,7 +24,6 @@ namespace MMDB.DataService.Data.Jobs
 		protected override FtpInboundData TryCreateJobData(FtpDownloadMetadata item, out bool jobAlreadyExisted)
 		{
 			FtpInboundData returnValue;
-			bool download = false;
 			using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
 			{
 				returnValue = this.DocumentSession.Query<FtpInboundData>()
