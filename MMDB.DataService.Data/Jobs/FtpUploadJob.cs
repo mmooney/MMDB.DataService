@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MMDB.DataService.Data.Dto.Ftp;
+using Raven.Client;
 
 namespace MMDB.DataService.Data.Jobs
 {
@@ -10,7 +11,7 @@ namespace MMDB.DataService.Data.Jobs
 	{
 		private FtpManager FtpManager { get; set; }
 		
-		public FtpUploadJob(FtpManager ftpManager)
+		public FtpUploadJob(FtpManager ftpManager, IDocumentSession documentSession, EventReporter eventReporter) : base(documentSession, eventReporter)
 		{
 			this.FtpManager = ftpManager;
 		}
@@ -23,16 +24,6 @@ namespace MMDB.DataService.Data.Jobs
 		protected override void ProcessItem(FtpOutboundData jobItem)
 		{
 			this.FtpManager.UploadFile(jobItem);
-		}
-
-		protected override void MarkItemSuccessful(FtpOutboundData jobItem)
-		{
-			this.FtpManager.MarkJobSuccessful(jobItem);
-		}
-
-		protected override void MarkItemFailed(FtpOutboundData jobData, Exception err)
-		{
-			this.FtpManager.MarkJobFailed(jobData, err);
 		}
 	}
 }

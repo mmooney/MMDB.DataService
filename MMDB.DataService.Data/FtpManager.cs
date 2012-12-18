@@ -211,17 +211,5 @@ namespace MMDB.DataService.Data
 			}
 		}
 
-		public void MarkJobSuccessful(FtpOutboundData jobItem)
-		{
-			jobItem.Status = EnumJobStatus.Complete;
-			this.DocumentSession.SaveChanges();
-		}
-
-		public void MarkJobFailed(FtpOutboundData jobItem, Exception err)
-		{
-			var errorObject = this.EventReporter.ExceptionForObject(err, jobItem);
-			jobItem.Status = EnumJobStatus.Error;
-			jobItem.ExceptionIdList.Add(errorObject.Id);
-		}
 	}
 }

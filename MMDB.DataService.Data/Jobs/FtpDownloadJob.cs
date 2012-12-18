@@ -35,6 +35,7 @@ namespace MMDB.DataService.Data.Jobs
 					{
 						Directory = item.Directory,
 						FileName = item.FileName,
+						QueuedDateTimeUtc = DateTime.UtcNow,
 						AttachmentId = this.FtpManager.DownloadFile(item, this.FtpDownloadSettings)
 					};
 					jobAlreadyExisted = false;
