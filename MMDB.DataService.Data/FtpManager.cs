@@ -33,7 +33,7 @@ namespace MMDB.DataService.Data
 				returnValue = this.DocumentSession.Query<FtpOutboundData>()
 													.Customize(i => i.WaitForNonStaleResultsAsOfNow())
 													.OrderByDescending(i => i.QueuedDateTimeUtc)
-													.SingleOrDefault(i => i.Status == EnumJobStatus.New);
+													.FirstOrDefault(i => i.Status == EnumJobStatus.New);
 				if(returnValue != null)
 				{
 					returnValue.Status = EnumJobStatus.InProcess;
@@ -78,36 +78,50 @@ namespace MMDB.DataService.Data
 			Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
 			ftp.Connect();
 
-			string path;
-			if(string.IsNullOrEmpty(ftpDownloadSettings.DownloadDirectory))
+			var patternList = new List<string>();
+			if(ftpDownloadSettings.FilePatternList == null || ftpDownloadSettings.FilePatternList.Count == 0)
 			{
-				path = ftpDownloadSettings.FilePattern;
-			}
-			else if(string.IsNullOrEmpty(ftpDownloadSettings.FilePattern))
-			{
-				path = ftpDownloadSettings.DownloadDirectory;
-			}
-			else 
-			{
-				if(ftpDownloadSettings.DownloadDirectory.EndsWith("/"))
+				if (string.IsNullOrEmpty(ftpDownloadSettings.DownloadDirectory))
 				{
-					path = ftpDownloadSettings.DownloadDirectory + ftpDownloadSettings.FilePattern;
+					patternList.Add("*.*");
+				}
+				else if (ftpDownloadSettings.DownloadDirectory.EndsWith("/"))
+				{
+					patternList.Add(ftpDownloadSettings.DownloadDirectory + "*.*");
+				}
+				else
+				{
+					patternList.Add(ftpDownloadSettings.DownloadDirectory + "/*.*");
+				}
+			}
+			foreach(var pattern in ftpDownloadSettings.FilePatternList)
+			{
+				if(string.IsNullOrEmpty(ftpDownloadSettings.DownloadDirectory))
+				{
+					patternList.Add("*." + pattern);
+				}
+				else if(ftpDownloadSettings.DownloadDirectory.EndsWith("/"))
+				{
+					patternList.Add(ftpDownloadSettings.DownloadDirectory + "*" + pattern);
 				}
 				else 
 				{
-					path = ftpDownloadSettings.DownloadDirectory + "/" + ftpDownloadSettings.FilePattern;
+					patternList.Add(ftpDownloadSettings.DownloadDirectory + "/*" + pattern);
 				}
 			}
-			var list = ftp.GetFileList(path);
 			var returnList = new List<FtpDownloadMetadata>();
-			foreach(string fileName in list)
+			foreach (var path in patternList)
 			{
-				var newItem = new FtpDownloadMetadata
+				var list = ftp.GetFileList(path);
+				foreach (string fileName in list)
 				{
-					Directory = ftpDownloadSettings.DownloadDirectory,
-					FileName = fileName
-				};
-				returnList.Add(newItem);
+					var newItem = new FtpDownloadMetadata
+					{
+						Directory = ftpDownloadSettings.DownloadDirectory,
+						FileName = fileName
+					};
+					returnList.Add(newItem);
+				}
 			}
 			return returnList;
 		}

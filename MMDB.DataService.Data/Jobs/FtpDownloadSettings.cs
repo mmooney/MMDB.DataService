@@ -11,6 +11,6 @@ namespace MMDB.DataService.Data.Jobs
 		public EnumSettingSource SettingSource { get; set; }
 		public string SettingKey { get; set; }
 		public string DownloadDirectory { get; set; }
-		public string FilePattern { get; set; }
+		public List<string> FilePatternList { get; set; }
 	}
 }
