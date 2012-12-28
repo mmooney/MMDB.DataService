@@ -1,0 +1,3 @@
+[submodule "MvcMailer"]
+	path = MvcMailer
+	url = https://github.com/mmooney/MvcMailer.git
