@@ -6,8 +6,8 @@ using Quartz;
 
 namespace MMDB.DataService.Data
 {
-	public interface IDataServiceJob : IJob
+	public interface IDataServiceJob
 	{
-		void Run(IJobExecutionContext context);
+		void Run();
 	}
 }

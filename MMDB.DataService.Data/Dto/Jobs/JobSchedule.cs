@@ -7,6 +7,6 @@ namespace MMDB.DataService.Data.Dto.Jobs
 {
 	public abstract class JobSchedule
 	{
-		public abstract JobScheduleType ScheduleType { get; }
+		public abstract string DisplayValue { get; }
 	}
 }

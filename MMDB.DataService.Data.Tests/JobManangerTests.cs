@@ -30,7 +30,6 @@ namespace MMDB.DataService.Data.Tests
 				Assert.AreEqual(jobName, dbItem.JobName);
 				Assert.AreEqual(assemblyName, dbItem.AssemblyName);
 				Assert.AreEqual(className, dbItem.ClassName);
-				Assert.AreEqual(JobScheduleType.Cron, dbItem.Schedule.ScheduleType);
 				Assert.IsInstanceOf<JobCronSchedule>(dbItem.Schedule);
 				Assert.AreEqual(scheduleExpression, ((JobCronSchedule)dbItem.Schedule).CronScheduleExpression);
 
@@ -60,7 +59,6 @@ namespace MMDB.DataService.Data.Tests
 				Assert.AreEqual(jobName, dbItem.JobName);
 				Assert.AreEqual(assemblyName, dbItem.AssemblyName);
 				Assert.AreEqual(className, dbItem.ClassName);
-				Assert.AreEqual(JobScheduleType.Simple, dbItem.Schedule.ScheduleType);
 				Assert.IsInstanceOf<JobSimpleSchedule>(dbItem.Schedule);
 				Assert.AreEqual(intervalMinutes, ((JobSimpleSchedule)dbItem.Schedule).IntervalMinutes);
 				Assert.AreEqual(delayStartMinutes, ((JobSimpleSchedule)dbItem.Schedule).DelayStartMinutes);

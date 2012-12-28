@@ -7,9 +7,12 @@ namespace MMDB.DataService.Data.Dto.Jobs
 {
 	public class JobCronSchedule : JobSchedule
 	{
-		public override JobScheduleType ScheduleType
+		public override string DisplayValue
 		{
-			get { return JobScheduleType.Cron; }
+			get
+			{
+				return "Cron Job: " + this.CronScheduleExpression;
+			}
 		}
 
 		public string CronScheduleExpression { get; set; }

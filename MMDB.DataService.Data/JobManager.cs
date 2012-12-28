@@ -6,6 +6,7 @@ using MMDB.DataService.Data.DataProvider;
 using MMDB.DataService.Data.Dto;
 using Raven.Client;
 using MMDB.DataService.Data.Dto.Jobs;
+using MMDB.DataService.Data.Dto.Assemblies;
 
 namespace MMDB.DataService.Data
 {
@@ -55,5 +56,10 @@ namespace MMDB.DataService.Data
 			return this.DocumentSession.Query<JobDefinition>().ToList();
 		}
 
+
+		public List<JobAssembly> LoadAssemblyList()
+		{
+			return this.DocumentSession.Query<JobAssembly>().ToList();
+		}
 	}
 }

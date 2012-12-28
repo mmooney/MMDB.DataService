@@ -43,7 +43,7 @@ namespace MMDB.DataService.Web
 			RegisterRoutes(RouteTable.Routes);
 
 			this.DocumentStore = new DocumentStore() { Url=ConfigurationManager.AppSettings["RavenUrl"] };
-			RavenDataHandler.Register(this.DocumentStore, "admin", new RazorViewEngine());
+			//RavenDataHandler.Register(this.DocumentStore, "admin", new RazorViewEngine());
 		}
 	}
 }

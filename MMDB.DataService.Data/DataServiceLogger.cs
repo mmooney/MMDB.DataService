@@ -16,7 +16,7 @@ namespace MMDB.DataService.Data
 			this.DocumentSession = documentSession;
 		}
 
-		public void Trace(string message, object[] args)
+		public ServiceMessage Trace(string message, object[] args)
 		{
 			string formattedMessage;
 			if (args == null || args.Length == 0)
@@ -27,20 +27,62 @@ namespace MMDB.DataService.Data
 			{
 				formattedMessage = string.Format(message, args);
 			}
-			var traceMessage = new TraceMessage
+			var traceMessage = new ServiceMessage
 			{
+				Level = EnumServiceMessageLevel.Trace,
 				Message = message,
 				Detail = message,
 				MessageDateTimeUtc = DateTime.UtcNow
 			};
 			this.DocumentSession.Store(traceMessage);
 			this.DocumentSession.SaveChanges();
+			return traceMessage;
 		}
 
-		public void Exception(Exception err)
+		public ServiceMessage InfoForObject(string message, object dataObject)
 		{
-			this.DocumentSession.Store(err);
+			var infoMessage = new ServiceMessage
+			{
+				Level = EnumServiceMessageLevel.Info,
+				Message = message,
+				Detail = message,
+				MessageDateTimeUtc = DateTime.UtcNow,
+				DataObject = dataObject
+			};
+			this.DocumentSession.Store(infoMessage);
 			this.DocumentSession.SaveChanges();
+			return infoMessage;
 		}
+
+		public ServiceMessage WarningForObject(string message, object dataObject)
+		{
+			var warningMessage = new ServiceMessage
+			{
+				Level = EnumServiceMessageLevel.Warning,
+				Message = message,
+				Detail = message,
+				MessageDateTimeUtc = DateTime.UtcNow,
+				DataObject = dataObject
+			};
+			this.DocumentSession.Store(warningMessage);
+			this.DocumentSession.SaveChanges();
+			return warningMessage;
+		}
+
+		public ServiceMessage Exception(Exception err, object dataObject = null)
+		{
+			var exceptionMessage = new ServiceMessage
+			{
+				Level = EnumServiceMessageLevel.Error,
+				Message = err.Message,
+				Detail = err.ToString(),
+				MessageDateTimeUtc = DateTime.UtcNow,
+				DataObject = dataObject
+			};
+			this.DocumentSession.Store(exceptionMessage);
+			this.DocumentSession.SaveChanges();
+			return exceptionMessage;
+		}
+
 	}
 }

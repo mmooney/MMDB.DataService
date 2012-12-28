@@ -22,7 +22,7 @@ namespace MMDB.DataService.Data
 			this.EventReporter.Trace("Starting Job " + context.JobDetail.Description);
 			try 
 			{
-				this.DataServiceJob.Run(context);
+				this.DataServiceJob.Run();
 			}
 			catch(Exception err)
 			{

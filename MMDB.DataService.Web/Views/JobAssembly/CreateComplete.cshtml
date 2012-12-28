@@ -1,0 +1,22 @@
+﻿@model MMDB.DataService.Data.Dto.Assemblies.AssemblyImportResult
+
+@{
+    ViewBag.Title = "CreateComplete";
+}
+
+<h2>Assebly Create Complete</h2>
+@if(Model.Success)
+{
+	<p>
+		Success!
+	</p>
+}
+else
+{
+		<p>
+			Failed!
+		</p>
+		<p>
+			@Model.ErrorMessage
+		</p>
+}
