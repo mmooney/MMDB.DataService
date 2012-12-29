@@ -102,11 +102,11 @@ namespace MMDB.DataService.Data
 				}
 				else if(ftpDownloadSettings.DownloadDirectory.EndsWith("/"))
 				{
-					patternList.Add(ftpDownloadSettings.DownloadDirectory + "*" + pattern);
+					patternList.Add(ftpDownloadSettings.DownloadDirectory + pattern);
 				}
 				else 
 				{
-					patternList.Add(ftpDownloadSettings.DownloadDirectory + "/*" + pattern);
+					patternList.Add(ftpDownloadSettings.DownloadDirectory + "/" + pattern);
 				}
 			}
 			var returnList = new List<FtpDownloadMetadata>();

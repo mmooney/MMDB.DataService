@@ -21,6 +21,7 @@ namespace MMDB.DataEmail
 		public void SendEmail<T>(string subject, T model, string razorView, IEnumerable<MailAddress> toAddressList, MailAddress fromAddress)
 		{
 			this.RazorEngine.AddAssemblyFromType(typeof(T));
+			throw new Exception("WHY IS THIS RETURNING NULL");
 			string body = this.RazorEngine.RenderTemplate(razorView, model);
 
 			this.EmailSender.SendEmail(subject, body, toAddressList, fromAddress);
