@@ -31,6 +31,7 @@ namespace MMDB.DataService.Data
 			{
 				this.StartJob(jobDefinition);
 			}
+			this.Scheduler.Start();
 		}
 
 		private void StartJob(JobDefinition jobDefinition)
@@ -38,7 +39,8 @@ namespace MMDB.DataService.Data
 			this.EventReporter.Trace("Creating " + jobDefinition.JobName);
 			var jobAssembly = Assembly.LoadFrom(jobDefinition.AssemblyName);
 			var jobType = jobAssembly.GetType(jobDefinition.ClassName);
-			var jobDetail = new JobDetailImpl(jobDefinition.JobName, jobType);
+			var wrapperType = typeof(JobWrapper<>).MakeGenericType(jobType);
+			var jobDetail = new JobDetailImpl(jobDefinition.JobName, wrapperType);
 
 			if(jobDefinition.Schedule is JobSimpleSchedule)
 			{
@@ -73,6 +75,7 @@ namespace MMDB.DataService.Data
 				}
 			};
 			this.DocumentSession.Store(item);
+			this.DocumentSession.SaveChanges();
 			return item;
 		}
 
@@ -89,6 +92,7 @@ namespace MMDB.DataService.Data
 				}
 			};
 			this.DocumentSession.Store(item);
+			this.DocumentSession.SaveChanges();
 			return item;
 		}
 		public List<JobDefinition> LoadJobList()
@@ -102,5 +106,41 @@ namespace MMDB.DataService.Data
 			return this.DocumentSession.Query<JobAssembly>().ToList();
 		}
 
+
+		public JobDefinition LoadJob(int id)
+		{
+			return this.DocumentSession.Load<JobDefinition>(id);
+		}
+
+		public void UpdateSimpleJob(int id, string jobName, string assemblyName, string className, int intervalMinutes, int delayStartMinutes)
+		{
+			var item = this.LoadJob(id);
+			item.JobName = jobName;
+			item.AssemblyName = assemblyName;
+			item.ClassName = className;
+			var schedule = item.Schedule as JobSimpleSchedule;
+			if(schedule == null)
+			{
+				item.Schedule = schedule = new JobSimpleSchedule();
+			}
+			schedule.IntervalMinutes = intervalMinutes;
+			schedule.DelayStartMinutes = delayStartMinutes;
+			this.DocumentSession.SaveChanges();
+		}
+
+		public void UpdateCronJob(int id, string jobName, string assemblyName, string className, string cronScheduleExpression)
+		{
+			var item = this.LoadJob(id);
+			item.JobName = jobName;
+			item.AssemblyName = assemblyName;
+			item.ClassName = className;
+			var schedule = item.Schedule as JobCronSchedule;
+			if (schedule == null)
+			{
+				item.Schedule = schedule = new JobCronSchedule();
+			}
+			schedule.CronScheduleExpression = cronScheduleExpression;
+			this.DocumentSession.SaveChanges();
+		}
 	}
 }

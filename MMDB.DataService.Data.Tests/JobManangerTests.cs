@@ -25,7 +25,7 @@ namespace MMDB.DataService.Data.Tests
 			
 				var result = sut.CreateCronJob(jobName, assemblyName, className, scheduleExpression);
 				Assert.IsNotNull(result);
-				Assert.IsNotNullOrEmpty(result.Id);
+				Assert.AreNotEqual(0, result.Id);
 				
 				var dbItem = session.Load<JobDefinition>(result.Id);
 				Assert.IsNotNull(dbItem);
@@ -54,7 +54,7 @@ namespace MMDB.DataService.Data.Tests
 
 				var result = sut.CreateSimpleJob(jobName, assemblyName, className, intervalMinutes, delayStartMinutes);
 				Assert.IsNotNull(result);
-				Assert.IsNotNullOrEmpty(result.Id);
+				Assert.AreNotEqual(0, result.Id);
 
 				var dbItem = session.Load<JobDefinition>(result.Id);
 				Assert.IsNotNull(dbItem);
