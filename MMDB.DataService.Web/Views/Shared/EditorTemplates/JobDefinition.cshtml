@@ -1,0 +1,101 @@
+﻿@using MMDB.DataService.Data.Dto.Jobs
+@model JobDefinition
+
+<script type="text/javascript" language="javascript">
+	$(document).ready(function () {
+		$("input[name='Schedule']").change(function () {
+			var value = $(this).val();
+			if (value == "Simple") {
+				$("#divSimpleOptions").slideDown();
+				$("#divCronOptions").slideUp();
+			}
+			else if (value == "CRON") {
+				$("#divSimpleOptions").slideUp();
+				$("#divCronOptions").slideDown();
+			}
+		});
+		$("#divCronOptions").hide();
+	});
+</script>
+
+@Html.HiddenFor(model=>model.Id)
+    <fieldset>
+        <legend>JobDefinition</legend>
+
+        <div class="editor-label">
+			Job Name:
+        </div>
+        <div class="editor-field">
+			@Html.TextBoxFor(model=>model.JobName)
+        </div>
+
+        <div class="editor-label">
+			Assembly:
+        </div>
+		<div class="editor-field">
+			@Html.TextBoxFor(model=>model.AssemblyName)
+		</div>
+
+		<div class="editor-label">
+			Class Name:
+		</div>
+		<div class="edit-field">
+			@Html.TextBoxFor(model=>model.ClassName)
+		</div>
+
+		<div>
+			<fieldset>
+				<legend>Schedule</legend>
+					<div>
+						@Html.RadioButton("Schedule","Simple", true) Simple
+						<div id="divSimpleOptions" style="padding-left:40px">
+							<div class="editor-label">
+								Interval Minutes:
+							</div>
+							<div class="editor-field">
+								@if(Model.Schedule is JobSimpleSchedule)
+								{
+									@Html.TextBoxFor(model => ((JobSimpleSchedule)model.Schedule).IntervalMinutes)
+								}
+								else 
+								{
+									@Html.TextBoxFor(model => new JobSimpleSchedule().IntervalMinutes)
+								}
+							</div>
+
+							<div class="editor-label">
+								Delay Start Minutes:
+							</div>
+							<div class="editor-field">
+								@if(Model.Schedule is JobSimpleSchedule)
+								{
+									@Html.TextBoxFor(model => ((JobSimpleSchedule)model.Schedule).DelayStartMinutes)
+								}
+								else 
+								{
+									@Html.TextBoxFor(model => new JobSimpleSchedule().DelayStartMinutes)
+								}
+							</div>
+						</div>
+					</div>
+					<div>
+						@Html.RadioButton("Schedule","CRON", false) CRON
+						<div id="divCronOptions" style="padding-left:40px">
+							<div class="editor-label">
+								CRON Schedule Expression:
+							</div>
+							<div class="editor-field">
+								@if(Model.Schedule is JobCronSchedule)
+								{
+									@Html.TextBoxFor(model => ((JobCronSchedule)model.Schedule).CronScheduleExpression)
+								}
+								else 
+								{
+									@Html.TextBoxFor(model => new JobCronSchedule().CronScheduleExpression)
+								}
+							</div>
+						</div>
+					</div>
+			</fieldset>
+		</div>
+    </fieldset>

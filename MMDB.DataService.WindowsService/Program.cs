@@ -23,7 +23,7 @@ namespace MMDB.DataService.WindowsService
 			NinjectBootstrapper.Kernel.Bind<IDocumentStore>().ToMethod(CreateDocumentStore).InSingletonScope();
 			NinjectBootstrapper.Kernel.Bind<IDocumentSession>().ToMethod(c=>c.Kernel.Get<IDocumentStore>().OpenSession()).InTransientScope();
 			NinjectBootstrapper.Kernel.Bind<ISchedulerFactory>().To<StdSchedulerFactory>();
-			NinjectBootstrapper.Kernel.Bind<IScheduler>().ToMethod(c=>c.Kernel.Get<ISchedulerFactory>().GetScheduler());
+			NinjectBootstrapper.Kernel.Bind<IScheduler>().ToMethod(CreateScheduler).InSingletonScope();
 
 			if (args.Length > 0 && args[0].ToLower() == "/debug")
 			{
@@ -49,6 +49,14 @@ namespace MMDB.DataService.WindowsService
 			};
 			store.Initialize();
 			return store;
+		}
+
+		public static IScheduler CreateScheduler(IContext context)
+		{
+			var schedulerFactory = context.Kernel.Get<ISchedulerFactory>();
+			var scheduler = schedulerFactory.GetScheduler();
+			scheduler.JobFactory = context.Kernel.Get<NinjectJobFactory>();
+			return scheduler;
 		}
 	}
 }
