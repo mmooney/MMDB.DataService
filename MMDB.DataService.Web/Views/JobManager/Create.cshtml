@@ -1,4 +1,4 @@
-﻿@model MMDB.DataService.Web.Models.CreateJobDefinitionViewModel
+﻿@model MMDB.DataService.Data.Dto.Jobs.JobDefinition
 
 @{
     ViewBag.Title = "Create";
@@ -9,9 +9,20 @@
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
 <script type="text/javascript" language="javascript">
-	var CreateJob = {
-		AssemblyJson = "@Model.ToJson()";
-	};
+	$(document).ready(function () {
+		$("input[name='Schedule']").change(function () {
+			var value = $(this).val();
+			if (value == "Simple") {
+				$("#divSimpleOptions").slideDown();
+				$("#divCronOptions").slideUp();
+			}
+			else if (value == "CRON") {
+				$("#divSimpleOptions").slideUp();
+				$("#divCronOptions").slideDown();
+			}
+		});
+		$("#divCronOptions").hide();
+	});
 </script>
 @using (Html.BeginForm()) {
     @Html.ValidationSummary(true)
@@ -22,15 +33,61 @@
 			Job Name:
         </div>
         <div class="editor-field">
-			@Html.TextBox("JobName")
+			@Html.TextBoxFor(model=>model.JobName)
         </div>
 
         <div class="editor-label">
 			Assembly:
         </div>
-        <div class="editor-field">
+		<div class="editor-field">
+			@Html.TextBoxFor(model=>model.AssemblyName)
+		</div>
+
+		<div class="editor-label">
+			Class Name:
+		</div>
+		<div class="edit-field">
+			@Html.TextBoxFor(model=>model.ClassName)
+		</div>
+
+		<div>
+			<fieldset>
+				<legend>Schedule</legend>
+					<div>
+						@Html.RadioButton("Schedule","Simple", true) Simple
+						<div id="divSimpleOptions" style="padding-left:40px">
+							<div class="editor-label">
+								Interval Minutes:
+							</div>
+							<div class="editor-field">
+								@Html.TextBoxFor(model=>((MMDB.DataService.Data.Dto.Jobs.JobSimpleSchedule)model.Schedule).IntervalMinutes)
+							</div>
+
+							<div class="editor-label">
+								Delay Start Minutes:
+							</div>
+							<div class="editor-field">
+								@Html.TextBoxFor(model=>((MMDB.DataService.Data.Dto.Jobs.JobSimpleSchedule)model.Schedule).DelayStartMinutes)
+							</div>
+						</div>
+					</div>
+					<div>
+						@Html.RadioButton("Schedule","CRON", false) CRON
+						<div id="divCronOptions" style="padding-left:40px">
+							<div class="editor-label">
+								CRON Schedule Expression:
+							</div>
+							<div class="editor-field">
+								@Html.TextBoxFor(model=>((MMDB.DataService.Data.Dto.Jobs.JobCronSchedule)model.Schedule).CronScheduleExpression)
+							</div>
+						</div>
+					</div>
+			</fieldset>
+		</div>
+@*        <div class="editor-field">
 			@Html.DropDownList("AssemblyName", Model.AssemblyList.Select(i=> new SelectListItem { Value=i.AssemblyName, Text=i.AssemblyName }))
         </div>
+*@
 @*
         <div class="editor-label">
             @Html.LabelFor(model => model.ClassName)

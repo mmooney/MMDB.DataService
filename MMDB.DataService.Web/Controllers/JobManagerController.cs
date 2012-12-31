@@ -28,11 +28,7 @@ namespace MMDB.DataService.Web.Controllers
 
         public ActionResult Create()
         {
-			var model = new CreateJobDefinitionViewModel
-			{
-				AssemblyList = this.JobManager.LoadAssemblyList()
-			};
-            return View(model);
+            return View();
         } 
 
         //

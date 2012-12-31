@@ -1,23 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using MMDB.DataService.Data.DataProvider;
-using MMDB.DataService.Data.Dto;
-using Raven.Client;
-using MMDB.DataService.Data.Dto.Jobs;
 using MMDB.DataService.Data.Dto.Assemblies;
+using MMDB.DataService.Data.Dto.Jobs;
+using Quartz;
+using Quartz.Impl;
+using Raven.Client;
+using Quartz.Impl.Triggers;
+using System.Reflection;
 
 namespace MMDB.DataService.Data
 {
 	public class JobManager
 	{
 		private IDocumentSession DocumentSession { get; set; } 
+		private EventReporter EventReporter { get; set; }
+		private IScheduler Scheduler { get; set; }
 
-		public JobManager(IDocumentSession documentSession)
+		public JobManager(IDocumentSession documentSession, EventReporter eventReporter, IScheduler scheduler)
 		{
 			this.DocumentSession = documentSession;
+			this.EventReporter = eventReporter;
+			this.Scheduler = scheduler;
 		}
+
+		public void StartJobs()
+		{
+			var jobDefintionList = this.DocumentSession.Query<JobDefinition>();
+			foreach(var jobDefinition in jobDefintionList)
+			{
+				this.StartJob(jobDefinition);
+			}
+		}
+
+		private void StartJob(JobDefinition jobDefinition)
+		{
+			this.EventReporter.Trace("Creating " + jobDefinition.JobName);
+			var jobAssembly = Assembly.LoadFrom(jobDefinition.AssemblyName);
+			var jobType = jobAssembly.GetType(jobDefinition.ClassName);
+			var jobDetail = new JobDetailImpl(jobDefinition.JobName, jobType);
+
+			if(jobDefinition.Schedule is JobSimpleSchedule)
+			{
+				var schedule = (JobSimpleSchedule)jobDefinition.Schedule;
+				var trigger = new SimpleTriggerImpl(jobDefinition.JobName + "Trigger", DateBuilder.FutureDate(schedule.DelayStartMinutes, IntervalUnit.Minute), null, SimpleTriggerImpl.RepeatIndefinitely, TimeSpan.FromMinutes(schedule.IntervalMinutes));
+				this.Scheduler.ScheduleJob(jobDetail, trigger);
+			}
+			else if (jobDefinition.Schedule is JobCronSchedule)
+			{
+				//string jobTypeName = typeof(JobType).Name;
+				//this.Logger.Trace("Creating " + jobTypeName);
+				//var jobDetail = new JobDetailImpl(jobDefinition.JobName, typeof(ServiceJob<JobType>));
+				//var trigger = new CronTriggerImpl(jobTypeName + "Trigger", jobTypeName + "Group", cronExpression);
+				//this.Scheduler.ScheduleJob(jobDetail, trigger);
+				//this.Logger.Trace("Done Creating " + jobTypeName);
+			}
+			this.EventReporter.Trace("Done Creating " + jobDefinition.JobName);
+		}
+
 
 		public JobDefinition CreateSimpleJob(string jobName, string assemblyName, string className, int intervalMinutes, int delayStartMinutes)
 		{
@@ -61,5 +101,6 @@ namespace MMDB.DataService.Data
 		{
 			return this.DocumentSession.Query<JobAssembly>().ToList();
 		}
+
 	}
 }

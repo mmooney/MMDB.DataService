@@ -5,6 +5,8 @@ using System.Text;
 using NUnit.Framework;
 using MMDB.DataService.Data.Dto;
 using MMDB.DataService.Data.Dto.Jobs;
+using Moq;
+using Quartz;
 
 namespace MMDB.DataService.Data.Tests
 {
@@ -15,7 +17,7 @@ namespace MMDB.DataService.Data.Tests
 		{
 			using(var session = EmbeddedRavenProvider.DocumentStore.OpenSession())
 			{
-				var sut = new JobManager(session);
+				var sut = new JobManager(session, DataServiceTestHelper.GetEventReporter().Object, new Mock<IScheduler>().Object);
 				string assemblyName = Guid.NewGuid().ToString();
 				string className = Guid.NewGuid().ToString();
 				string scheduleExpression = Guid.NewGuid().ToString();
@@ -43,7 +45,7 @@ namespace MMDB.DataService.Data.Tests
 		{
 			using (var session = EmbeddedRavenProvider.DocumentStore.OpenSession())
 			{
-				var sut = new JobManager(session);
+				var sut = new JobManager(session, DataServiceTestHelper.GetEventReporter().Object, new Mock<IScheduler>().Object);
 				string assemblyName = Guid.NewGuid().ToString();
 				string className = Guid.NewGuid().ToString();
 				int intervalMinutes = 10;
@@ -73,7 +75,7 @@ namespace MMDB.DataService.Data.Tests
 		{
 			using (var session = EmbeddedRavenProvider.DocumentStore.OpenSession())
 			{
-				var sut = new JobManager(session);
+				var sut = new JobManager(session, DataServiceTestHelper.GetEventReporter().Object, new Mock<IScheduler>().Object);
 				string assemblyName = Guid.NewGuid().ToString();
 				string className = Guid.NewGuid().ToString();
 				string scheduleExpression = Guid.NewGuid().ToString();
@@ -101,7 +103,7 @@ namespace MMDB.DataService.Data.Tests
 		{
 			using(var session = EmbeddedRavenProvider.DocumentStore.OpenSession())
 			{
-				var sut = new JobManager(session);
+				var sut = new JobManager(session, DataServiceTestHelper.GetEventReporter().Object, new Mock<IScheduler>().Object);
 				var list = sut.LoadJobList();
 				Assert.AreEqual(0, list.Count());
 			}

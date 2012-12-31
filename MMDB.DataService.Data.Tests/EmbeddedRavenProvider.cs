@@ -26,7 +26,7 @@ namespace MMDB.DataService.Data.Tests
 							Conventions = new DocumentConvention
 							{
 								DefaultQueryingConsistency = ConsistencyOptions.QueryYourWrites,
-							}
+							},
 						};
 						_documentStore.Initialize();
 					}

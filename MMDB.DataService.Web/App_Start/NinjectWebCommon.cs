@@ -13,6 +13,9 @@ namespace MMDB.DataService.Web.App_Start
 	using Raven.Client.Document;
 	using System.Configuration;
 	using Raven.Client;
+using Ninject.Activation;
+	using Quartz.Impl;
+	using Quartz;
 
     public static class NinjectWebCommon 
     {
@@ -56,16 +59,19 @@ namespace MMDB.DataService.Web.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-			NinjectWebCommon.DocumentStore = new DocumentStore 
-			{ 
-				Url = ConfigurationManager.AppSettings["RavenUrl"]
-			};
-			NinjectWebCommon.DocumentStore.Initialize();
-			kernel.Bind<IDocumentSession>()
-					.ToMethod(x => NinjectWebCommon.DocumentStore.OpenSession())
-					.InRequestScope();
+			kernel.Bind<IDocumentStore>().ToMethod(CreateDocumentStore).InSingletonScope();
+			kernel.Bind<IDocumentSession>().ToMethod(c => c.Kernel.Get<IDocumentStore>().OpenSession()).InRequestScope();
+			kernel.Bind<ISchedulerFactory>().To<StdSchedulerFactory>();
+			kernel.Bind<IScheduler>().ToMethod(c => c.Kernel.Get<ISchedulerFactory>().GetScheduler());
         }
 
-		public static IDocumentStore DocumentStore { get; set; }
+		public static IDocumentStore CreateDocumentStore(IContext context)
+		{
+			var documentStore = new DocumentStore
+			{
+				ConnectionStringName = "RavenDB"
+			}.Initialize();
+			return documentStore;
+		}
 	}
 }
