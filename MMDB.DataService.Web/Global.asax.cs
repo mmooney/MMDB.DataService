@@ -42,7 +42,6 @@ namespace MMDB.DataService.Web
 			RegisterGlobalFilters(GlobalFilters.Filters);
 			RegisterRoutes(RouteTable.Routes);
 
-			this.DocumentStore = new DocumentStore() { Url=ConfigurationManager.AppSettings["RavenUrl"] };
 			//RavenDataHandler.Register(this.DocumentStore, "admin", new RazorViewEngine());
 		}
 	}
