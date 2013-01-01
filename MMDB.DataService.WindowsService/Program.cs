@@ -9,6 +9,8 @@ using Ninject.Activation;
 using Raven.Client.Document;
 using Quartz.Impl;
 using Quartz;
+using MMDB.DataService.Data.Settings;
+using MMDB.DataService.Data.DataProvider;
 
 namespace MMDB.DataService.WindowsService
 {
@@ -43,11 +45,7 @@ namespace MMDB.DataService.WindowsService
 
 		public static IDocumentStore CreateDocumentStore(IContext context)
 		{
-			var store = new DocumentStore()
-			{
-				ConnectionStringName = "RavenDB"
-			};
-			store.Initialize();
+			var store = RavenHelper.CreateDocumentStore();
 			return store;
 		}
 

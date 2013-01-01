@@ -124,9 +124,12 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JobAssemblyController.cs" />
     <Compile Include="Controllers\JobManagerController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ViewSettingsHelper.cs" />
+    <Compile Include="Models\AssemblyClassItem.cs" />
     <Compile Include="Models\CreateJobDefinitionViewModel.cs" />
     <Compile Include="Models\PagedViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -318,7 +321,12 @@
   <ItemGroup>
     <Content Include="Views\Events\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Views\Settings\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Settings\Create.cshtml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
