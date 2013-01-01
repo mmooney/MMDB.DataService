@@ -47,7 +47,7 @@ namespace MMDB.DataService.Data
 				Message = message,
 				Detail = message,
 				MessageDateTimeUtc = DateTime.UtcNow,
-				DataObject = dataObject
+				DataObjectJson = (dataObject!=null) ? dataObject.ToJson() : null
 			};
 			this.DocumentSession.Store(infoMessage);
 			this.DocumentSession.SaveChanges();
@@ -62,7 +62,7 @@ namespace MMDB.DataService.Data
 				Message = message,
 				Detail = message,
 				MessageDateTimeUtc = DateTime.UtcNow,
-				DataObject = dataObject
+				DataObjectJson = (dataObject != null) ? dataObject.ToJson() : null
 			};
 			this.DocumentSession.Store(warningMessage);
 			this.DocumentSession.SaveChanges();
@@ -77,12 +77,35 @@ namespace MMDB.DataService.Data
 				Message = err.Message,
 				Detail = err.ToString(),
 				MessageDateTimeUtc = DateTime.UtcNow,
-				DataObject = dataObject
+				DataObjectJson = (dataObject != null) ? dataObject.ToJson() : null
 			};
 			this.DocumentSession.Store(exceptionMessage);
 			this.DocumentSession.SaveChanges();
 			return exceptionMessage;
 		}
 
+		public int GetEventCount(EnumServiceMessageLevel? level)
+		{
+			if (level.HasValue)
+			{
+				return this.DocumentSession.Query<ServiceMessage>().Where(i => i.Level == level.Value).Count();
+			}
+			else
+			{
+				return this.DocumentSession.Query<ServiceMessage>().Count();
+			}
+		}
+
+		public IQueryable<ServiceMessage> GetEventList(int pageIndex, int pageSize, EnumServiceMessageLevel? level)
+		{
+			if(level.HasValue)
+			{
+				return this.DocumentSession.Query<ServiceMessage>().Where(i=>i.Level == level.Value).OrderByDescending(i => i.MessageDateTimeUtc).Skip((pageIndex) * pageSize).Take(pageSize);
+			}
+			else 
+			{
+				return this.DocumentSession.Query<ServiceMessage>().OrderByDescending(i => i.MessageDateTimeUtc).Skip((pageIndex) * pageSize).Take(pageSize);
+			}
+		}
 	}
 }

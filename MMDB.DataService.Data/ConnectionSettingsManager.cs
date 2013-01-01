@@ -11,17 +11,17 @@ using System.Reflection;
 
 namespace MMDB.DataService.Data
 {
-	public class SettingsManager
+	public class ConnectionSettingsManager
 	{
 		public IDocumentSession DocumentSession { get; set; }
 		private ConcurrentDictionary<string,IEnumerable<PropertyInfo>> PropertyDictionary;
 
-		public SettingsManager()
+		public ConnectionSettingsManager()
 		{
 			this.PropertyDictionary = new ConcurrentDictionary<string, IEnumerable<PropertyInfo>>();
 		}
 
-		public SettingsManager(IDocumentSession documentSession)
+		public ConnectionSettingsManager(IDocumentSession documentSession)
 		{
 			this.DocumentSession = documentSession;
 			this.PropertyDictionary = new ConcurrentDictionary<string,IEnumerable<PropertyInfo>>();
