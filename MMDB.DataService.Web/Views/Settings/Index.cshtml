@@ -1,0 +1,31 @@
+﻿@model IEnumerable<MMDB.DataService.Data.Settings.SettingsContainer>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr class="ui-widget-header">
+        <th>
+            Type
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @item.Settings.TypeName
+        </td>
+        <td>
+            @Html.ActionLink("Edit","Edit", new {id=item.Id})
+        </td>
+    </tr>
+}
+
+</table>

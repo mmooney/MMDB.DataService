@@ -5,14 +5,7 @@ using System.Text;
 
 namespace MMDB.DataService.Data.Settings
 {
-	public abstract class SettingsBase 
+	public class CoreDataServiceSettings : SettingsBase
 	{
-		public string TypeName 
-		{ 
-			get 
-			{ 
-				return this.GetType().FullName;
-			} 
-		}
 	}
 }

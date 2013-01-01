@@ -16,6 +16,7 @@ namespace MMDB.DataService.Web.App_Start
 using Ninject.Activation;
 	using Quartz.Impl;
 	using Quartz;
+	using MMDB.DataService.Data.DataProvider;
 
     public static class NinjectWebCommon 
     {
@@ -31,6 +32,10 @@ using Ninject.Activation;
             bootstrapper.Initialize(CreateKernel);
         }
         
+		internal static T Get<T>()
+		{
+			return bootstrapper.Kernel.Get<T>();
+		}
         /// <summary>
         /// Stops the application.
         /// </summary>
@@ -67,11 +72,7 @@ using Ninject.Activation;
 
 		public static IDocumentStore CreateDocumentStore(IContext context)
 		{
-			var documentStore = new DocumentStore
-			{
-				ConnectionStringName = "RavenDB"
-			}.Initialize();
-			return documentStore;
+			return RavenHelper.CreateDocumentStore();
 		}
 	}
 }
