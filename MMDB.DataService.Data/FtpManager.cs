@@ -15,10 +15,10 @@ namespace MMDB.DataService.Data
 	public class FtpManager
 	{
 		private IDocumentSession DocumentSession { get; set; }
-		private SettingsManager SettingsManager { get; set; }
+		private ConnectionSettingsManager SettingsManager { get; set; }
 		private EventReporter EventReporter { get; set; }
 
-		public FtpManager(IDocumentSession documentSession, SettingsManager settingsManager, EventReporter eventReporter)
+		public FtpManager(IDocumentSession documentSession, ConnectionSettingsManager settingsManager, EventReporter eventReporter)
 		{
 			this.DocumentSession = documentSession;
 			this.SettingsManager = settingsManager;

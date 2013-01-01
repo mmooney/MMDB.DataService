@@ -1,0 +1,75 @@
+﻿@model MvcContrib.Pagination.IPagination<MMDB.DataService.Data.Dto.Logging.ServiceMessage>
+@using MvcContrib.UI.Pager
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Event List</h2>
+
+<script src="@Url.Content("~/Scripts/Events.js")"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#UpdateButton").click(function () {
+            UpdateGrid();
+        });
+    });
+
+    function UpdateGrid() {
+        var pageSize = $("#PageSize").val();
+        var pageNumber = @Model.PageNumber;
+        var level = $("input[name='LevelFilter']:checked").val();
+        var url = "@Url.Action("Index")?pageNumber" + pageNumber + "&pageSize=" + pageSize;
+        if(level)
+        {
+            url += "&level=" + level;
+        }
+        window.location.href = url;
+    }
+</script>
+
+<fieldset>
+    <legend>Options</legend>
+    <div>
+        # of rows to display:
+        @Html.DropDownListFor(model => model.PageSize,
+                                new List<SelectListItem>
+                                {
+                                    new SelectListItem { Text="20", Value="20"},
+                                    new SelectListItem { Text="50", Value="50"},
+                                    new SelectListItem { Text="100", Value="100"},
+                                    new SelectListItem { Text="250", Value="250"},
+                                    new SelectListItem { Text="500", Value="500"},
+                                    new SelectListItem { Text="1000", Value="1000"},
+                                })
+    </div>
+    <div>
+        Type:  
+        @Html.RadioButton("LevelFilter", string.Empty, (bool)(this.ViewBag.Level == null)) All
+        @foreach (var item in Enum.GetValues(typeof(MMDB.DataService.Data.Dto.Logging.EnumServiceMessageLevel)))
+        {
+            @Html.RadioButton("LevelFilter", item.ToString(), (bool)(this.ViewBag.Level == (MMDB.DataService.Data.Dto.Logging.EnumServiceMessageLevel)item)) @item.ToString()
+        }
+    </div>
+
+    <button id="UpdateButton">Update</button>
+</fieldset>
+<table>
+    <tr class="ui-widget-header">
+        <th style="width:50px;">ID</th>
+        <th style="width:50px;">Type</th>
+        <th>Message</th>
+        <th>Date/Time</th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@MMDB.Shared.EnumHelper.GetDisplayValue(item.Level)</td>
+            <td>@item.Message</td>
+            <td>@item.MessageDateTimeUtc</td>
+            <td>@Html.ActionLink("Edit", "Edit", new { id = @item.Id })</td>
+        </tr>
+    }
+</table>
+@Html.Pager(Model)
