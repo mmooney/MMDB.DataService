@@ -142,5 +142,12 @@ namespace MMDB.DataService.Data
 			schedule.CronScheduleExpression = cronScheduleExpression;
 			this.DocumentSession.SaveChanges();
 		}
+
+		public void DeleteJob(int id)
+		{
+			var job = this.LoadJob(id);
+			this.DocumentSession.Delete(job);
+			this.DocumentSession.SaveChanges();
+		}
 	}
 }

@@ -82,7 +82,8 @@ namespace MMDB.DataService.Web.Controllers
  
         public ActionResult Delete(int id)
         {
-            return View();
+			var item = this.JobManager.LoadJob(id);
+            return View(item);
         }
 
         //
@@ -91,16 +92,8 @@ namespace MMDB.DataService.Web.Controllers
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
-            try
-            {
-                // TODO: Add delete logic here
- 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+			this.JobManager.DeleteJob(id);
+            return RedirectToAction("Index");
         }
     }
 }

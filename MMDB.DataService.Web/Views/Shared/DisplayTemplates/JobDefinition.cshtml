@@ -1,0 +1,59 @@
+﻿@using MMDB.DataService.Data.Dto.Jobs
+@model JobDefinition
+
+@{
+    ViewBag.Title = "JobDefinition";
+}
+    <div class="display-label">JobName</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.JobName)
+    </div>
+
+    <div class="display-label">AssemblyName</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.AssemblyName)
+    </div>
+
+    <div class="display-label">ClassName</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.ClassName)
+    </div>
+
+	<div>
+		<fieldset>
+			<legend>Schedule</legend>
+				<div>
+                    @if (Model.Schedule is JobSimpleSchedule)
+                    {
+    					<text>Simple</text>
+	    				<div id="divSimpleOptions" style="padding-left:40px">
+		    				<div class="editor-label">
+			    				Interval Minutes:
+				    		</div>
+					    	<div class="editor-field">
+                                @Html.DisplayFor(model => ((JobSimpleSchedule)model.Schedule).IntervalMinutes)
+    						</div>
+
+	    					<div class="editor-label">
+		    					Delay Start Minutes:
+			    			</div>
+				    		<div class="editor-field">
+					    		@Html.DisplayFor(model => ((JobSimpleSchedule)model.Schedule).DelayStartMinutes)
+    						</div>
+	    				</div>
+                    }
+                    else if (Model.Schedule is JobCronSchedule)
+                    {
+    					<text>CRON</text>
+    					<div id="divCronOptions" style="padding-left:40px">
+	    					<div class="editor-label">
+		    					CRON Schedule Expression:
+			    			</div>
+				    		<div class="editor-field">
+					    		@Html.DisplayFor(model => ((JobCronSchedule)model.Schedule).CronScheduleExpression)
+    						</div>
+                        </div>
+                    }
+				</div>
+		</fieldset>
+	</div>

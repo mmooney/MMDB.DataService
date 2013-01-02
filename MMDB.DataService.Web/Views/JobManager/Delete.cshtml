@@ -1,0 +1,19 @@
+﻿@model MMDB.DataService.Data.Dto.Jobs.JobDefinition
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>JobDefinition</legend>
+    @Html.DisplayForModel()
+</fieldset>
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="Delete" /> |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+}
