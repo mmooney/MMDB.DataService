@@ -15,14 +15,22 @@ namespace MMDB.DataService.Data.Settings
 			this.DocumentSession = documentSession;
 		}
 
-		public SettingsContainer Get<T>() where T:SettingsBase
+		public T Get<T>() where T:SettingsBase
 		{
-			return this.DocumentSession.Query<SettingsContainer>().Where(i=>i.IsActive == true && i.Settings.TypeName == typeof(T).FullName).FirstOrDefault();
+			var container = this.DocumentSession.Query<SettingsContainer>().Where(i=>i.IsActive == true && i.Settings.TypeName == typeof(T).FullName).FirstOrDefault();
+			return (T)container.Settings;
+		}
+
+		public object Get(Type type)
+		{
+			var container = this.DocumentSession.Query<SettingsContainer>().Where(i=>i.IsActive == true && i.Settings.TypeName == type.FullName).FirstOrDefault();
+			return container.Settings;
 		}
 
 		public IEnumerable<SettingsContainer> GetList()
 		{
 			return this.DocumentSession.Query<SettingsContainer>().ToList();
 		}
+
 	}
 }
