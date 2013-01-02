@@ -7,5 +7,7 @@ namespace MMDB.DataService.Data.Settings
 {
 	public class CoreDataServiceSettings : SettingsBase
 	{
+		public string ApplicationName { get; set; }
+		public string LogoUrl { get; set; }
 	}
 }

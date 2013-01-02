@@ -26,7 +26,8 @@ namespace MMDB.DataService.WindowsService
 			NinjectBootstrapper.Kernel.Bind<IDocumentSession>().ToMethod(c=>c.Kernel.Get<IDocumentStore>().OpenSession()).InTransientScope();
 			NinjectBootstrapper.Kernel.Bind<ISchedulerFactory>().To<StdSchedulerFactory>();
 			NinjectBootstrapper.Kernel.Bind<IScheduler>().ToMethod(CreateScheduler).InSingletonScope();
-
+			
+			var settings = NinjectBootstrapper.Kernel.Get<CoreDataServiceSettings>();
 			if (args.Length > 0 && args[0].ToLower() == "/debug")
 			{
 				var service = NinjectBootstrapper.Get<WinService>();
