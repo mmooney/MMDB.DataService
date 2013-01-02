@@ -53,7 +53,7 @@
 								Interval Minutes:
 							</div>
 							<div class="editor-field">
-								@if(Model.Schedule is JobSimpleSchedule)
+								@if (Model != null && Model.Schedule != null && Model.Schedule is JobSimpleSchedule)
 								{
 									@Html.TextBoxFor(model => ((JobSimpleSchedule)model.Schedule).IntervalMinutes)
 								}
@@ -67,7 +67,7 @@
 								Delay Start Minutes:
 							</div>
 							<div class="editor-field">
-								@if(Model.Schedule is JobSimpleSchedule)
+								@if (Model != null && Model.Schedule != null && Model.Schedule is JobSimpleSchedule)
 								{
 									@Html.TextBoxFor(model => ((JobSimpleSchedule)model.Schedule).DelayStartMinutes)
 								}
@@ -85,7 +85,7 @@
 								CRON Schedule Expression:
 							</div>
 							<div class="editor-field">
-								@if(Model.Schedule is JobCronSchedule)
+								@if (Model != null && Model.Schedule != null && Model.Schedule is JobCronSchedule)
 								{
 									@Html.TextBoxFor(model => ((JobCronSchedule)model.Schedule).CronScheduleExpression)
 								}
