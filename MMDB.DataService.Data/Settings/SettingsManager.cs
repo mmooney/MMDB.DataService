@@ -18,13 +18,27 @@ namespace MMDB.DataService.Data.Settings
 		public T Get<T>() where T:SettingsBase
 		{
 			var container = this.DocumentSession.Query<SettingsContainer>().Where(i=>i.IsActive == true && i.Settings.TypeName == typeof(T).FullName).FirstOrDefault();
-			return (T)container.Settings;
+			if(container == null)
+			{
+				return null;
+			}
+			else 
+			{
+				return (T)container.Settings;
+			}
 		}
 
 		public object Get(Type type)
 		{
 			var container = this.DocumentSession.Query<SettingsContainer>().Where(i=>i.IsActive == true && i.Settings.TypeName == type.FullName).FirstOrDefault();
-			return container.Settings;
+			if(container == null)
+			{
+				return null;
+			}
+			else 
+			{
+				return container.Settings;
+			}
 		}
 
 		public IEnumerable<SettingsContainer> GetList()
