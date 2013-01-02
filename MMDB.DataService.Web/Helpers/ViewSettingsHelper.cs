@@ -13,10 +13,16 @@ namespace MMDB.DataService.Web.Helpers
 		{
 			get 
 			{
-				return null;
-				//var settingsManager = NinjectWebCommon.Get<SettingsManager>();
-				//var settings = settingsManager.Get<CoreDataServiceSettings>();
-				//return settings.ApplicationDisplayName;
+				var settingsManager = NinjectWebCommon.Get<SettingsManager>();
+				var settings = settingsManager.Get<CoreDataServiceSettings>();
+				if(settings == null)
+				{
+					return "MMDB Data Service";
+				}
+				else 
+				{
+					return settings.ApplicationName;
+				}
 			}
 		}
 
@@ -24,10 +30,16 @@ namespace MMDB.DataService.Web.Helpers
 		{
 			get 
 			{
-				return null;
-				//var settingsManager = NinjectWebCommon.Get<SettingsManager>();
-				//var settings = settingsManager.Get<CoreDataServiceSettings>();
-				//return settings.LogoUrl;
+				var settingsManager = NinjectWebCommon.Get<SettingsManager>();
+				var settings = settingsManager.Get<CoreDataServiceSettings>();
+				if(settings == null)
+				{
+					return "http://mmdbsolutions.com/Portals/6/logo_web.jpg";
+				}
+				else 
+				{
+					return settings.LogoUrl;
+				}
 			}
 		}
 	}
