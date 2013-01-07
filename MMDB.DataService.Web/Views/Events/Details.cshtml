@@ -1,0 +1,37 @@
+﻿@model MMDB.DataService.Data.Dto.Logging.ServiceMessage
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>ServiceMessage</legend>
+
+    <div class="display-label">MessageDateTimeUtc</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.MessageDateTimeUtc)
+    </div>
+
+    <div class="display-label">Message</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Message)
+    </div>
+
+    <div class="display-label">Detail</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Detail)
+    </div>
+
+    <div class="display-label">DataObjectJson</div>
+    <div class="display-field">
+		<pre>
+			@Html.DisplayFor(model => model.DataObjectJson)
+		</pre>
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

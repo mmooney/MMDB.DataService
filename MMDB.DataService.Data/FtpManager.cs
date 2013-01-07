@@ -118,7 +118,8 @@ namespace MMDB.DataService.Data
 					var newItem = new FtpDownloadMetadata
 					{
 						Directory = ftpDownloadSettings.DownloadDirectory,
-						FileName = fileName
+						FileName = fileName,
+						Settings = ftpDownloadSettings
 					};
 					returnList.Add(newItem);
 				}
@@ -126,9 +127,9 @@ namespace MMDB.DataService.Data
 			return returnList;
 		}
 
-		public string DownloadFile(FtpDownloadMetadata item, FtpDownloadSettings ftpDownloadSettings)
+		public string DownloadFile(FtpDownloadMetadata item)
 		{
-			var settings = this.SettingsManager.Load<FtpSettings>(ftpDownloadSettings.SettingSource, ftpDownloadSettings.SettingKey);
+			var settings = this.SettingsManager.Load<FtpSettings>(item.Settings.SettingSource, item.Settings.SettingKey);
 			Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
 			ftp.Connect();
 

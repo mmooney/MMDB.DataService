@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MMDB.DataService.Data.Dto
 {
-	public class SettingBase
+	public class ConnectionSettingBase
 	{
 		public string Key { get; set; }
 	}

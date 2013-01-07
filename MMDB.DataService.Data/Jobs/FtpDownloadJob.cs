@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Transactions;
 using MMDB.DataService.Data.Dto.Ftp;
+using MMDB.DataService.Data.Settings;
 using Raven.Client;
 
 namespace MMDB.DataService.Data.Jobs
@@ -12,13 +13,14 @@ namespace MMDB.DataService.Data.Jobs
 	{
 		private IDocumentSession DocumentSession { get; set; }
 		private FtpManager FtpManager { get; set; }
-		private FtpDownloadSettings FtpDownloadSettings { get; set; }
+		private SettingsManager SettingsManager { get; set; }
+		//private FtpDownloadSettings FtpDownloadSettings { get; set; }
 
-		public FtpDownloadJob(IDocumentSession documentSession, EventReporter eventReporter, FtpManager ftpManager, FtpDownloadSettings ftpDownloadSettings) : base(eventReporter)
+		public FtpDownloadJob(IDocumentSession documentSession, EventReporter eventReporter, FtpManager ftpManager, SettingsManager settingsManager) : base(eventReporter)
 		{
 			this.DocumentSession = documentSession;
 			this.FtpManager = ftpManager;
-			this.FtpDownloadSettings = ftpDownloadSettings;
+			this.SettingsManager = settingsManager;
 		}
 
 		protected override FtpInboundData TryCreateJobData(FtpDownloadMetadata item, out bool jobAlreadyExisted)
@@ -36,7 +38,7 @@ namespace MMDB.DataService.Data.Jobs
 						Directory = item.Directory,
 						FileName = item.FileName,
 						QueuedDateTimeUtc = DateTime.UtcNow,
-						AttachmentId = this.FtpManager.DownloadFile(item, this.FtpDownloadSettings)
+						AttachmentId = this.FtpManager.DownloadFile(item)
 					};
 					jobAlreadyExisted = false;
 
@@ -54,7 +56,22 @@ namespace MMDB.DataService.Data.Jobs
 
 		protected override List<FtpDownloadMetadata> GetListToProcess()
 		{
-			return this.FtpManager.GetAvailableDownloadList(this.FtpDownloadSettings);
+			var settings = this.SettingsManager.Get<FtpDownloadServiceSettings>();
+			if(settings == null)
+			{
+				throw new Exception("Unable to find FtpDownloadServiceSettings");
+			}
+			if(settings.FtpDownloadSettings == null || settings.FtpDownloadSettings.Count == 0)
+			{
+				throw new Exception("FtpDownloadServiceSettings.FtpDownloadSettings is empty");
+			}
+			List<FtpDownloadMetadata> returnList = new List<FtpDownloadMetadata>();
+			foreach(var item in settings.FtpDownloadSettings)
+			{
+				var tempList = this.FtpManager.GetAvailableDownloadList(item);
+				returnList.AddRange(tempList);
+			}
+			return returnList;
 		}
 	}
 }

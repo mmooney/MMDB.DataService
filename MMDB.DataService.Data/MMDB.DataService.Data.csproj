@@ -82,6 +82,7 @@
     <Compile Include="Dto\Assemblies\JobAssembly.cs" />
     <Compile Include="Dto\Enums.cs" />
     <Compile Include="Dto\Ftp\FtpDownloadMetadata.cs" />
+    <Compile Include="Jobs\FtpDownloadServiceSettings.cs" />
     <Compile Include="Dto\Ftp\FtpInboundData.cs" />
     <Compile Include="Dto\Ftp\FtpOutboundData.cs" />
     <Compile Include="Dto\Ftp\FtpSettings.cs" />
@@ -96,7 +97,7 @@
     <Compile Include="Dto\Jobs\JobStatusIndex.cs" />
     <Compile Include="Dto\Logging\Enums.cs" />
     <Compile Include="Dto\Logging\ServiceMessage.cs" />
-    <Compile Include="Dto\SettingBase.cs" />
+    <Compile Include="Dto\ConnectionSettingBase.cs" />
     <Compile Include="EventReporter.cs" />
     <Compile Include="ExceptionReporter.cs" />
     <Compile Include="FtpManager.cs" />
