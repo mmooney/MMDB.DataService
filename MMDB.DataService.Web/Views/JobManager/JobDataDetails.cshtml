@@ -1,0 +1,20 @@
+﻿@model MMDB.DataService.Data.Dto.Jobs.JobData
+
+@{
+    ViewBag.Title = "JobDataDetails";
+}
+
+<h2>JobDataDetails</h2>
+@using (Html.BeginForm())
+{
+	<div>
+		Status:  
+		@Html.DropDownListFor(model => model.Status, new SelectList(Enum.GetValues(typeof(MMDB.DataService.Data.Dto.EnumJobStatus))))
+
+		<input type="submit" value="Update"/>
+	</div> 
+}
+<div>
+All Data:
+<pre>@Model.ToJson(true)</pre>
+</div>

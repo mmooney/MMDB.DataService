@@ -1,4 +1,6 @@
-﻿@model IEnumerable<MMDB.DataService.Data.Dto.Jobs.JobStatus>
+﻿@using MMDB.DataService.Data.Dto
+@using MMDB.DataService.Data.Dto.Jobs
+@model IEnumerable<JobStatus>
 <table>
     <tr class="ui-widget-header">
         <th>Job Name</th>
@@ -11,10 +13,10 @@
 @foreach (var item in Model) {
     <tr>
 		<td>@item.JobDefinition.JobName</td>
-		<th>@item.GetStatusCount(MMDB.DataService.Data.Dto.EnumJobStatus.New)</th>
-		<th>@item.GetStatusCount(MMDB.DataService.Data.Dto.EnumJobStatus.InProcess)</th>
-		<th>@item.GetStatusCount(MMDB.DataService.Data.Dto.EnumJobStatus.Complete)</th>
-		<th>@item.GetStatusCount(MMDB.DataService.Data.Dto.EnumJobStatus.Error)</th>
+		<th>@Html.ActionLink(item.GetStatusCount(EnumJobStatus.New).ToString(), "QueueStatusList", "JobManager", new {jobDefinitionId=item.JobDefinition.Id, status=EnumJobStatus.New}, null)</th>
+		<th>@Html.ActionLink(item.GetStatusCount(EnumJobStatus.InProcess).ToString(), "QueueStatusList", "JobManager", new {jobDefinitionId=item.JobDefinition.Id, status=EnumJobStatus.InProcess}, null)</th>
+		<th>@Html.ActionLink(item.GetStatusCount(EnumJobStatus.Complete).ToString(), "QueueStatusList", "JobManager", new {jobDefinitionId=item.JobDefinition.Id, status=EnumJobStatus.Complete}, null)</th>
+		<th>@Html.ActionLink(item.GetStatusCount(EnumJobStatus.Error).ToString(), "QueueStatusList", "JobManager", new {jobDefinitionId=item.JobDefinition.Id, status=EnumJobStatus.Error}, null)</th>
     </tr>
 }
 
