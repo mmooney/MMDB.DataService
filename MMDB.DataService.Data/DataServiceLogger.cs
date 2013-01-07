@@ -77,7 +77,7 @@ namespace MMDB.DataService.Data
 				Message = err.Message,
 				Detail = err.ToString(),
 				MessageDateTimeUtc = DateTime.UtcNow,
-				DataObjectJson = (dataObject != null) ? dataObject.ToJson() : null
+				DataObjectJson = (dataObject != null) ? dataObject.ToJson(true) : null
 			};
 			this.DocumentSession.Store(exceptionMessage);
 			this.DocumentSession.SaveChanges();

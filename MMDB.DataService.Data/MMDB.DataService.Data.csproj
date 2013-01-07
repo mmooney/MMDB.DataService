@@ -125,7 +125,12 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\MMDB.DataEmail\MMDB.DataEmail.csproj">
+      <Project>{6cc3c4d6-a5ee-496c-9156-01b040081bd6}</Project>
+      <Name>MMDB.DataEmail</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

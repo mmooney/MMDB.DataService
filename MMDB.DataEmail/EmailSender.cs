@@ -16,6 +16,13 @@ namespace MMDB.DataEmail
 			this.EmailServerSettings = emailServerSettings;
 		}
 
+		public virtual void SendEmail(string subject, string body, IEnumerable<string> toAddressList, string fromAddress)
+		{
+			var toList = toAddressList.Select(i=>new MailAddress(i));
+			var from = new MailAddress(fromAddress);
+			this.SendEmail(subject, body, toList, from);
+		}
+
 		public virtual void SendEmail(string subject, string body, IEnumerable<MailAddress> toAddressList, MailAddress fromAddress)
 		{
 			int port = this.EmailServerSettings.Port.GetValueOrDefault(25);

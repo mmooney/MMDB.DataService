@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="EmailSender.cs" />
     <Compile Include="EmailServerSettings.cs" />
+    <Compile Include="FakeEmailSender.cs" />
     <Compile Include="RazorEmailEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
