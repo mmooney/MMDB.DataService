@@ -1,0 +1,25 @@
+﻿@model MMDB.DataService.Data.Dto.Jobs.JobData
+
+@{
+    ViewBag.Title = "JobDataDelete";
+}
+
+<h2>JobDataDelete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<fieldset>
+    <legend>JobData</legend>
+	@using (Html.BeginForm()) {
+		<div> 
+			Status: @Model.Status
+		</div>
+		<div>
+			All Data:
+			<pre>@Model.ToJson(true)</pre>
+		</div>
+		<p>
+			<input type="submit" value="Delete" /> |
+			@Html.ActionLink("Back to List", "QueueStatusList", new { jobDefinitionId=ViewBag.JobDefinitionId, status=@Model.Status })
+		</p>
+	}
+</fieldset>

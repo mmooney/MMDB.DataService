@@ -89,6 +89,7 @@
     <Compile Include="Dto\Jobs\JobData.cs" />
     <Compile Include="Dto\Jobs\JobDefinition.cs" />
     <Compile Include="DataProvider\IRavenProvider.cs" />
+    <Compile Include="Dto\Jobs\JobDataExtensions.cs" />
     <Compile Include="Dto\Jobs\JobSchedule.cs" />
     <Compile Include="Dto\Jobs\JobSimpleSchedule.cs" />
     <Compile Include="Dto\Jobs\JobStatus.cs" />

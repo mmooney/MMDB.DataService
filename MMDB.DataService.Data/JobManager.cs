@@ -109,14 +109,14 @@ namespace MMDB.DataService.Data
 		}
 
 
-		public JobDefinition LoadJob(int id)
+		public JobDefinition LoadJobDefinition(int id)
 		{
 			return this.DocumentSession.Load<JobDefinition>(id);
 		}
 
 		public void UpdateSimpleJob(int id, string jobName, string assemblyName, string className, int intervalMinutes, int delayStartMinutes)
 		{
-			var item = this.LoadJob(id);
+			var item = this.LoadJobDefinition(id);
 			item.JobName = jobName;
 			item.AssemblyName = assemblyName;
 			item.ClassName = className;
@@ -132,7 +132,7 @@ namespace MMDB.DataService.Data
 
 		public void UpdateCronJob(int id, string jobName, string assemblyName, string className, string cronScheduleExpression)
 		{
-			var item = this.LoadJob(id);
+			var item = this.LoadJobDefinition(id);
 			item.JobName = jobName;
 			item.AssemblyName = assemblyName;
 			item.ClassName = className;
@@ -145,9 +145,9 @@ namespace MMDB.DataService.Data
 			this.DocumentSession.SaveChanges();
 		}
 
-		public void DeleteJob(int id)
+		public void DeleteJobDefinition(int id)
 		{
-			var job = this.LoadJob(id);
+			var job = this.LoadJobDefinition(id);
 			this.DocumentSession.Delete(job);
 			this.DocumentSession.SaveChanges();
 		}
@@ -158,14 +158,12 @@ namespace MMDB.DataService.Data
 			var jobDefinitionList = this.DocumentSession.Query<JobDefinition>();
 			foreach(var jobDefinition in jobDefinitionList)
 			{
-				var jobAssembly = Assembly.Load(jobDefinition.AssemblyName.Replace(".dll",""));
-				var jobType = jobAssembly.GetType(jobDefinition.ClassName);
-				var queueInterface = jobType.GetInterfaces().SingleOrDefault(i=>i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueueJob<>));
-				if(queueInterface != null)
+				Type queueDataType = null;
+				queueDataType = TryGetQueueDataType(jobDefinition);
+
+				if(queueDataType != null)
 				{
-					var queueDataType = queueInterface.GetGenericArguments()[0];
-					var entityName = this.DocumentSession.Advanced.DocumentStore.Conventions.GetTypeTagName(queueDataType);
-					var itemQuery = this.DocumentSession.Advanced.LuceneQuery<object>().WhereEquals("@metadata.Raven-Entity-Name", entityName);
+					var itemQuery = GetJobDataQueue(queueDataType);
 
 					var jobStatus = new JobStatus()
 					{
@@ -173,7 +171,7 @@ namespace MMDB.DataService.Data
 						QueueDataType = queueDataType
 					};
 					var jobStatusCountQuery = (from i in itemQuery
-											group itemQuery by ((JobData)i).Status into g
+											group itemQuery by i.Status into g
 											select new 
 											{
 												Status = g.Key,
@@ -187,6 +185,66 @@ namespace MMDB.DataService.Data
 				}
 			}
 			return returnList;
+		}
+
+
+		public JobDefinition GetJobDefinition(int jobDefinitionId)
+		{
+			return this.DocumentSession.Load<JobDefinition>(jobDefinitionId);
+		}
+
+		public IQueryable<JobData> GetJobDataQueue(int jobDefinitionId)
+		{
+			var jobDefinition = this.GetJobDefinition(jobDefinitionId);
+			return GetJobDataQueue(jobDefinition);
+		}
+
+		public IQueryable<JobData> GetJobDataQueue(JobDefinition jobDefinition)
+		{
+			var queueType = TryGetQueueDataType(jobDefinition);
+			if(queueType == null)
+			{
+				throw new Exception(jobDefinition.JobName + " does not have a queue data type");
+			}
+			return GetJobDataQueue(queueType);
+		}
+
+		private IQueryable<JobData> GetJobDataQueue(Type queueDataType)
+		{
+			var entityName = this.DocumentSession.Advanced.DocumentStore.Conventions.GetTypeTagName(queueDataType);
+			var itemQuery = this.DocumentSession.Advanced.LuceneQuery<object>().WhereEquals("@metadata.Raven-Entity-Name", entityName).Select(i => (JobData)i);
+			return itemQuery.AsQueryable();
+		}
+
+		private static Type TryGetQueueDataType(JobDefinition jobDefinition)
+		{
+			Type queueDataType = null;
+			var jobAssembly = Assembly.Load(jobDefinition.AssemblyName.Replace(".dll", ""));
+			var jobType = jobAssembly.GetType(jobDefinition.ClassName);
+			var queueInterface = jobType.GetInterfaces().SingleOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueueJob<>));
+			if (queueInterface != null)
+			{
+				queueDataType = queueInterface.GetGenericArguments()[0];
+			}
+			return queueDataType;
+		}
+
+
+		public void SaveChanges()
+		{
+			this.DocumentSession.SaveChanges();
+		}
+
+		public void DeleteJobData(JobData item)
+		{
+			this.DocumentSession.Delete(item);
+			this.DocumentSession.SaveChanges();
+		}
+
+		public void UpdateJobDataStatus(JobData item, EnumJobStatus status)
+		{
+			item.Status = status;
+			this.DocumentSession.SaveChanges();
 		}
 	}
 }

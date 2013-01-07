@@ -1,0 +1,26 @@
+﻿@model MMDB.DataService.Web.Models.JobQueueDataListViewModel
+
+@{
+    ViewBag.Title = "QueueStatusList";
+}
+
+<h2>Queue Status for @Model.JobDefinition.JobName (@MMDB.Shared.EnumHelper.GetDisplayValue(Model.Status))</h2>
+
+<table>
+    <tr>
+        <th>Status</th>
+		<th>JSON Data</th>
+    </tr>
+
+@foreach (var item in Model.JobDataList) {
+    <tr>
+		<td>@MMDB.Shared.EnumHelper.GetDisplayValue(item.Status)</td>
+		<td>@item.ToJson()</td>
+        <td>
+            @Html.ActionLink("Details", "JobDataDetails", new { jobDefinitionID=Model.JobDefinition.Id, jobDataId=item.Id }) |
+            @Html.ActionLink("Delete", "JobDataDelete", new { jobDefinitionID=Model.JobDefinition.Id, jobDataId=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

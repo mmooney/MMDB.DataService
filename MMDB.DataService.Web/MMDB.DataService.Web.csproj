@@ -135,6 +135,7 @@
     <Compile Include="Models\AssemblyClassItem.cs" />
     <Compile Include="Models\CreateJobDefinitionViewModel.cs" />
     <Compile Include="Models\HomePageViewModel.cs" />
+    <Compile Include="Models\JobQueueDataListViewModel.cs" />
     <Compile Include="Models\PagedViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -351,6 +352,15 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\JobStatusList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\JobManager\QueueStatusList.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\JobManager\JobDataDetails.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\JobManager\JobDataDelete.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
