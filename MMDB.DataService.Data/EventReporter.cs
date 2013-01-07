@@ -14,6 +14,7 @@ namespace MMDB.DataService.Data
 		public EventReporter(DataServiceLogger logger, ExceptionReporter exceptionReporter)
 		{
 			this.Logger = logger;
+			this.ExceptionReporter = exceptionReporter;
 		}
 
 		public ServiceMessage Trace(string message, params object[] args)
@@ -24,14 +25,14 @@ namespace MMDB.DataService.Data
 		public ServiceMessage Exception(Exception err)
 		{
 			var returnValue = this.Logger.Exception(err);
-			this.ExceptionReporter.Exception(err);
+			this.ExceptionReporter.Exception(returnValue);
 			return returnValue;
 		}
 
 		public ServiceMessage ExceptionForObject(Exception err, object dataObject)
 		{
 			var returnValue = this.Logger.Exception(err, dataObject);
-			this.ExceptionReporter.Exception(err, dataObject);
+			this.ExceptionReporter.Exception(returnValue);
 			return returnValue;
 		}
 
@@ -39,7 +40,7 @@ namespace MMDB.DataService.Data
 		{
 			var err = new Exception(errorMessage);
 			var returnValue = this.Logger.Exception(err, dataObject);
-			this.ExceptionReporter.Exception(err, dataObject);
+			this.ExceptionReporter.Exception(returnValue);
 			return returnValue;
 		}
 
