@@ -27,6 +27,7 @@ namespace MMDB.DataService.Data.Jobs
 
 		public void Run()
 		{
+			this.EventReporter.Trace(this.GetType().Name + ": job run started");
 			bool done = false;
 			while (!done)
 			{
@@ -34,13 +35,16 @@ namespace MMDB.DataService.Data.Jobs
 				if (jobData == null)
 				{
 					done = true;
+					this.EventReporter.Trace(this.GetType().Name + ": job run done");
 				}
 				else
 				{
 					try
 					{
+						this.EventReporter.Trace(this.GetType().Name + ": processing item", jobData);
 						this.ProcessItem(jobData);
 						this.MarkItemSuccessful(jobData);
+						this.EventReporter.Trace(this.GetType().Name + ": item done");
 					}
 					catch (Exception err)
 					{

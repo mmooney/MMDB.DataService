@@ -22,7 +22,9 @@ namespace MMDB.DataService.Data.Jobs
 
 		public void Run()
 		{
+			this.EventReporter.Trace(this.GetType().Name + ": job run started");
 			var list = this.GetListToProcess();
+			this.EventReporter.Trace(this.GetType().Name + ": " + list.Count() + " records to process");
 			foreach (var item in list)
 			{
 				try
@@ -31,15 +33,16 @@ namespace MMDB.DataService.Data.Jobs
 					var jobData = this.TryCreateJobData(item, out jobAlreadyExisted);
 					if (jobData == null)
 					{
-						this.EventReporter.ExceptionForObject("TryCreateJobData returned null", item);
+						string message = string.Format("TryCreateJobData<{0}> returned null", typeof(ImportDataType).Name);
+						this.EventReporter.ExceptionForObject(message, item);
 					}
 					if (jobAlreadyExisted)
 					{
-						this.EventReporter.WarningForObject("Order job already existed", item);
+						this.EventReporter.WarningForObject(typeof(ImportDataType).Name + " job data already existed", item);
 					}
 					else
 					{
-						this.EventReporter.InfoForObject("Order job created", item);
+						this.EventReporter.InfoForObject(typeof(ImportDataType).Name  + " job data created", item);
 					}
 				}
 				catch (Exception err)
@@ -47,6 +50,7 @@ namespace MMDB.DataService.Data.Jobs
 					this.EventReporter.ExceptionForObject(err, item);
 				}
 			}
+			this.EventReporter.Trace(this.GetType().Name + ": job run ended");
 		}
 
 		protected abstract JobDataType TryCreateJobData(ImportDataType item, out bool jobAlreadyExisted);
