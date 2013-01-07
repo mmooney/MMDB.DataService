@@ -11,6 +11,7 @@ using Quartz.Impl;
 using Quartz;
 using MMDB.DataService.Data.Settings;
 using MMDB.DataService.Data.DataProvider;
+using MMDB.DataService.Data.Jobs;
 
 namespace MMDB.DataService.WindowsService
 {

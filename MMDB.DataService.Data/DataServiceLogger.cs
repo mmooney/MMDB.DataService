@@ -107,5 +107,10 @@ namespace MMDB.DataService.Data
 				return this.DocumentSession.Query<ServiceMessage>().OrderByDescending(i => i.MessageDateTimeUtc).Skip((pageIndex) * pageSize).Take(pageSize);
 			}
 		}
+
+		public ServiceMessage GetEventItem(int id)
+		{
+			return this.DocumentSession.Load<ServiceMessage>(id);
+		}
 	}
 }

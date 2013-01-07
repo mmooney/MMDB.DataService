@@ -27,7 +27,7 @@ namespace MMDB.DataService.Data
 			this.PropertyDictionary = new ConcurrentDictionary<string,IEnumerable<PropertyInfo>>();
 		}
 
-		public virtual T Load<T>(EnumSettingSource source, string key) where T:SettingBase, new()
+		public virtual T Load<T>(EnumSettingSource source, string key) where T:ConnectionSettingBase, new()
 		{
 			T returnValue;
 			switch(source)
@@ -47,12 +47,12 @@ namespace MMDB.DataService.Data
 			return returnValue;
 		}
 
-		private T TryLoadDatabase<T>(string key) where T:SettingBase
+		private T TryLoadDatabase<T>(string key) where T:ConnectionSettingBase
 		{
 			return this.DocumentSession.Query<T>().SingleOrDefault(i=>i.Key == key);
 		}
 
-		private T TryLoadConnectionString<T>(string key) where T : SettingBase, new()
+		private T TryLoadConnectionString<T>(string key) where T : ConnectionSettingBase, new()
 		{
 			var data = ConfigurationManager.ConnectionStrings[key];
 			if(data == null || string.IsNullOrEmpty(data.ConnectionString))
@@ -65,7 +65,7 @@ namespace MMDB.DataService.Data
 			}
 		}
 
-		private T TryLoadAppSettings<T>(string key) where T : SettingBase, new()
+		private T TryLoadAppSettings<T>(string key) where T : ConnectionSettingBase, new()
 		{
 			string data = ConfigurationManager.AppSettings[key];
 			if(string.IsNullOrEmpty(data))
@@ -78,7 +78,7 @@ namespace MMDB.DataService.Data
 			}
 		}
 
-		private T ParseStringData<T>(string data, string key) where T: SettingBase, new()
+		private T ParseStringData<T>(string data, string key) where T: ConnectionSettingBase, new()
 		{
 			T returnValue = new T
 			{

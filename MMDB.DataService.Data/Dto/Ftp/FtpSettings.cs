@@ -5,11 +5,10 @@ using System.Text;
 
 namespace MMDB.DataService.Data.Dto.Ftp
 {
-	public class FtpSettings : SettingBase
+	public class FtpSettings : ConnectionSettingBase
 	{
 		public string FtpUserName { get; set; }
 		public string FtpPassword { get; set; }
 		public string FtpHost { get; set; }
-		public string DownloadDirectory { get; set; }
 	}
 }

@@ -28,6 +28,7 @@ namespace MMDB.DataService.Data.Dto
 
 	public enum EnumSettingSource
 	{
+		Unknown,
 		AppSetting,
 		ConnectionString,
 		Database
