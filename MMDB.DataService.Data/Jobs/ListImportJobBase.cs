@@ -6,13 +6,18 @@ using MMDB.DataService.Data.Dto.Jobs;
 
 namespace MMDB.DataService.Data.Jobs
 {
-	public abstract class ListImportJobBase<ImportDataType, JobDataType>:  IDataServiceJob where JobDataType : JobData
+	public abstract class ListImportJobBase<ImportDataType, JobDataType> : IQueueJob<JobDataType> where JobDataType : JobData
 	{
 		protected EventReporter EventReporter { get; private set; }
 
 		public ListImportJobBase(EventReporter eventReporter)
 		{
 			this.EventReporter = eventReporter;
+		}
+
+		public Type GetQueueDataType()
+		{
+			return typeof(JobDataType);
 		}
 
 		public void Run()

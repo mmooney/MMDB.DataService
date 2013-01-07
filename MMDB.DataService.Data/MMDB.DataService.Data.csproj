@@ -91,6 +91,8 @@
     <Compile Include="DataProvider\IRavenProvider.cs" />
     <Compile Include="Dto\Jobs\JobSchedule.cs" />
     <Compile Include="Dto\Jobs\JobSimpleSchedule.cs" />
+    <Compile Include="Dto\Jobs\JobStatus.cs" />
+    <Compile Include="Dto\Jobs\JobStatusIndex.cs" />
     <Compile Include="Dto\Logging\Enums.cs" />
     <Compile Include="Dto\Logging\ServiceMessage.cs" />
     <Compile Include="Dto\SettingBase.cs" />
@@ -102,10 +104,13 @@
     <Compile Include="Jobs\FtpDownloadJob.cs" />
     <Compile Include="Jobs\FtpDownloadSettings.cs" />
     <Compile Include="Jobs\FtpUploadJob.cs" />
+    <Compile Include="Jobs\IQueueJob.cs" />
     <Compile Include="Jobs\ItemProcessingJobBase.cs" />
     <Compile Include="Jobs\ListImportJobBase.cs" />
     <Compile Include="JobWrapper.cs" />
     <Compile Include="JsonExtensions.cs" />
+    <Compile Include="Metadata\JobDataQueue.cs" />
+    <Compile Include="Metadata\JobDataWorkflow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ScheduleManager.cs" />
     <Compile Include="ConnectionSettingsManager.cs" />
@@ -114,6 +119,7 @@
     <Compile Include="Settings\SettingsContainer.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="TypeLoader.cs" />
+    <Compile Include="WorkflowManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

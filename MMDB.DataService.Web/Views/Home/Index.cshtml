@@ -1,5 +1,7 @@
-﻿@{
+﻿@model MMDB.DataService.Web.Models.HomePageViewModel
+@{
     ViewBag.Title = "Index";
 }
 
 <h2>Index</h2>
+@{Html.RenderPartial("JobStatusList", Model.JobStatusList);}

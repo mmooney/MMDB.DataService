@@ -8,6 +8,8 @@ using Quartz.Impl;
 using Raven.Client;
 using Quartz.Impl.Triggers;
 using System.Reflection;
+using MMDB.DataService.Data.Dto;
+using MMDB.DataService.Data.Jobs;
 
 namespace MMDB.DataService.Data
 {
@@ -148,6 +150,43 @@ namespace MMDB.DataService.Data
 			var job = this.LoadJob(id);
 			this.DocumentSession.Delete(job);
 			this.DocumentSession.SaveChanges();
+		}
+
+		public List<JobStatus> GetAllJobStatus()
+		{
+			var returnList = new List<JobStatus>();
+			var jobDefinitionList = this.DocumentSession.Query<JobDefinition>();
+			foreach(var jobDefinition in jobDefinitionList)
+			{
+				var jobAssembly = Assembly.Load(jobDefinition.AssemblyName.Replace(".dll",""));
+				var jobType = jobAssembly.GetType(jobDefinition.ClassName);
+				var queueInterface = jobType.GetInterfaces().SingleOrDefault(i=>i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueueJob<>));
+				if(queueInterface != null)
+				{
+					var queueDataType = queueInterface.GetGenericArguments()[0];
+					var entityName = this.DocumentSession.Advanced.DocumentStore.Conventions.GetTypeTagName(queueDataType);
+					var itemQuery = this.DocumentSession.Advanced.LuceneQuery<object>().WhereEquals("@metadata.Raven-Entity-Name", entityName);
+
+					var jobStatus = new JobStatus()
+					{
+						JobDefinition = jobDefinition,
+						QueueDataType = queueDataType
+					};
+					var jobStatusCountQuery = (from i in itemQuery
+											group itemQuery by ((JobData)i).Status into g
+											select new 
+											{
+												Status = g.Key,
+												Count = g.Count()
+											});
+					foreach(var jobStatusCountItem in jobStatusCountQuery)
+					{
+						jobStatus.StatusCountList.Add(jobStatusCountItem.Status, jobStatusCountItem.Count);
+					}
+					returnList.Add(jobStatus);
+				}
+			}
+			return returnList;
 		}
 	}
 }

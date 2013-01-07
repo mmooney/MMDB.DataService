@@ -3,17 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using MMDB.DataService.Data;
+using MMDB.DataService.Web.Models;
 
 namespace MMDB.DataService.Web.Controllers
 {
     public class HomeController : Controller
     {
+		private JobManager JobManager { get; set; }
+
+		public HomeController(JobManager jobManager)
+		{
+			this.JobManager = jobManager;
+		}
         //
         // GET: /Home/
 
         public ActionResult Index()
         {
-            return View();
+			var viewModel = new HomePageViewModel()
+			{
+				JobStatusList = this.JobManager.GetAllJobStatus()
+			};
+			return View(viewModel);
         }
 
     }
