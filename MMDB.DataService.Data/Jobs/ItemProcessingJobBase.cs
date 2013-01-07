@@ -8,15 +8,21 @@ using Raven.Client;
 
 namespace MMDB.DataService.Data.Jobs
 {
-	public abstract class ItemProcessingJob<T>: IDataServiceJob where T:JobData
+	public abstract class ItemProcessingJob<T> : IQueueJob<T> where T : JobData
 	{
 		protected IDocumentSession DocumentSession { get; private set; }
 		protected EventReporter EventReporter { get; private set; }
+
 
 		public ItemProcessingJob(IDocumentSession documentSession, EventReporter eventReporter)
 		{
 			this.DocumentSession = documentSession;
 			this.EventReporter = eventReporter;
+		}
+
+		public Type GetQueueDataType()
+		{
+			return typeof(T);
 		}
 
 		public void Run()
@@ -59,5 +65,6 @@ namespace MMDB.DataService.Data.Jobs
 			jobData.Status = EnumJobStatus.Error;
 			jobData.ExceptionIdList.Add(errorObject.Id);
 		}
+
 	}
 }

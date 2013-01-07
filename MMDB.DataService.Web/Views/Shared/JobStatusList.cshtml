@@ -1,0 +1,21 @@
+﻿@model IEnumerable<MMDB.DataService.Data.Dto.Jobs.JobStatus>
+<table>
+    <tr class="ui-widget-header">
+        <th>Job Name</th>
+		<th>New</th>
+		<th>In Process</th>
+		<th>Complete</th>
+		<th>Error</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+		<td>@item.JobDefinition.JobName</td>
+		<th>@item.GetStatusCount(MMDB.DataService.Data.Dto.EnumJobStatus.New)</th>
+		<th>@item.GetStatusCount(MMDB.DataService.Data.Dto.EnumJobStatus.InProcess)</th>
+		<th>@item.GetStatusCount(MMDB.DataService.Data.Dto.EnumJobStatus.Complete)</th>
+		<th>@item.GetStatusCount(MMDB.DataService.Data.Dto.EnumJobStatus.Error)</th>
+    </tr>
+}
+
+</table>

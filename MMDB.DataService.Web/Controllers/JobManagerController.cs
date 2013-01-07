@@ -95,5 +95,11 @@ namespace MMDB.DataService.Web.Controllers
 			this.JobManager.DeleteJob(id);
             return RedirectToAction("Index");
         }
+
+		public ActionResult Status()
+		{
+			var list = this.JobManager.GetAllJobStatus();
+			return View(list);
+		}
     }
 }
