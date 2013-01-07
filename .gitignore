@@ -164,3 +164,4 @@ pip-log.txt
 
 packages/*
 !packages/repositories.config
+/MMDB.DataService.WindowsService/app.config
