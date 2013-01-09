@@ -41,7 +41,7 @@
     </Reference>
     <Reference Include="MMDB.Shared, Version=2.0.0.12, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\MMDB.Shared.2.0.0.12\lib\net35\MMDB.Shared.dll</HintPath>
+      <HintPath>..\packages\MMDB.Shared.2.0.0.12\lib\net35\MMDB.Shared.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.4.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
