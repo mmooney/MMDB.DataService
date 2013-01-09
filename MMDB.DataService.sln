@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6324FAF8-42AF-4C47-AE53-DD41B5F7D87A}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
@@ -15,9 +15,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMDB.DataService.Data.Tests", "MMDB.DataService.Data.Tests\MMDB.DataService.Data.Tests.csproj", "{684AF4C7-8A83-4F4C-A29D-35122631AD18}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "git", "git", "{D852550D-981F-433A-866B-3D948C446DF3}"
-	ProjectSection(SolutionItems) = preProject
-		.gitattributes = .gitattributes
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMDB.DataService.Web", "MMDB.DataService.Web\MMDB.DataService.Web.csproj", "{920BFBC6-3E92-4D53-AC8D-29E72E9E0326}"
 EndProject
@@ -28,6 +25,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMDB.DataEmail", "MMDB.DataEmail\MMDB.DataEmail.csproj", "{6CC3C4D6-A5EE-496C-9156-01B040081BD6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMDB.DataEmail.Tests", "MMDB.DataEmail.Tests\MMDB.DataEmail.Tests.csproj", "{9ED76F4C-1B5B-42C5-A66F-A8CF4E446210}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0A170282-CB86-46C9-B18E-A64FF1A4EF34}"
+	ProjectSection(SolutionItems) = preProject
+		MMDB.DataService.build = MMDB.DataService.build
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
