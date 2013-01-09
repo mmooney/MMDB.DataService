@@ -30,6 +30,7 @@ namespace MMDB.DataService.Data.Jobs
 				try
 				{
 					bool jobAlreadyExisted;
+					this.EventReporter.InfoForObject(this.GetType().Name + ": processing item", item);
 					var jobData = this.TryCreateJobData(item, out jobAlreadyExisted);
 					if (jobData == null)
 					{
@@ -42,7 +43,7 @@ namespace MMDB.DataService.Data.Jobs
 					}
 					else
 					{
-						this.EventReporter.InfoForObject(typeof(ImportDataType).Name  + " job data created", item);
+						this.EventReporter.InfoForObject(this.GetType().Name + ": item done", jobData);
 					}
 				}
 				catch (Exception err)

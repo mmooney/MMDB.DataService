@@ -63,5 +63,17 @@ namespace MMDB.DataService.Web.Controllers
 			return View(item);
 		}
 
+		public ActionResult Edit(int id)
+		{
+			var item = this.DataObjectManager.GetMetadata(id);
+			return View(item);
+		}
+
+		[HttpPost]
+		public ActionResult Edit(int id, string objectName, string assemblyName, string className)
+		{
+			this.DataObjectManager.UpdateMetadata(id, objectName, assemblyName, className);
+			return RedirectToAction("Index");
+		}
     }
 }

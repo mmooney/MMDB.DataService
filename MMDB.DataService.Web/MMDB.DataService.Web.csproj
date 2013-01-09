@@ -385,6 +385,9 @@
   <ItemGroup>
     <Content Include="Views\DataObject\DisplayTemplates\Placeholder.cshtml" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DataObject\Edit.cshtml" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

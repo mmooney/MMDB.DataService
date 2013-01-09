@@ -41,10 +41,10 @@ namespace MMDB.DataService.Data.Jobs
 				{
 					try
 					{
-						this.EventReporter.Trace(this.GetType().Name + ": processing item", jobData);
+						this.EventReporter.InfoForObject(this.GetType().Name + ": processing item", jobData);
 						this.ProcessItem(jobData);
 						this.MarkItemSuccessful(jobData);
-						this.EventReporter.Trace(this.GetType().Name + ": item done");
+						this.EventReporter.InfoForObject(this.GetType().Name + ": item done", jobData);
 					}
 					catch (Exception err)
 					{

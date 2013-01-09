@@ -76,5 +76,14 @@ namespace MMDB.DataService.Data.Metadata
 			var metadata = this.GetMetadata(objectName);
 			return this.GetDataObject(metadata, objectId);
 		}
+
+		public void UpdateMetadata(int id, string objectName, string assemblyName, string className)
+		{
+			var item = this.GetMetadata(id);
+			item.ObjectName = objectName;
+			item.AssemblyName = assemblyName;
+			item.ClassName = className;
+			this.DocumentSession.SaveChanges();
+		}
 	}
 }
