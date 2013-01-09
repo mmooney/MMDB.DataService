@@ -121,13 +121,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\NinjectWebCommon.cs" />
+    <Compile Include="Controllers\DataObjectController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\JobAssemblyController.cs" />
     <Compile Include="Controllers\JobDataQueueController.cs" />
     <Compile Include="Controllers\JobManagerController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
-    <Compile Include="Controllers\WorkflowController.cs" />
+    <Compile Include="Controllers\ViewManagerController.cs" />
+    <Compile Include="DataServicePathProvider.cs" />
+    <Compile Include="DataServiceVirtualFile.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -136,7 +139,9 @@
     <Compile Include="Models\CreateJobDefinitionViewModel.cs" />
     <Compile Include="Models\HomePageViewModel.cs" />
     <Compile Include="Models\JobQueueDataListViewModel.cs" />
+    <Compile Include="Models\MetadataDetailsViewModel.cs" />
     <Compile Include="Models\PagedViewModel.cs" />
+    <Compile Include="Models\ViewDataViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -339,15 +344,6 @@
     <Content Include="Views\Shared\DisplayTemplates\JobDefinition.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Workflow\Index.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Workflow\Create.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Workflow\Edit.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\JobManager\Status.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -364,6 +360,30 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Events\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DataObject\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DataObject\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DataObject\Details.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DataObject\ViewData.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ViewManager\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ViewManager\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\ViewManager\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\DataObject\DisplayTemplates\Placeholder.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

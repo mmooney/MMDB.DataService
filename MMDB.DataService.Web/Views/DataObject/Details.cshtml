@@ -1,0 +1,46 @@
+﻿@model MMDB.DataService.Web.Models.MetadataDetailsViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<fieldset>
+    <legend>DataObjectMetadata</legend>
+
+    <div class="display-label">ObjectName</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Metadata.ObjectName)
+    </div>
+
+    <div class="display-label">AssemblyName</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Metadata.AssemblyName)
+    </div>
+
+    <div class="display-label">ClassName</div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Metadata.ClassName)
+    </div>
+</fieldset>
+<fieldset>
+	<legend>Data</legend>
+	<table>
+		<tr>
+			<td>ID</td>
+			<td></td>
+		</tr>
+		@foreach(dynamic item in Model.DataList)
+		{
+			<tr>
+				<td>@item.Id</td>
+				<td>@Html.ActionLink("View", "ViewData", "DataObject", new { objectName=@Model.Metadata.ObjectName, objectId=@item.Id }, null)</td>
+			</tr>
+		}
+	</table>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Metadata.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -8,6 +8,7 @@ using Raven.Client.Document;
 using System.Configuration;
 using Raven.Client;
 using MMDB.RavenDB.DynamicData;
+using System.Web.Hosting;
 
 namespace MMDB.DataService.Web
 {
@@ -42,6 +43,8 @@ namespace MMDB.DataService.Web
 			RegisterGlobalFilters(GlobalFilters.Filters);
 			RegisterRoutes(RouteTable.Routes);
 
+			var pathProvider = App_Start.NinjectWebCommon.Get<DataServicePathProvider>();
+			HostingEnvironment.RegisterVirtualPathProvider(pathProvider);
 			//RavenDataHandler.Register(this.DocumentStore, "admin", new RazorViewEngine());
 		}
 	}

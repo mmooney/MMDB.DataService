@@ -1,0 +1,8 @@
+﻿@model MMDB.DataService.Web.Models.ViewDataViewModel
+
+@{
+    ViewBag.Title = "ViewData";
+}
+
+<h2>View Data for @Model.Metadata.ObjectName: @Model.DataObject.Id</h2>
+@Html.DisplayFor(model=>model.DataObject)

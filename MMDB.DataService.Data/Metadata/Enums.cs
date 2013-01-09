@@ -5,8 +5,11 @@ using System.Text;
 
 namespace MMDB.DataService.Data.Metadata
 {
-	public class JobDataQueue
+	public enum EnumViewStorageType
 	{
-		public string QueueName { get; set; }
+		Unknown,
+		Database,
+		ResourceFile,
+		FileSystem
 	}
 }
