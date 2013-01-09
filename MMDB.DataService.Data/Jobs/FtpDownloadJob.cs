@@ -57,10 +57,6 @@ namespace MMDB.DataService.Data.Jobs
 		protected override List<FtpDownloadMetadata> GetListToProcess()
 		{
 			var settings = this.SettingsManager.Get<FtpDownloadServiceSettings>();
-			if(settings == null)
-			{
-				throw new Exception("Unable to find FtpDownloadServiceSettings");
-			}
 			if(settings.FtpDownloadSettings == null || settings.FtpDownloadSettings.Count == 0)
 			{
 				throw new Exception("FtpDownloadServiceSettings.FtpDownloadSettings is empty");

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 
 namespace MMDB.DataEmail
@@ -12,12 +13,13 @@ namespace MMDB.DataEmail
 
 		}
 
-		public override void SendEmail(string subject, string body, IEnumerable<string> toAddressList, string fromAddress)
+		public override void SendEmail(string subject, string body, IEnumerable<string> toAddressList, string fromAddress, params EmailAttachementData[] attachments)
 		{
 			//Do Nothing
 		}
 
-		public override void SendEmail(string subject, string body, IEnumerable<System.Net.Mail.MailAddress> toAddressList, System.Net.Mail.MailAddress fromAddress)
+
+		public override void SendEmail(string subject, string body, IEnumerable<MailAddress> toAddressList, MailAddress fromAddress, params EmailAttachementData[] attachments)
 		{
 			//Do Nothing
 		}

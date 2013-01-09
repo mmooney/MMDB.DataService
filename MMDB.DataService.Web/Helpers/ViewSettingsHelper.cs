@@ -14,7 +14,7 @@ namespace MMDB.DataService.Web.Helpers
 			get 
 			{
 				var settingsManager = NinjectWebCommon.Get<SettingsManager>();
-				var settings = settingsManager.Get<CoreDataServiceSettings>();
+				var settings = settingsManager.TryGet<CoreDataServiceSettings>();
 				if(settings == null)
 				{
 					return "MMDB Data Service";
@@ -31,7 +31,7 @@ namespace MMDB.DataService.Web.Helpers
 			get 
 			{
 				var settingsManager = NinjectWebCommon.Get<SettingsManager>();
-				var settings = settingsManager.Get<CoreDataServiceSettings>();
+				var settings = settingsManager.TryGet<CoreDataServiceSettings>();
 				if(settings == null)
 				{
 					return "http://mmdbsolutions.com/Portals/6/logo_web.jpg";

@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EmailAttachementData.cs" />
     <Compile Include="EmailSender.cs" />
     <Compile Include="EmailServerSettings.cs" />
     <Compile Include="FakeEmailSender.cs" />

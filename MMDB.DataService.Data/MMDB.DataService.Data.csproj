@@ -120,6 +120,7 @@
     <Compile Include="Settings\SettingsBase.cs" />
     <Compile Include="Settings\SettingsContainer.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
+    <Compile Include="StreamHelper.cs" />
     <Compile Include="TypeLoader.cs" />
     <Compile Include="WorkflowManager.cs" />
   </ItemGroup>
