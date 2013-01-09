@@ -17,12 +17,14 @@ namespace MMDB.DataService.Data
 		private IDocumentSession DocumentSession { get; set; }
 		private ConnectionSettingsManager SettingsManager { get; set; }
 		private EventReporter EventReporter { get; set; }
+		private IDocumentStore DocumentStore;
 
-		public FtpManager(IDocumentSession documentSession, ConnectionSettingsManager settingsManager, EventReporter eventReporter)
+		public FtpManager(IDocumentSession documentSession, ConnectionSettingsManager settingsManager, EventReporter eventReporter, IDocumentStore documentStore)
 		{
 			this.DocumentSession = documentSession;
 			this.SettingsManager = settingsManager;
 			this.EventReporter = eventReporter;
+			this.DocumentStore = documentStore;
 		}
 
 		public FtpOutboundData GetNextUploadItem()
@@ -54,7 +56,7 @@ namespace MMDB.DataService.Data
 					writer.Write(fileData);
 					writer.Flush();
 					stream.Position = 0;
-					this.DocumentSession.Advanced.DatabaseCommands.PutAttachment(attachmentID, null, stream, new Raven.Json.Linq.RavenJObject());
+					this.DocumentStore.DatabaseCommands.PutAttachment(attachmentID, null, stream, new Raven.Json.Linq.RavenJObject());
 				}
 			}
 			var newItem = new FtpOutboundData
@@ -162,7 +164,7 @@ namespace MMDB.DataService.Data
 				string attachmentID = Guid.NewGuid().ToString();
 				using(FileStream stream = new FileStream(tempPath, FileMode.Open))
 				{
-					this.DocumentSession.Advanced.DatabaseCommands.PutAttachment(attachmentID, null, stream, new Raven.Json.Linq.RavenJObject());
+					this.DocumentStore.DatabaseCommands.PutAttachment(attachmentID, null, stream, new Raven.Json.Linq.RavenJObject());
 				}
 				return attachmentID;
 			}
@@ -205,7 +207,7 @@ namespace MMDB.DataService.Data
 			string tempPath = Path.Combine(tempDirectory, Guid.NewGuid().ToString() + "." + targetFileName);
 			try 
 			{
-				var attachment = this.DocumentSession.Advanced.DatabaseCommands.GetAttachment(jobItem.AttachmentId);
+				var attachment = this.DocumentStore.DatabaseCommands.GetAttachment(jobItem.AttachmentId);
 				using (var fileStream = File.Create(tempPath))
 				{
 					attachment.Data().CopyTo(fileStream);

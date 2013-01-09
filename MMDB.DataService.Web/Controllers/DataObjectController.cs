@@ -47,16 +47,6 @@ namespace MMDB.DataService.Web.Controllers
 			return View(viewModel);
 		}
 
-		public ActionResult ViewData(string objectName, int objectId)
-		{
-			var viewModel = new ViewDataViewModel
-			{
-				Metadata = this.DataObjectManager.GetMetadata(objectName)
-			};
-			viewModel.DataObject = this.DataObjectManager.GetDataObject(viewModel.Metadata, objectId);
-			return View(viewModel);
-		}
-
 		public ActionResult ViewDataItem(string objectName, int objectId)
 		{
 			var item = this.DataObjectManager.GetDataObject(objectName, objectId);
