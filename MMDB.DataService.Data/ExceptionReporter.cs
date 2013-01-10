@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using MMDB.DataEmail;
 using MMDB.DataService.Data.Dto.Logging;
 using MMDB.DataService.Data.Settings;
+using MMDB.RazorEmail;
 
 namespace MMDB.DataService.Data
 {

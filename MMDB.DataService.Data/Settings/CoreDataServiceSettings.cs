@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MMDB.DataEmail;
+using MMDB.RazorEmail;
 
 namespace MMDB.DataService.Data.Settings
 {
