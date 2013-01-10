@@ -37,7 +37,7 @@ namespace MMDB.DataService.Web.Controllers
         // POST: /JobManager/Create
 
         [HttpPost]
-        public ActionResult Create(string jobName, string assemblyName, string className, string schedule, int intervalMinutes, int delayStartMinutes, string cronScheduleExpression)
+        public ActionResult Create(string jobName, string assemblyName, string className, string schedule, int intervalMinutes=0, int delayStartMinutes=0, string cronScheduleExpression=null)
         {
 			if(schedule == "Simple")
 			{

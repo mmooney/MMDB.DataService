@@ -53,12 +53,9 @@ namespace MMDB.DataService.Data
 			}
 			else if (jobDefinition.Schedule is JobCronSchedule)
 			{
-				//string jobTypeName = typeof(JobType).Name;
-				//this.Logger.Trace("Creating " + jobTypeName);
-				//var jobDetail = new JobDetailImpl(jobDefinition.JobName, typeof(ServiceJob<JobType>));
-				//var trigger = new CronTriggerImpl(jobTypeName + "Trigger", jobTypeName + "Group", cronExpression);
-				//this.Scheduler.ScheduleJob(jobDetail, trigger);
-				//this.Logger.Trace("Done Creating " + jobTypeName);
+				var schedule = (JobCronSchedule)jobDefinition.Schedule;
+				var trigger = new CronTriggerImpl(jobDefinition.JobName + "Trigger", jobDefinition.JobName + "Group", schedule.CronScheduleExpression);
+				this.Scheduler.ScheduleJob(jobDetail, trigger);
 			}
 			this.EventReporter.Trace("Done Creating " + jobDefinition.JobName);
 		}

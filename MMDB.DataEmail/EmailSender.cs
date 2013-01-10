@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Net.Mail;
 using System.Net;
+using System.IO;
 
 namespace MMDB.DataEmail
 {
@@ -49,6 +50,23 @@ namespace MMDB.DataEmail
 				{
 					message.To.Add(toAddress);
 				}
+
+				if (attachments != null)
+				{
+					foreach(var item in attachments)
+					{
+						var stream = new MemoryStream();
+						var writer = new StreamWriter(stream);
+						writer.Write(item.AttachmentData);
+						writer.Flush();
+						stream.Position = 0;
+
+						var attachment = new Attachment(stream, item.FileName);
+
+						message.Attachments.Add(attachment);
+					}
+				}
+
 				smtpClient.Send(message);
 			}
 		} 

@@ -35,7 +35,7 @@
 		{
 			<tr>
 				<td>@item.Id</td>
-				<td>@Html.ActionLink("View", "ViewData", "DataObject", new { objectName=@Model.Metadata.ObjectName, objectId=@item.Id }, null)</td>
+				<td>@Html.ActionLink("View", "ViewDataItem", "DataObject", new { objectName=@Model.Metadata.ObjectName, objectId=@item.Id }, null)</td>
 			</tr>
 		}
 	</table>

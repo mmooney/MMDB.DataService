@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Westwind.RazorHosting;
 using System.Net.Mail;
 
 namespace MMDB.DataEmail
 {
 	public class RazorEmailEngine
 	{
-		private RazorEngine RazorEngine { get; set; }
+		//private RazorHosting.RazorEngine< RazorEngine { get; set; }
 		private EmailSender EmailSender { get; set; }
 
 		public EmailServerSettings EmailServerSettings 
@@ -25,20 +24,14 @@ namespace MMDB.DataEmail
 		}
 
 
-		public RazorEmailEngine(RazorEngine razorEngine, EmailSender emailSender)
+		public RazorEmailEngine(EmailSender emailSender)
 		{
-			this.RazorEngine = razorEngine;
 			this.EmailSender = emailSender;
 		}
 
 		public void SendEmail<T>(string subject, T model, string razorView, IEnumerable<MailAddress> toAddressList, MailAddress fromAddress, params EmailAttachementData[] attachments)
 		{
-			this.RazorEngine.AddAssemblyFromType(typeof(T));
-			string body = this.RazorEngine.RenderTemplate(razorView, model);
-			if(body == null)
-			{
-				throw new Exception(this.RazorEngine.ErrorMessage);
-			}
+			string body = RazorEngine.Razor.Parse<T>(razorView, model);
 			this.EmailSender.SendEmail(subject, body, toAddressList, fromAddress, attachments);
 		}
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using Westwind.RazorHosting;
 using Moq;
 using System.Net.Mail;
 using MMDB.Shared;
@@ -50,7 +49,7 @@ namespace MMDB.DataEmail.Tests
 					var address = new MailAddress(Guid.NewGuid().ToString() + "@example.com");
 					returnValue.ToAddressList.Add(address);
 				}
-				returnValue.EmailEngine = new RazorEmailEngine(new RazorEngine(), returnValue.EmailSender.Object);
+				returnValue.EmailEngine = new RazorEmailEngine(returnValue.EmailSender.Object);
 				return returnValue;
 			}
 		}
