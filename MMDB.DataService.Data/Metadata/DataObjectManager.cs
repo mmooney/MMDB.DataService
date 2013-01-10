@@ -11,10 +11,12 @@ namespace MMDB.DataService.Data.Metadata
 	public class DataObjectManager
 	{
 		private IDocumentSession DocumentSession { get; set; }
+		private TypeLoader TypeLoader { get; set; }
 
-		public DataObjectManager(IDocumentSession documentSession)
+		public DataObjectManager(IDocumentSession documentSession, TypeLoader typeLoader)
 		{
 			this.DocumentSession = documentSession;
+			this.TypeLoader = typeLoader;
 		}
 
 		public List<DataObjectMetadata> GetMetadataList()
@@ -53,8 +55,7 @@ namespace MMDB.DataService.Data.Metadata
 
 		public IList<object> LoadData(DataObjectMetadata metadata)
 		{
-			var assembly = Assembly.Load(metadata.AssemblyName.Replace(".dll", ""));
-			var type = assembly.GetType(metadata.ClassName);
+			var type = this.TypeLoader.LoadType(metadata.AssemblyName, metadata.ClassName);
 			var entityName = this.DocumentSession.Advanced.DocumentStore.Conventions.GetTypeTagName(type);
 			var itemQuery = this.DocumentSession.Advanced.LuceneQuery<object>().WhereEquals("@metadata.Raven-Entity-Name", entityName).ToList();
 			return itemQuery;
@@ -62,8 +63,7 @@ namespace MMDB.DataService.Data.Metadata
 
 		public object GetDataObject(DataObjectMetadata metadata, int objectId)
 		{
-			var assembly = Assembly.Load(metadata.AssemblyName.Replace(".dll", ""));
-			var type = assembly.GetType(metadata.ClassName);
+			var type = this.TypeLoader.LoadType(metadata.AssemblyName, metadata.ClassName);
 			var entityName = this.DocumentSession.Advanced.DocumentStore.Conventions.GetTypeTagName(type);
 			var itemQuery = this.DocumentSession.Advanced.LuceneQuery<dynamic>().WhereEquals("@metadata.Raven-Entity-Name", entityName);
 			var item = itemQuery.Single(i=>i.Id == objectId);

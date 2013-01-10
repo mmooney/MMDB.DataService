@@ -17,7 +17,7 @@ namespace MMDB.DataService.Data.Tests
 		{
 			using(var session = EmbeddedRavenProvider.DocumentStore.OpenSession())
 			{
-				var sut = new JobManager(session, DataServiceTestHelper.GetEventReporter().Object, new Mock<IScheduler>().Object);
+				var sut = new JobManager(session, DataServiceTestHelper.GetEventReporter().Object, new Mock<IScheduler>().Object, new Mock<TypeLoader>().Object);
 				string assemblyName = Guid.NewGuid().ToString();
 				string className = Guid.NewGuid().ToString();
 				string scheduleExpression = Guid.NewGuid().ToString();
@@ -45,7 +45,7 @@ namespace MMDB.DataService.Data.Tests
 		{
 			using (var session = EmbeddedRavenProvider.DocumentStore.OpenSession())
 			{
-				var sut = new JobManager(session, DataServiceTestHelper.GetEventReporter().Object, new Mock<IScheduler>().Object);
+				var sut = new JobManager(session, DataServiceTestHelper.GetEventReporter().Object, new Mock<IScheduler>().Object, new Mock<TypeLoader>().Object);
 				string assemblyName = Guid.NewGuid().ToString();
 				string className = Guid.NewGuid().ToString();
 				int intervalMinutes = 10;
@@ -75,7 +75,7 @@ namespace MMDB.DataService.Data.Tests
 		{
 			using (var session = EmbeddedRavenProvider.DocumentStore.OpenSession())
 			{
-				var sut = new JobManager(session, DataServiceTestHelper.GetEventReporter().Object, new Mock<IScheduler>().Object);
+				var sut = new JobManager(session, DataServiceTestHelper.GetEventReporter().Object, new Mock<IScheduler>().Object, new Mock<TypeLoader>().Object);
 				string assemblyName = Guid.NewGuid().ToString();
 				string className = Guid.NewGuid().ToString();
 				string scheduleExpression = Guid.NewGuid().ToString();
@@ -103,7 +103,7 @@ namespace MMDB.DataService.Data.Tests
 		{
 			using(var session = EmbeddedRavenProvider.DocumentStore.OpenSession())
 			{
-				var sut = new JobManager(session, DataServiceTestHelper.GetEventReporter().Object, new Mock<IScheduler>().Object);
+				var sut = new JobManager(session, DataServiceTestHelper.GetEventReporter().Object, new Mock<IScheduler>().Object, new Mock<TypeLoader>().Object);
 				var list = sut.LoadJobList();
 				Assert.AreEqual(0, list.Count());
 			}

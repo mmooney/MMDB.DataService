@@ -105,7 +105,7 @@ namespace MMDB.DataService.Deployment
 									   //    //o.ForPath(Path.Combine(settings.TargetServiceDirectory,"logs"), fs => fs.GrantReadWrite(settings.ServiceUserName));
 									   });
                                        s.WinService(serviceName).Delete();
-									   s.WinService(serviceName).Create().WithCredentials(settings.ServiceUserName, settings.ServiceUserPassword).WithDisplayName("{{ServiceName}})").WithServicePath(@"{{TargetServiceDirectory}}\MMDB.DataService.WindowsService.exe").
+									   s.WinService(serviceName).Create().WithCredentials(settings.ServiceUserName, settings.ServiceUserPassword).WithDisplayName("{{ServiceName}}").WithServicePath(@"{{TargetServiceDirectory}}\MMDB.DataService.WindowsService.exe").
                                            WithStartMode(settings.ServiceStartMode)
                                            //.AddDependency("MSMQ")
                                            ;

@@ -18,15 +18,17 @@ namespace MMDB.DataService.Data
 		private IDocumentSession DocumentSession { get; set; } 
 		private EventReporter EventReporter { get; set; }
 		private IScheduler Scheduler { get; set; }
+		private TypeLoader TypeLoader { get; set; }
 
-		public JobManager(IDocumentSession documentSession, EventReporter eventReporter, IScheduler scheduler)
+		public JobManager(IDocumentSession documentSession, EventReporter eventReporter, IScheduler scheduler, TypeLoader typeLoader)
 		{
 			this.DocumentSession = documentSession;
 			this.EventReporter = eventReporter;
 			this.Scheduler = scheduler;
+			this.TypeLoader = typeLoader;
 		}
 
-		public void StartJobs()
+		public virtual void StartJobs()
 		{
 			var jobDefintionList = this.DocumentSession.Query<JobDefinition>();
 			foreach(var jobDefinition in jobDefintionList)
@@ -39,8 +41,7 @@ namespace MMDB.DataService.Data
 		private void StartJob(JobDefinition jobDefinition)
 		{
 			this.EventReporter.Trace("Creating " + jobDefinition.JobName);
-			var jobAssembly = Assembly.LoadFrom(jobDefinition.AssemblyName);
-			var jobType = jobAssembly.GetType(jobDefinition.ClassName);
+			var jobType = this.TypeLoader.LoadType(jobDefinition.AssemblyName, jobDefinition.ClassName);
 			var wrapperType = typeof(JobWrapper<>).MakeGenericType(jobType);
 			var jobDetail = new JobDetailImpl(jobDefinition.JobName, wrapperType);
 
@@ -216,11 +217,12 @@ namespace MMDB.DataService.Data
 			return itemQuery.AsQueryable();
 		}
 
-		private static Type TryGetQueueDataType(JobDefinition jobDefinition)
+		private Type TryGetQueueDataType(JobDefinition jobDefinition)
 		{
 			Type queueDataType = null;
-			var jobAssembly = Assembly.Load(jobDefinition.AssemblyName.Replace(".dll", ""));
-			var jobType = jobAssembly.GetType(jobDefinition.ClassName);
+			var jobType = this.TypeLoader.LoadType(jobDefinition.AssemblyName, jobDefinition.ClassName);
+			//var jobAssembly = Assembly.Load(jobDefinition.AssemblyName.Replace(".dll", ""));
+			//var jobType = jobAssembly.GetType(jobDefinition.ClassName);
 			var queueInterface = jobType.GetInterfaces().SingleOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueueJob<>));
 			if (queueInterface != null)
 			{
