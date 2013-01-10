@@ -93,17 +93,17 @@ namespace MMDB.DataService.Deployment
 
 									   s.CopyFile(@"Configs\{{Environment}}\MMDB.DataService.WindowsService.exe.config").ToDirectory(@"{{TargetServiceDirectory}}");
 
-									   //s.Security(o =>
-									   //{
-									   //    o.LocalPolicy(lp =>
-									   //    {
-									   //        lp.LogOnAsService(settings.ServiceUserName);
-									   //        lp.LogOnAsBatch(settings.ServiceUserName);
-									   //    });
+									   s.Security(o =>
+									   {
+									       o.LocalPolicy(lp =>
+									       {
+									           lp.LogOnAsService(settings.ServiceUserName);
+									           lp.LogOnAsBatch(settings.ServiceUserName);
+									       });
 
-									   //    o.ForPath(settings.TargetServiceDirectory, fs => fs.GrantRead(settings.ServiceUserName));
+									       o.ForPath(settings.TargetServiceDirectory, fs => fs.GrantRead(settings.ServiceUserName));
 									   //    //o.ForPath(Path.Combine(settings.TargetServiceDirectory,"logs"), fs => fs.GrantReadWrite(settings.ServiceUserName));
-									   //});
+									   });
                                        s.WinService(serviceName).Delete();
 									   s.WinService(serviceName).Create().WithCredentials(settings.ServiceUserName, settings.ServiceUserPassword).WithDisplayName("{{ServiceName}})").WithServicePath(@"{{TargetServiceDirectory}}\MMDB.DataService.WindowsService.exe").
                                            WithStartMode(settings.ServiceStartMode)
