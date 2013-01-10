@@ -91,7 +91,7 @@ namespace MMDB.DataService.Deployment
 
 									   s.CopyDirectory(@"WindowsService").To(@"{{TargetServiceDirectory}}").DeleteDestinationBeforeDeploying();
 
-									   s.CopyFile(@"Configs\{{Environment}}\CleanItSupply.Data.WindowsService.exe.config").ToDirectory(@"{{TargetServiceDirectory}}");
+									   s.CopyFile(@"Configs\{{Environment}}\MMDB.DataService.WindowsService.exe.config").ToDirectory(@"{{TargetServiceDirectory}}");
 
 									   //s.Security(o =>
 									   //{
