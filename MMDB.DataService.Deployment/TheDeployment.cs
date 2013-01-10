@@ -35,61 +35,77 @@ namespace MMDB.DataService.Deployment
         {
             Define(settings =>
             {
-                DeploymentStepsFor(Web,
-                                   s =>
-                                   {
-                                       s.CopyDirectory(@"..\_PublishedWebSites\__REPLACE_ME__").To(@"{{WebsitePath}}").DeleteDestinationBeforeDeploying();
+				//DeploymentStepsFor(Db,
+				//                   s =>
+				//                   {
+				//                       //s.RoundhousE()
+				//                       //    .ForEnvironment(settings.Environment)
+				//                       //    .OnDatabase(settings.DbName)
+				//                       //    .WithScriptsFolder(settings.DbSqlFilesPath)
+				//                       //    .WithDatabaseRecoveryMode(settings.DbRecoveryMode)
+				//                       //    .WithRestorePath(settings.DbRestorePath)
+				//                       //    .WithRepositoryPath("__REPLACE_ME__")
+				//                       //    .WithVersionFile("_BuildInfo.xml")
+				//                       //    .WithRoundhousEMode(settings.RoundhousEMode)
+				//                       //    ;
+				//                   });
 
-                                       s.CopyFile(@"..\environment.files\{{Environment}}\{{Environment}}.web.config").ToDirectory(@"{{WebsitePath}}").RenameTo(@"web.config");
+				//DeploymentStepsFor(Web,
+				//                   s =>
+				//                   {
+				//                       s.CopyDirectory(@"..\_PublishedWebSites\__REPLACE_ME__").To(@"{{WebsitePath}}").DeleteDestinationBeforeDeploying();
 
-                                       s.Security(securityOptions =>
-                                       {
-                                           securityOptions.ForPath(settings.WebsitePath, fileSecurityConfig => fileSecurityConfig.GrantRead(settings.WebUserName));
-                                           securityOptions.ForPath(Path.Combine(settings.WebsitePath, "logs"), fs => fs.GrantReadWrite(settings.WebUserName));
-                                           securityOptions.ForPath(@"~\C$\Windows\Microsoft.NET\Framework\v4.0.30319\Temporary ASP.NET Files", fs => fs.GrantReadWrite(settings.WebUserName));
-                                           if (Directory.Exists(@"~\C$\Windows\Microsoft.NET\Framework64\v4.0.30319\Temporary ASP.NET Files"))
-                                           {
-                                               securityOptions.ForPath(@"~\C$\Windows\Microsoft.NET\Framework64\v4.0.30319\Temporary ASP.NET Files", fs => fs.GrantReadWrite(settings.WebUserName));
-                                           }
-                                       });
-                                   });
+				//                       s.CopyFile(@"..\environment.files\{{Environment}}\{{Environment}}.web.config").ToDirectory(@"{{WebsitePath}}").RenameTo(@"web.config");
 
-                DeploymentStepsFor(VirtualDirectory,
-                                   s =>
-                                   {
-                                       s.Iis7Site(settings.VirtualDirectorySite)
-                                        .VirtualDirectory(settings.VirtualDirectoryName)
-                                        .SetAppPoolTo("Default Web Site", pool =>
-                                                        {
-                                                            pool.SetRuntimeToV4();
-                                                            //pool.UseClassicPipeline();
-                                                            //pool.Enable32BitAppOnWin64();
-                                                        }).SetPathTo(@"{{WebsitePath}}");
-                                   });
+				//                       s.Security(securityOptions =>
+				//                       {
+				//                           securityOptions.ForPath(settings.WebsitePath, fileSecurityConfig => fileSecurityConfig.GrantRead(settings.WebUserName));
+				//                           securityOptions.ForPath(Path.Combine(settings.WebsitePath, "logs"), fs => fs.GrantReadWrite(settings.WebUserName));
+				//                           securityOptions.ForPath(@"~\C$\Windows\Microsoft.NET\Framework\v4.0.30319\Temporary ASP.NET Files", fs => fs.GrantReadWrite(settings.WebUserName));
+				//                           if (Directory.Exists(@"~\C$\Windows\Microsoft.NET\Framework64\v4.0.30319\Temporary ASP.NET Files"))
+				//                           {
+				//                               securityOptions.ForPath(@"~\C$\Windows\Microsoft.NET\Framework64\v4.0.30319\Temporary ASP.NET Files", fs => fs.GrantReadWrite(settings.WebUserName));
+				//                           }
+				//                       });
+				//                   });
+
+				//DeploymentStepsFor(VirtualDirectory,
+				//                   s =>
+				//                   {
+				//                       s.Iis7Site(settings.VirtualDirectorySite)
+				//                        .VirtualDirectory(settings.VirtualDirectoryName)
+				//                        .SetAppPoolTo("Default Web Site", pool =>
+				//                                        {
+				//                                            pool.SetRuntimeToV4();
+				//                                            //pool.UseClassicPipeline();
+				//                                            //pool.Enable32BitAppOnWin64();
+				//                                        }).SetPathTo(@"{{WebsitePath}}");
+				//                   });
 
                 DeploymentStepsFor(Host,
                                    s =>
                                    {
-                                       var serviceName = "__REPLACE_ME__.{{Environment}}";
+                                       //var serviceName = "__REPLACE_ME__.{{Environment}}";
+									   var serviceName = "{{ServiceName}}";
                                        s.WinService(serviceName).Stop();
 
-                                       s.CopyDirectory(@"..\_PublishedApplications\__REPLACE_ME__").To(@"{{HostServicePath}}").DeleteDestinationBeforeDeploying();
+									   s.CopyDirectory(@"WindowsService").To(@"{{TargetServiceDirectory}}").DeleteDestinationBeforeDeploying();
 
-                                       s.CopyFile(@"..\environment.files\{{Environment}}\{{Environment}}.__REPLACE_ME__.exe.config").ToDirectory(@"{{HostServicePath}}").RenameTo(@"__REPLACE_ME__.exe.config");
+									   s.CopyFile(@"Configs\{{Environment}}\CleanItSupply.Data.WindowsService.exe.config").ToDirectory(@"{{TargetServiceDirectory}}");
 
-                                       s.Security(o =>
-                                       {
-                                           o.LocalPolicy(lp =>
-                                           {
-                                               lp.LogOnAsService(settings.ServiceUserName);
-                                               lp.LogOnAsBatch(settings.ServiceUserName);
-                                           });
+									   //s.Security(o =>
+									   //{
+									   //    o.LocalPolicy(lp =>
+									   //    {
+									   //        lp.LogOnAsService(settings.ServiceUserName);
+									   //        lp.LogOnAsBatch(settings.ServiceUserName);
+									   //    });
 
-                                           o.ForPath(settings.HostServicePath, fs => fs.GrantRead(settings.ServiceUserName));
-                                           o.ForPath(Path.Combine(settings.HostServicePath,"logs"), fs => fs.GrantReadWrite(settings.ServiceUserName));
-                                       });
+									   //    o.ForPath(settings.TargetServiceDirectory, fs => fs.GrantRead(settings.ServiceUserName));
+									   //    //o.ForPath(Path.Combine(settings.TargetServiceDirectory,"logs"), fs => fs.GrantReadWrite(settings.ServiceUserName));
+									   //});
                                        s.WinService(serviceName).Delete();
-                                       s.WinService(serviceName).Create().WithCredentials(settings.ServiceUserName, settings.ServiceUserPassword).WithDisplayName("__REPLACE_ME__ ({{Environment}})").WithServicePath(@"{{HostServicePath}}\__REPLACE_ME__.exe").
+									   s.WinService(serviceName).Create().WithCredentials(settings.ServiceUserName, settings.ServiceUserPassword).WithDisplayName("{{ServiceName}})").WithServicePath(@"{{TargetServiceDirectory}}\CleanItSupply.Data.WindowsService.exe").
                                            WithStartMode(settings.ServiceStartMode)
                                            //.AddDependency("MSMQ")
                                            ;
@@ -107,10 +123,10 @@ namespace MMDB.DataService.Deployment
         #region Properties
 
         //order is important
-        public static Role Web { get; set; }
-        public static Role VirtualDirectory { get; set; }
+        //public static Role Db { get; set; }
+        //public static Role Web { get; set; }
+        //public static Role VirtualDirectory { get; set; }
         public static Role Host { get; set; }
 
         #endregion
-    }
 }

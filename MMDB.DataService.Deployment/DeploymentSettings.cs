@@ -21,33 +21,19 @@ using dropkick.Wmi;
 
 namespace MMDB.DataService.Deployment
 {
-    public class DeploymentSettings : DropkickConfiguration
-    {
-        
-        #region Properties
+	public class DeploymentSettings : DropkickConfiguration
+	{
 
-        //directories
-        public string WebsitePath { get; set; }
-        public string HostServicePath { get; set; }
+		#region Properties
 
-        //service info
-        public ServiceStartMode ServiceStartMode { get; set; }
-        public string ServiceUserName { get; set; }
-        public string ServiceUserPassword { get; set; }
+		public string ServiceName { get; set; }
+		public string TargetServiceDirectory { get; set; }
 
-        //web stuff
-        public string WebUserName { get; set; }
-        public string WebUserPassword { get; set; }
-        public string VirtualDirectorySite { get; set; }
-        public string VirtualDirectoryName { get; set; }
-        
-        //database stuff 
-        public string DbName { get; set; }
-        public string DbSqlFilesPath { get; set; }
-        public string DbRestorePath { get; set; }
-        public DatabaseRecoveryMode DbRecoveryMode { get; set; }
-        public RoundhousEMode RoundhousEMode { get; set; }
+		//service info
+		public ServiceStartMode ServiceStartMode { get; set; }
+		public string ServiceUserName { get; set; }
+		public string ServiceUserPassword { get; set; }
 
-        #endregion
-    }
+		#endregion
+	}
 }

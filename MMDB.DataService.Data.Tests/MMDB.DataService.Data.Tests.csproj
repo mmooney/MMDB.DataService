@@ -86,7 +86,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MMDB.DataService.Data\MMDB.DataService.Data.csproj">
-      <Project>{948C1F2B-7562-4F84-8521-4B151CF6AE6D}</Project>
+      <Project>{948c1f2b-7562-4f84-8521-4b151cf6ae6d}</Project>
       <Name>MMDB.DataService.Data</Name>
     </ProjectReference>
   </ItemGroup>
