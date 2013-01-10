@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Hosting;
 using MMDB.DataService.Data;
+using MMDB.Shared;
 
 namespace MMDB.DataService.Web
 {
@@ -26,8 +27,7 @@ namespace MMDB.DataService.Web
 		}
 		public override Stream Open()
 		{
-			var stream = new MemoryStream(); 
-			StreamHelper.WriteAll(stream, this.FileData);
+			var stream = StreamHelper.CreateMemoryStream(this.FileData);
 			stream.Position = 0;
 			return stream;
 		}

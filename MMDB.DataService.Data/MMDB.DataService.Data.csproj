@@ -39,9 +39,9 @@
     <Reference Include="Common.Logging">
       <HintPath>..\packages\Common.Logging.2.0.0\lib\2.0\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="MMDB.RazorEmail">
-      <HintPath>..\packages\MMDB.RazorEmail.1.0.0.2\lib\net40\MMDB.RazorEmail.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="MMDB.RazorEmail, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MMDB.RazorEmail.1.0.0.3\lib\net40\MMDB.RazorEmail.dll</HintPath>
     </Reference>
     <Reference Include="MMDB.Shared, Version=2.0.0.15, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -132,7 +132,6 @@
     <Compile Include="Settings\SettingsBase.cs" />
     <Compile Include="Settings\SettingsContainer.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
-    <Compile Include="StreamHelper.cs" />
     <Compile Include="TypeLoader.cs" />
   </ItemGroup>
   <ItemGroup>
