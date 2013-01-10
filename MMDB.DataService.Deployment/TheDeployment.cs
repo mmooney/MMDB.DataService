@@ -129,4 +129,5 @@ namespace MMDB.DataService.Deployment
         public static Role Host { get; set; }
 
         #endregion
+	}
 }
