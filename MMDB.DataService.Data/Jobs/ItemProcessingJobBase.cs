@@ -70,6 +70,5 @@ namespace MMDB.DataService.Data.Jobs
 			jobData.ExceptionIdList.Add(errorObject.Id);
 			this.DocumentSession.SaveChanges();
 		}
-
 	}
 }

@@ -39,9 +39,9 @@
     <Reference Include="Common.Logging">
       <HintPath>..\packages\Common.Logging.2.0.0\lib\2.0\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="MMDB.RazorEmail, Version=1.0.0.3, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MMDB.RazorEmail, Version=1.0.0.4, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MMDB.RazorEmail.1.0.0.3\lib\net40\MMDB.RazorEmail.dll</HintPath>
+      <HintPath>..\packages\MMDB.RazorEmail.1.0.0.4\lib\net40\MMDB.RazorEmail.dll</HintPath>
     </Reference>
     <Reference Include="MMDB.Shared, Version=2.0.0.15, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -90,6 +90,8 @@
     <Compile Include="Dto\Assemblies\JobAssembly.cs" />
     <Compile Include="Dto\Enums.cs" />
     <Compile Include="Dto\Ftp\FtpDownloadMetadata.cs" />
+    <Compile Include="Jobs\DataServiceJobBase.cs" />
+    <Compile Include="Jobs\JobConfigurationBase.cs" />
     <Compile Include="Jobs\FtpDownloadServiceSettings.cs" />
     <Compile Include="Dto\Ftp\FtpInboundData.cs" />
     <Compile Include="Dto\Ftp\FtpOutboundData.cs" />
@@ -117,6 +119,8 @@
     <Compile Include="Jobs\IQueueJob.cs" />
     <Compile Include="Jobs\ItemProcessingJobBase.cs" />
     <Compile Include="Jobs\ListImportJobBase.cs" />
+    <Compile Include="Jobs\LogPurgeJob.cs" />
+    <Compile Include="Jobs\LogPurgeJobConfiguration.cs" />
     <Compile Include="JobWrapper.cs" />
     <Compile Include="JsonExtensions.cs" />
     <Compile Include="Metadata\DataObjectMetadata.cs" />

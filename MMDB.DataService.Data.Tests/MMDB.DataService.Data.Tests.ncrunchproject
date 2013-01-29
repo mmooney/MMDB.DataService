@@ -19,7 +19,7 @@
   <UseCPUArchitecture>AutoDetect</UseCPUArchitecture>
   <IgnoredTests>
     <RegexTestSelector>
-      <RegularExpression>.*</RegularExpression>
+      <RegularExpression>MMDB\.DataService\.Data\.Tests\.JobManangerTests\..*</RegularExpression>
     </RegexTestSelector>
   </IgnoredTests>
 </ProjectConfiguration>

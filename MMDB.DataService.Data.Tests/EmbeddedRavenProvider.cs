@@ -6,6 +6,7 @@ using Raven.Client;
 using Raven.Client.Embedded;
 using Raven.Client.Document;
 using MMDB.DataService.Data.DataProvider;
+using Raven.Client.Indexes;
 
 namespace MMDB.DataService.Data.Tests
 {
@@ -25,10 +26,11 @@ namespace MMDB.DataService.Data.Tests
 							RunInMemory = true,
 							Conventions = new DocumentConvention
 							{
-								DefaultQueryingConsistency = ConsistencyOptions.QueryYourWrites,
+								DefaultQueryingConsistency =  ConsistencyOptions.QueryYourWrites,
 							},
 						};
 						_documentStore.Initialize();
+						IndexCreation.CreateIndexes(typeof(MMDB.DataService.Data.IDataServiceJob).Assembly, _documentStore);
 					}
 				}
 				return _documentStore;

@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
 
 namespace MMDB.DataService.Data.Dto.Logging
 {
+	[DebuggerDisplay("{Level} - {MessageDateTimeUtc} - {Message}")]
 	public class ServiceMessage
 	{
 		public int Id { get; set; }

@@ -17,26 +17,26 @@ namespace MMDB.DataService.Data
 			this.ExceptionReporter = exceptionReporter;
 		}
 
-		public ServiceMessage Trace(string message, params object[] args)
+		public virtual ServiceMessage Trace(string message, params object[] args)
 		{
 			return this.Logger.Trace(message, args);
 		}
 
-		public ServiceMessage Exception(Exception err)
+		public virtual ServiceMessage Exception(Exception err)
 		{
 			var returnValue = this.Logger.Exception(err);
 			this.ExceptionReporter.Exception(returnValue);
 			return returnValue;
 		}
 
-		public ServiceMessage ExceptionForObject(Exception err, object dataObject)
+		public virtual ServiceMessage ExceptionForObject(Exception err, object dataObject)
 		{
 			var returnValue = this.Logger.Exception(err, dataObject);
 			this.ExceptionReporter.Exception(returnValue);
 			return returnValue;
 		}
 
-		public ServiceMessage ExceptionForObject(string errorMessage, object dataObject)
+		public virtual ServiceMessage ExceptionForObject(string errorMessage, object dataObject)
 		{
 			var err = new Exception(errorMessage);
 			var returnValue = this.Logger.Exception(err, dataObject);
@@ -44,12 +44,12 @@ namespace MMDB.DataService.Data
 			return returnValue;
 		}
 
-		public ServiceMessage InfoForObject(string message, object dataObject)
+		public virtual ServiceMessage InfoForObject(string message, object dataObject)
 		{
 			return this.Logger.InfoForObject(message, dataObject);
 		}
 
-		public ServiceMessage WarningForObject(string message, object dataObject)
+		public virtual ServiceMessage WarningForObject(string message, object dataObject)
 		{
 			return this.Logger.WarningForObject(message, dataObject);
 		}
