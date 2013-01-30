@@ -12,13 +12,10 @@ namespace MMDB.DataService.Data.Jobs
 	public class FtpDownloadJob : ListImportJobBase<FtpDownloadJobConfiguration, FtpDownloadMetadata, FtpInboundData>
 	{
 		private FtpManager FtpManager { get; set; }
-		private SettingsManager SettingsManager { get; set; }
-		//private FtpDownloadSettings FtpDownloadSettings { get; set; }
-
-		public FtpDownloadJob(IDocumentSession documentSession, EventReporter eventReporter, FtpManager ftpManager, SettingsManager settingsManager) : base(eventReporter, documentSession)
+		
+		public FtpDownloadJob(IDocumentSession documentSession, EventReporter eventReporter, FtpManager ftpManager) : base(eventReporter, documentSession)
 		{
 			this.FtpManager = ftpManager;
-			this.SettingsManager = settingsManager;
 		}
 
 		protected override FtpInboundData TryCreateJobData(FtpDownloadJobConfiguration configuration, FtpDownloadMetadata item, out bool jobAlreadyExisted)
@@ -54,13 +51,12 @@ namespace MMDB.DataService.Data.Jobs
 
 		protected override List<FtpDownloadMetadata> GetListToProcess(FtpDownloadJobConfiguration configuration)
 		{
-			var settings = this.SettingsManager.Get<FtpDownloadServiceSettings>();
-			if(settings.FtpDownloadSettings == null || settings.FtpDownloadSettings.Count == 0)
+			if(configuration.FtpDownloadSettings == null || configuration.FtpDownloadSettings.Count == 0)
 			{
 				throw new Exception("FtpDownloadServiceSettings.FtpDownloadSettings is empty");
 			}
 			List<FtpDownloadMetadata> returnList = new List<FtpDownloadMetadata>();
-			foreach(var item in settings.FtpDownloadSettings)
+			foreach (var item in configuration.FtpDownloadSettings)
 			{
 				var tempList = this.FtpManager.GetAvailableDownloadList(item);
 				returnList.AddRange(tempList);
