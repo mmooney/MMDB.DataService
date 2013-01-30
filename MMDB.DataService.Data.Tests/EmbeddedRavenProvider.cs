@@ -30,7 +30,7 @@ namespace MMDB.DataService.Data.Tests
 							},
 						};
 						_documentStore.Initialize();
-						IndexCreation.CreateIndexes(typeof(MMDB.DataService.Data.IDataServiceJob).Assembly, _documentStore);
+						IndexCreation.CreateIndexes(typeof(MMDB.DataService.Data.Jobs.DataServiceJobBase<>).Assembly, _documentStore);
 					}
 				}
 				return _documentStore;

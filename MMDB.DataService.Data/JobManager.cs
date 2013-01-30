@@ -42,8 +42,10 @@ namespace MMDB.DataService.Data
 		{
 			this.EventReporter.Trace("Creating " + jobDefinition.JobName);
 			var jobType = this.TypeLoader.LoadType(jobDefinition.AssemblyName, jobDefinition.ClassName);
-			var wrapperType = typeof(JobWrapper<>).MakeGenericType(jobType);
+			var configType = jobType.GetGenericArguments()[0];
+			var wrapperType = typeof(JobWrapper<,>).MakeGenericType(jobType, configType);
 			var jobDetail = new JobDetailImpl(jobDefinition.JobName, wrapperType);
+			jobDetail.JobDataMap.Add("Configuration", jobDefinition.Configuration);
 
 			if(jobDefinition.Schedule is JobSimpleSchedule)
 			{
@@ -248,7 +250,7 @@ namespace MMDB.DataService.Data
 			var jobType = this.TypeLoader.LoadType(jobDefinition.AssemblyName, jobDefinition.ClassName);
 			//var jobAssembly = Assembly.Load(jobDefinition.AssemblyName.Replace(".dll", ""));
 			//var jobType = jobAssembly.GetType(jobDefinition.ClassName);
-			var queueInterface = jobType.GetInterfaces().SingleOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IQueueJob<>));
+			var queueInterface = jobType.GetInterfaces().SingleOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(QueueJobBase<,>));
 			if (queueInterface != null)
 			{
 				queueDataType = queueInterface.GetGenericArguments()[0];

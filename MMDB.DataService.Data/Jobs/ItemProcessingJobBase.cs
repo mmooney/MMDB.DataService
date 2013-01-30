@@ -29,7 +29,7 @@ namespace MMDB.DataService.Data.Jobs
 			bool done = false;
 			while (!done)
 			{
-				JobDataType jobData = this.GetNextItemToProcess();
+				JobDataType jobData = this.GetNextItemToProcess(configuration);
 				if (jobData == null)
 				{
 					done = true;
@@ -40,7 +40,7 @@ namespace MMDB.DataService.Data.Jobs
 					try
 					{
 						this.EventReporter.InfoForObject(this.GetType().Name + ": processing item", jobData);
-						this.ProcessItem(jobData);
+						this.ProcessItem(configuration, jobData);
 						this.MarkItemSuccessful(jobData);
 						this.EventReporter.InfoForObject(this.GetType().Name + ": item done", jobData);
 					}
@@ -52,8 +52,8 @@ namespace MMDB.DataService.Data.Jobs
 			}
 		}
 
-		protected abstract JobDataType GetNextItemToProcess();
-		protected abstract void ProcessItem(JobDataType jobItem);
+		protected abstract JobDataType GetNextItemToProcess(ConfigType configuration);
+		protected abstract void ProcessItem(ConfigType configuration, JobDataType jobItem);
 
 		protected virtual void MarkItemSuccessful(JobDataType jobData)
 		{

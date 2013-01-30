@@ -113,15 +113,11 @@
     <Compile Include="EventReporter.cs" />
     <Compile Include="ExceptionReporter.cs" />
     <Compile Include="FtpManager.cs" />
-    <Compile Include="IDataServiceJob.cs" />
     <Compile Include="JobManager.cs" />
     <Compile Include="Jobs\FtpDownloadJob.cs" />
     <Compile Include="Jobs\FtpDownloadSettings.cs" />
     <Compile Include="Jobs\FtpUploadJob.cs" />
-    <Compile Include="Jobs\IQueueJob.cs" />
-    <Compile Include="Jobs\ItemProcessingJobBaseOld.cs" />
     <Compile Include="Jobs\ListImportJobBase.cs" />
-    <Compile Include="Jobs\ListImportJobBaseOld.cs" />
     <Compile Include="Jobs\LogPurgeJob.cs" />
     <Compile Include="Jobs\LogPurgeJobConfiguration.cs" />
     <Compile Include="Jobs\NullJobConfiguration.cs" />

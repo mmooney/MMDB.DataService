@@ -33,32 +33,32 @@ namespace MMDB.DataService.Web.Controllers
         //
         // GET: /JobAssembly/Create
 
-        public ActionResult Create()
-        {
-            return View();
-        } 
+		//public ActionResult Create()
+		//{
+		//	return View();
+		//} 
 
         //
         // POST: /JobAssembly/Create
 
-        [HttpPost]
-        public ActionResult Create(HttpPostedFileBase file)
-        {
-            try
-            {
-				var result = this.AssemblyManager.ImportAssembly(file.FileName, file.InputStream);
-                return View("CreateComplete", result);
-            }
-            catch(Exception err)
-            {
-				var result = new AssemblyImportResult
-				{
-					Success = false,
-					ErrorMessage = err.ToString()
-				};
-                return View("CreateComplete", result);
-            }
-        }
+		//[HttpPost]
+		//public ActionResult Create(HttpPostedFileBase file)
+		//{
+		//	try
+		//	{
+		//		var result = this.AssemblyManager.ImportAssembly(file.FileName, file.InputStream);
+		//		return View("CreateComplete", result);
+		//	}
+		//	catch(Exception err)
+		//	{
+		//		var result = new AssemblyImportResult
+		//		{
+		//			Success = false,
+		//			ErrorMessage = err.ToString()
+		//		};
+		//		return View("CreateComplete", result);
+		//	}
+		//}
         
         //
         // GET: /JobAssembly/Edit/5

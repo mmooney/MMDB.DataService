@@ -16,12 +16,12 @@ namespace MMDB.DataService.Data.Jobs
 			this.FtpManager = ftpManager;
 		}
 
-		protected override FtpOutboundData GetNextItemToProcess()
+		protected override FtpOutboundData GetNextItemToProcess(NullJobConfiguration configuration)
 		{
 			return this.FtpManager.GetNextUploadItem();
 		}
 
-		protected override void ProcessItem(FtpOutboundData jobItem)
+		protected override void ProcessItem(NullJobConfiguration configuration, FtpOutboundData jobItem)
 		{
 			this.FtpManager.UploadFile(jobItem);
 		}

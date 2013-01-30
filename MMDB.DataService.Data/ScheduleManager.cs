@@ -43,7 +43,7 @@ namespace MMDB.DataService.Data
 			else if(job.Schedule is JobSimpleSchedule) 
 			{
 				var type = this.TypeLoader.LoadType(job.AssemblyName, job.ClassName);
-				var genericJobWrapperType = typeof(JobWrapper<>);
+				var genericJobWrapperType = typeof(JobWrapper<,>);
 				var combinedJobType = genericJobWrapperType.MakeGenericType(type);
 				var jobDetail = new JobDetailImpl(job.JobName, combinedJobType);
 				var simpleSchedule = (JobSimpleSchedule)job.Schedule;
