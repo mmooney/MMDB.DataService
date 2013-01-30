@@ -44,11 +44,11 @@ namespace MMDB.DataService.Web.Controllers
 			JobDefinition job;
 			if(schedule == "Simple")
 			{
-	            job = this.JobManager.CreateSimpleJob(jobName, assemblyName, className, intervalMinutes, delayStartMinutes);
+				job = this.JobManager.CreateSimpleJob(jobName, Guid.NewGuid(), assemblyName, className, intervalMinutes, delayStartMinutes);
 			}
 			else if (schedule == "CRON")
 			{
-				job = this.JobManager.CreateCronJob(jobName, assemblyName, className, cronScheduleExpression);
+				job = this.JobManager.CreateCronJob(jobName, Guid.NewGuid(), assemblyName, className, cronScheduleExpression);
 			}
 			else 
 			{
@@ -95,11 +95,11 @@ namespace MMDB.DataService.Web.Controllers
 			}
 			if (schedule == "Simple")
 			{
-				this.JobManager.UpdateSimpleJob(id, jobName, assemblyName, className, intervalMinutes, delayStartMinutes, jobDefinition.Configuration);
+				this.JobManager.UpdateSimpleJob(id, jobName, jobDefinition.JobGuid, assemblyName, className, intervalMinutes, delayStartMinutes, jobDefinition.Configuration);
 			}
 			else if (schedule == "CRON")
 			{
-				this.JobManager.UpdateCronJob(id, jobName, assemblyName, className, cronScheduleExpression, jobDefinition.Configuration);
+				this.JobManager.UpdateCronJob(id, jobName, jobDefinition.JobGuid, assemblyName, className, cronScheduleExpression, jobDefinition.Configuration);
 			}
 			else
 			{

@@ -22,8 +22,8 @@ namespace MMDB.DataService.Data.Tests
 				string className = Guid.NewGuid().ToString();
 				string scheduleExpression = Guid.NewGuid().ToString();
 				string jobName = Guid.NewGuid().ToString();
-			
-				var result = sut.CreateCronJob(jobName, assemblyName, className, scheduleExpression);
+
+				var result = sut.CreateCronJob(jobName, Guid.NewGuid(), assemblyName, className, scheduleExpression);
 				Assert.IsNotNull(result);
 				Assert.AreNotEqual(0, result.Id);
 				
@@ -52,7 +52,7 @@ namespace MMDB.DataService.Data.Tests
 				int delayStartMinutes = 20;
 				string jobName = Guid.NewGuid().ToString();
 
-				var result = sut.CreateSimpleJob(jobName, assemblyName, className, intervalMinutes, delayStartMinutes);
+				var result = sut.CreateSimpleJob(jobName, Guid.NewGuid(), assemblyName, className, intervalMinutes, delayStartMinutes);
 				Assert.IsNotNull(result);
 				Assert.AreNotEqual(0, result.Id);
 
@@ -80,7 +80,7 @@ namespace MMDB.DataService.Data.Tests
 				string className = Guid.NewGuid().ToString();
 				string scheduleExpression = Guid.NewGuid().ToString();
 				string jobName = Guid.NewGuid().ToString();
-				var newJob = sut.CreateCronJob(jobName, assemblyName, className, scheduleExpression);
+				var newJob = sut.CreateCronJob(jobName, Guid.NewGuid(), assemblyName, className, scheduleExpression);
 
 				newJob.AssemblyName = Guid.NewGuid().ToString();
 				newJob.ClassName = Guid.NewGuid().ToString();

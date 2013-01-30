@@ -12,6 +12,7 @@ namespace MMDB.DataService.Data.Dto.Jobs
 		public string JobName { get; set; }
 		public string AssemblyName { get; set; }
 		public string ClassName { get; set; }
+		public Guid JobGuid { get; set; }
 		public JobSchedule Schedule { get; set; }
 		public JobConfigurationBase Configuration { get; set; }
 	}

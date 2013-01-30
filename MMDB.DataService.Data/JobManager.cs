@@ -61,11 +61,16 @@ namespace MMDB.DataService.Data
 		}
 
 
-		public JobDefinition CreateSimpleJob(string jobName, string assemblyName, string className, int intervalMinutes, int delayStartMinutes)
+		public JobDefinition CreateSimpleJob(string jobName, Guid jobGuid, string assemblyName, string className, int intervalMinutes, int delayStartMinutes)
 		{
+			if(jobGuid == Guid.Empty)
+			{
+				jobGuid = Guid.NewGuid();
+			}
 			var item = new JobDefinition
 			{
 				JobName = jobName,
+				JobGuid = jobGuid,
 				AssemblyName = assemblyName,
 				ClassName = className,
 				Schedule = new JobSimpleSchedule
@@ -79,11 +84,16 @@ namespace MMDB.DataService.Data
 			return item;
 		}
 
-		public JobDefinition CreateCronJob(string jobName, string assemblyName, string className, string cronScheduleExpression)
+		public JobDefinition CreateCronJob(string jobName, Guid jobGuid, string assemblyName, string className, string cronScheduleExpression)
 		{
+			if(jobGuid == Guid.Empty)
+			{
+				jobGuid = Guid.NewGuid();
+			}
 			var item = new JobDefinition
 			{
 				JobName = jobName,
+				JobGuid = jobGuid,
 				AssemblyName = assemblyName,
 				ClassName = className, 
 				Schedule  = new JobCronSchedule
@@ -122,6 +132,7 @@ namespace MMDB.DataService.Data
 			item.JobName = jobName;
 			item.AssemblyName = assemblyName;
 			item.ClassName = className;
+			item.JobGuid = jobGuid;
 			var schedule = item.Schedule as JobSimpleSchedule;
 			if(schedule == null)
 			{
@@ -136,12 +147,17 @@ namespace MMDB.DataService.Data
 			this.DocumentSession.SaveChanges();
 		}
 
-		public void UpdateCronJob(int id, string jobName, string assemblyName, string className, string cronScheduleExpression, JobConfigurationBase configuration=null)
+		public void UpdateCronJob(int id, string jobName, Guid jobGuid, string assemblyName, string className, string cronScheduleExpression, JobConfigurationBase configuration=null)
 		{
+			if(jobGuid == Guid.Empty)
+			{
+				jobGuid = Guid.NewGuid();
+			}
 			var item = this.LoadJobDefinition(id);
 			item.JobName = jobName;
 			item.AssemblyName = assemblyName;
 			item.ClassName = className;
+			item.JobGuid = jobGuid;
 			var schedule = item.Schedule as JobCronSchedule;
 			if (schedule == null)
 			{
