@@ -7,7 +7,7 @@ using Raven.Client;
 
 namespace MMDB.DataService.Data.Jobs
 {
-	public class FtpUploadJob : ItemProcessingJob<FtpOutboundData>
+	public class FtpUploadJob : ItemProcessingJob<NullJobConfiguration, FtpOutboundData>
 	{
 		private FtpManager FtpManager { get; set; }
 		
@@ -25,5 +25,6 @@ namespace MMDB.DataService.Data.Jobs
 		{
 			this.FtpManager.UploadFile(jobItem);
 		}
+
 	}
 }

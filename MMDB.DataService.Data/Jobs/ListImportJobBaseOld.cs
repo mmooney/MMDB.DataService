@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MMDB.DataService.Data.Dto.Jobs;
-using Raven.Client;
 
 namespace MMDB.DataService.Data.Jobs
 {
-	public abstract class ListImportJobBase<ConfigType, ImportDataType, JobDataType> : QueueJobBase<ConfigType, JobDataType> where ConfigType : JobConfigurationBase where JobDataType : JobData
+	[Obsolete]
+	public abstract class ListImportJobBaseOld<ImportDataType, JobDataType> : IQueueJob<JobDataType> where JobDataType : JobData
 	{
 		protected EventReporter EventReporter { get; private set; }
 
-		public ListImportJobBase(EventReporter eventReporter, IDocumentSession documentSession) : base(documentSession)
+		public ListImportJobBaseOld(EventReporter eventReporter)
 		{
 			this.EventReporter = eventReporter;
 		}
@@ -21,10 +21,10 @@ namespace MMDB.DataService.Data.Jobs
 			return typeof(JobDataType);
 		}
 
-		public override void Run(ConfigType configuration)
+		public void Run()
 		{
 			this.EventReporter.Trace(this.GetType().Name + ": job run started");
-			var list = this.GetListToProcess(configuration);
+			var list = this.GetListToProcess();
 			this.EventReporter.Trace(this.GetType().Name + ": " + list.Count() + " records to process");
 			foreach (var item in list)
 			{
@@ -32,7 +32,7 @@ namespace MMDB.DataService.Data.Jobs
 				{
 					bool jobAlreadyExisted;
 					this.EventReporter.InfoForObject(this.GetType().Name + ": processing item", item);
-					var jobData = this.TryCreateJobData(configuration, item, out jobAlreadyExisted);
+					var jobData = this.TryCreateJobData(item, out jobAlreadyExisted);
 					if (jobData == null)
 					{
 						string message = string.Format("TryCreateJobData<{0}> returned null", typeof(ImportDataType).Name);
@@ -55,7 +55,7 @@ namespace MMDB.DataService.Data.Jobs
 			this.EventReporter.Trace(this.GetType().Name + ": job run ended");
 		}
 
-		protected abstract JobDataType TryCreateJobData(ConfigType configuration, ImportDataType item, out bool jobAlreadyExisted);
-		protected abstract List<ImportDataType> GetListToProcess(ConfigType configuration);
+		protected abstract JobDataType TryCreateJobData(ImportDataType item, out bool jobAlreadyExisted);
+		protected abstract List<ImportDataType> GetListToProcess();
 	}
 }

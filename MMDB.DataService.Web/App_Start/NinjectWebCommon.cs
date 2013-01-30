@@ -17,6 +17,8 @@ using Ninject.Activation;
 	using Quartz.Impl;
 	using Quartz;
 	using MMDB.DataService.Data.DataProvider;
+	using System.Web.Mvc;
+	using MMDB.DataService.Data.Jobs;
 
     public static class NinjectWebCommon 
     {
@@ -68,7 +70,9 @@ using Ninject.Activation;
 			kernel.Bind<IDocumentSession>().ToMethod(c => c.Kernel.Get<IDocumentStore>().OpenSession()).InRequestScope();
 			kernel.Bind<ISchedulerFactory>().To<StdSchedulerFactory>();
 			kernel.Bind<IScheduler>().ToMethod(c => c.Kernel.Get<ISchedulerFactory>().GetScheduler());
-        }
+
+			ModelBinders.Binders.Add(typeof(JobConfigurationBase), kernel.Get<ConfigurationModelBinder>());
+		}
 
 		public static IDocumentStore CreateDocumentStore(IContext context)
 		{

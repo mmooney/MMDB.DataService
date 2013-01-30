@@ -124,6 +124,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\NinjectWebCommon.cs" />
+    <Compile Include="ConfigurationModelBinder.cs" />
     <Compile Include="Controllers\DataObjectController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\HtmlHelperExtensions.cs" />
     <Compile Include="Helpers\ViewSettingsHelper.cs" />
     <Compile Include="Models\AssemblyClassItem.cs" />
     <Compile Include="Models\CreateJobDefinitionViewModel.cs" />
@@ -297,6 +299,11 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\JobManager\Edit.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\JobConfigurationBase.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\LogPurgeJobConfiguration.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\FtpDownloadJobConfiguration_temp.cshtml" />
+    <Content Include="Views\Shared\EditorTemplates\String.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\WebMatrix.WebData.xml" />
     <None Include="_bin_deployableAssemblies\WebMatrix.WebData.dll" />
@@ -344,9 +351,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\JobAssembly\CreateComplete.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\JobManager\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Shared\EditorTemplates\JobDefinition.cshtml" />

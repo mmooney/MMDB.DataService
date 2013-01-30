@@ -9,21 +9,19 @@ using Raven.Client;
 
 namespace MMDB.DataService.Data.Jobs
 {
-	public class FtpDownloadJob : ListImportJobBase<FtpDownloadMetadata, FtpInboundData>
+	public class FtpDownloadJob : ListImportJobBase<FtpDownloadJobConfiguration, FtpDownloadMetadata, FtpInboundData>
 	{
-		private IDocumentSession DocumentSession { get; set; }
 		private FtpManager FtpManager { get; set; }
 		private SettingsManager SettingsManager { get; set; }
 		//private FtpDownloadSettings FtpDownloadSettings { get; set; }
 
-		public FtpDownloadJob(IDocumentSession documentSession, EventReporter eventReporter, FtpManager ftpManager, SettingsManager settingsManager) : base(eventReporter)
+		public FtpDownloadJob(IDocumentSession documentSession, EventReporter eventReporter, FtpManager ftpManager, SettingsManager settingsManager) : base(eventReporter, documentSession)
 		{
-			this.DocumentSession = documentSession;
 			this.FtpManager = ftpManager;
 			this.SettingsManager = settingsManager;
 		}
 
-		protected override FtpInboundData TryCreateJobData(FtpDownloadMetadata item, out bool jobAlreadyExisted)
+		protected override FtpInboundData TryCreateJobData(FtpDownloadJobConfiguration configuration, FtpDownloadMetadata item, out bool jobAlreadyExisted)
 		{
 			FtpInboundData returnValue;
 			using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
@@ -54,7 +52,7 @@ namespace MMDB.DataService.Data.Jobs
 			return returnValue;
 		}
 
-		protected override List<FtpDownloadMetadata> GetListToProcess()
+		protected override List<FtpDownloadMetadata> GetListToProcess(FtpDownloadJobConfiguration configuration)
 		{
 			var settings = this.SettingsManager.Get<FtpDownloadServiceSettings>();
 			if(settings.FtpDownloadSettings == null || settings.FtpDownloadSettings.Count == 0)

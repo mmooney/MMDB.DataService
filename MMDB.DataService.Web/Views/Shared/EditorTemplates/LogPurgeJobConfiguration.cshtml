@@ -1,0 +1,20 @@
+﻿@model MMDB.DataService.Data.Jobs.LogPurgeJobConfiguration
+
+@{
+    ViewBag.Title = "LogPurgeJobConfiguration";
+}
+
+<div class="editor-label">Debug Age: </div>
+<div class="editor-field">@Html.EditorFor(model=>model.DebugAgeMinutes) minutes</div>
+
+<div class="editor-label">Trace Age: </div>
+<div class="editor-field">@Html.EditorFor(model=>model.TraceAgeMinutes) minutes</div>
+
+<div class="editor-label">Info Age: </div>
+<div class="editor-field">@Html.EditorFor(model=>model.InfoAgeMinutes) minutes</div>
+
+<div class="editor-label">Warning Age: </div>
+<div class="editor-field">@Html.EditorFor(model=>model.WarningAgeMinutes) minutes</div>
+
+<div class="editor-label">Error Age: </div>
+<div class="editor-field">@Html.EditorFor(model=>model.ErrorAgeMinutes) minutes</div>

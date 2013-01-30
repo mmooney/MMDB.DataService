@@ -99,3 +99,10 @@
 			</fieldset>
 		</div>
     </fieldset>
+	@if(Model.Configuration != null)
+	{
+		<fieldset>
+			<legend>Configuration</legend>
+			@Html.EditorFor(model=>model.Configuration)
+		</fieldset>
+	}

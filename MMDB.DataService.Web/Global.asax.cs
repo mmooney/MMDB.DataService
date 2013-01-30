@@ -9,6 +9,7 @@ using System.Configuration;
 using Raven.Client;
 using MMDB.RavenDB.DynamicData;
 using System.Web.Hosting;
+using MMDB.DataService.Data.Jobs;
 
 namespace MMDB.DataService.Web
 {

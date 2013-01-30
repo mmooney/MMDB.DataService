@@ -1,0 +1,56 @@
+﻿@model MMDB.DataService.Data.Jobs.FtpDownloadJobConfiguration
+
+@{
+    ViewBag.Title = "FtpDownloadJobConfiguration";
+}
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		$("#btnAddFilePattern").click(function () {
+			alert("hello");
+			return false;
+		});
+	});
+</script>
+<h2>FTP Download Settings</h2>
+@{ 
+	var list = Model.FtpDownloadSettings;
+	if(list == null || list.Count == 0)
+	{
+		list = new List<MMDB.DataService.Data.Jobs.FtpDownloadSettings>
+		{
+			new MMDB.DataService.Data.Jobs.FtpDownloadSettings()
+		};
+	}
+
+}
+<table>
+	<tr>
+		<th>Settings Source</th>
+		<th>Setting Key</th>
+		<th>File Pattern List</th>
+	</tr>
+	@foreach(var item in list)
+	{
+	<tr>
+		<td>@Html.EditorFor(i=>item.SettingSource)</td>
+		<td>@Html.EditorFor(i=>item.SettingKey)</td>
+		<td>
+			@{
+				var filePatternList = item.FilePatternList;
+				if(filePatternList == null || filePatternList.Count == 0)
+				{
+					filePatternList = new List<string>() { string.Empty };
+				}
+			}
+
+			@foreach(var filePattern in filePatternList)
+			{
+				@Html.EditorFor(i=>filePattern)
+			}
+			<button id="btnAddFilePattern">Add</button>
+		</td>
+	</tr>
+	}
+</table>
+<button id="btnAdd">Add FTP Download Setting</button>

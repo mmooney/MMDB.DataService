@@ -90,6 +90,8 @@
     <Compile Include="Dto\Assemblies\JobAssembly.cs" />
     <Compile Include="Dto\Enums.cs" />
     <Compile Include="Dto\Ftp\FtpDownloadMetadata.cs" />
+    <Compile Include="Jobs\FtpDownloadJobConfiguration.cs" />
+    <Compile Include="Jobs\ItemProcessingJobBase.cs" />
     <Compile Include="Jobs\DataServiceJobBase.cs" />
     <Compile Include="Jobs\JobConfigurationBase.cs" />
     <Compile Include="Jobs\FtpDownloadServiceSettings.cs" />
@@ -117,10 +119,13 @@
     <Compile Include="Jobs\FtpDownloadSettings.cs" />
     <Compile Include="Jobs\FtpUploadJob.cs" />
     <Compile Include="Jobs\IQueueJob.cs" />
-    <Compile Include="Jobs\ItemProcessingJobBase.cs" />
+    <Compile Include="Jobs\ItemProcessingJobBaseOld.cs" />
     <Compile Include="Jobs\ListImportJobBase.cs" />
+    <Compile Include="Jobs\ListImportJobBaseOld.cs" />
     <Compile Include="Jobs\LogPurgeJob.cs" />
     <Compile Include="Jobs\LogPurgeJobConfiguration.cs" />
+    <Compile Include="Jobs\NullJobConfiguration.cs" />
+    <Compile Include="Jobs\QueueJobBase.cs" />
     <Compile Include="JobWrapper.cs" />
     <Compile Include="JsonExtensions.cs" />
     <Compile Include="Metadata\DataObjectMetadata.cs" />

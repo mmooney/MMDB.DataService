@@ -8,11 +8,14 @@ using Raven.Client;
 
 namespace MMDB.DataService.Data.Jobs
 {
-	public abstract class ItemProcessingJob<ConfigType, JobDataType> : QueueJobBase<ConfigType, JobDataType> where ConfigType:JobConfigurationBase where JobDataType:JobData
+	[Obsolete]
+	public abstract class ItemProcessingJobOld<T> : IQueueJob<T> where T : JobData
 	{
+		protected IDocumentSession DocumentSession { get; private set; }
 		protected EventReporter EventReporter { get; private set; }
 
-		public ItemProcessingJob(IDocumentSession documentSession, EventReporter eventReporter) : base(documentSession)
+
+		public ItemProcessingJobOld(IDocumentSession documentSession, EventReporter eventReporter)
 		{
 			this.DocumentSession = documentSession;
 			this.EventReporter = eventReporter;
@@ -20,16 +23,16 @@ namespace MMDB.DataService.Data.Jobs
 
 		public Type GetQueueDataType()
 		{
-			return typeof(JobDataType);
+			return typeof(T);
 		}
 
-		public override void Run(ConfigType configuration)
+		public void Run()
 		{
 			this.EventReporter.Trace(this.GetType().Name + ": job run started");
 			bool done = false;
 			while (!done)
 			{
-				JobDataType jobData = this.GetNextItemToProcess();
+				T jobData = this.GetNextItemToProcess();
 				if (jobData == null)
 				{
 					done = true;
@@ -52,16 +55,16 @@ namespace MMDB.DataService.Data.Jobs
 			}
 		}
 
-		protected abstract JobDataType GetNextItemToProcess();
-		protected abstract void ProcessItem(JobDataType jobItem);
+		protected abstract T GetNextItemToProcess();
+		protected abstract void ProcessItem(T jobItem);
 
-		protected virtual void MarkItemSuccessful(JobDataType jobData)
+		protected virtual void MarkItemSuccessful(T jobData)
 		{
 			jobData.Status = EnumJobStatus.Complete;
 			this.DocumentSession.SaveChanges();
 		}
 
-		protected virtual void MarkItemFailed(JobDataType jobData, Exception err)
+		protected virtual void MarkItemFailed(T jobData, Exception err)
 		{
 			var errorObject = this.EventReporter.ExceptionForObject(err, jobData);
 			jobData.Status = EnumJobStatus.Error;

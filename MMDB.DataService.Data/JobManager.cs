@@ -112,8 +112,12 @@ namespace MMDB.DataService.Data
 			return this.DocumentSession.Load<JobDefinition>(id);
 		}
 
-		public void UpdateSimpleJob(int id, string jobName, string assemblyName, string className, int intervalMinutes, int delayStartMinutes)
+		public void UpdateSimpleJob(int id, string jobName, Guid jobGuid, string assemblyName, string className, int intervalMinutes, int delayStartMinutes, JobConfigurationBase configuration = null)
 		{
+			if(jobGuid == Guid.Empty)
+			{
+				jobGuid = Guid.NewGuid();
+			}
 			var item = this.LoadJobDefinition(id);
 			item.JobName = jobName;
 			item.AssemblyName = assemblyName;
@@ -125,10 +129,14 @@ namespace MMDB.DataService.Data
 			}
 			schedule.IntervalMinutes = intervalMinutes;
 			schedule.DelayStartMinutes = delayStartMinutes;
+			if(configuration != null)
+			{
+				item.Configuration = configuration;
+			}
 			this.DocumentSession.SaveChanges();
 		}
 
-		public void UpdateCronJob(int id, string jobName, string assemblyName, string className, string cronScheduleExpression)
+		public void UpdateCronJob(int id, string jobName, string assemblyName, string className, string cronScheduleExpression, JobConfigurationBase configuration=null)
 		{
 			var item = this.LoadJobDefinition(id);
 			item.JobName = jobName;
@@ -140,6 +148,10 @@ namespace MMDB.DataService.Data
 				item.Schedule = schedule = new JobCronSchedule();
 			}
 			schedule.CronScheduleExpression = cronScheduleExpression;
+			if(configuration != null)
+			{
+				item.Configuration = configuration;
+			}
 			this.DocumentSession.SaveChanges();
 		}
 
@@ -244,6 +256,52 @@ namespace MMDB.DataService.Data
 		{
 			item.Status = status;
 			this.DocumentSession.SaveChanges();
+		}
+
+		public void EnsureConfiguration(JobDefinition jobDefinition)
+		{
+			if (jobDefinition.Configuration == null)
+			{
+				var jobType = this.TypeLoader.LoadType(jobDefinition.AssemblyName, jobDefinition.ClassName);
+				if (jobType != null)
+				{
+					var configType = this.GetJobConfigurationType(jobType);
+					if (configType != null && configType != typeof(NullJobConfiguration))
+					{
+						jobDefinition.Configuration = (JobConfigurationBase)Activator.CreateInstance(configType);
+						this.DocumentSession.SaveChanges();
+					}
+				}
+			}
+		}
+
+		public Type GetJobConfigurationType(Type jobType)
+		{
+			var baseType = FindDataServiceJobBase(jobType);
+			if (baseType != null)
+			{
+				return baseType.GetGenericArguments()[0];
+			}
+			else 
+			{
+				return null;
+			}
+		}
+
+		private Type FindDataServiceJobBase(Type jobType)
+		{
+			if(jobType.BaseType.IsGenericType &&  jobType.BaseType.GetGenericTypeDefinition() == typeof(DataServiceJobBase<>))
+			{
+				return jobType.BaseType;
+			}
+			else if (jobType.BaseType == typeof(object))
+			{
+				return null;
+			}
+			else 
+			{
+				return FindDataServiceJobBase(jobType.BaseType);
+			}
 		}
 	}
 }

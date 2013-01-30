@@ -7,6 +7,8 @@ using MMDB.DataService.Data;
 using MMDB.DataService.Web.Models;
 using MMDB.DataService.Data.Dto.Jobs;
 using MMDB.DataService.Data.Dto;
+using MMDB.DataService.Data.Jobs;
+using Raven.Imports.Newtonsoft.Json;
 
 namespace MMDB.DataService.Web.Controllers
 {
@@ -39,44 +41,104 @@ namespace MMDB.DataService.Web.Controllers
         [HttpPost]
         public ActionResult Create(string jobName, string assemblyName, string className, string schedule, int intervalMinutes=0, int delayStartMinutes=0, string cronScheduleExpression=null)
         {
+			JobDefinition job;
 			if(schedule == "Simple")
 			{
-	            this.JobManager.CreateSimpleJob(jobName, assemblyName, className, intervalMinutes, delayStartMinutes);
+	            job = this.JobManager.CreateSimpleJob(jobName, assemblyName, className, intervalMinutes, delayStartMinutes);
 			}
 			else if (schedule == "CRON")
 			{
-				this.JobManager.CreateCronJob(jobName, assemblyName, className, cronScheduleExpression);
+				job = this.JobManager.CreateCronJob(jobName, assemblyName, className, cronScheduleExpression);
 			}
 			else 
 			{
 				throw new Exception("Unexpected schedule value: " + schedule);
 			}
-            return RedirectToAction("Index");
+            return RedirectToAction("Edit", new {id = job.Id});
         }
 
 		public ActionResult Edit(int id)
 		{
-			var item = this.JobManager.LoadJobDefinition(id);
-			return View(item);
-		}        
+			var jobDefinition = this.JobManager.GetJobDefinition(id);
+			this.JobManager.EnsureConfiguration(jobDefinition);
+			return View(jobDefinition);
+		}
 
 		[HttpPost]
-        public ActionResult Edit(int id, string jobName, string assemblyName, string className, string schedule, int intervalMinutes, int delayStartMinutes, string cronScheduleExpression)
-        {
-			var item = this.JobManager.LoadJobDefinition(id);
+		public ActionResult Edit(int id, string jobName, string assemblyName, string className, string schedule, string configJson, int intervalMinutes=0, int delayStartMinutes=0, string cronScheduleExpression=null)
+		{
+			var jobDefinition = this.JobManager.LoadJobDefinition(id);
+			this.JobManager.EnsureConfiguration(jobDefinition);
+			if(string.IsNullOrEmpty(configJson))
+			{
+				configJson = this.Request.Form["Configuration.configJson"];
+			}
+			if(jobDefinition.Configuration != null && !string.IsNullOrEmpty(configJson))
+			{
+				var configType = jobDefinition.Configuration.GetType();
+				jobDefinition.Configuration = (JobConfigurationBase)JsonConvert.DeserializeObject(configJson,configType); 
+				//foreach(var key in form.AllKeys.Where(i=>i.StartsWith("Configuration.")))
+				//{
+				//	string configKey = key.Substring("Configuration.".Length);
+				//	var propInfo = configType.GetProperty(configKey);
+				//	object convertedValue;
+				//	if(string.IsNullOrEmpty(form[key]))
+				//	{
+				//		convertedValue = null;
+				//	}
+				//	else 
+				//	{
+				//		convertedValue = ConvertValue(propInfo.PropertyType, form[key]);
+				//	}
+				//	propInfo.SetValue(jobDefinition.Configuration, convertedValue, null);
+				//}
+			}
 			if (schedule == "Simple")
 			{
-				this.JobManager.UpdateSimpleJob(id, jobName, assemblyName, className, intervalMinutes, delayStartMinutes);
+				this.JobManager.UpdateSimpleJob(id, jobName, assemblyName, className, intervalMinutes, delayStartMinutes, jobDefinition.Configuration);
 			}
 			else if (schedule == "CRON")
 			{
-				this.JobManager.UpdateCronJob(id, jobName, assemblyName, className, cronScheduleExpression);
+				this.JobManager.UpdateCronJob(id, jobName, assemblyName, className, cronScheduleExpression, jobDefinition.Configuration);
 			}
 			else
 			{
 				throw new Exception("Unexpected schedule value: " + schedule);
 			}
 			return RedirectToAction("Index");
+		}
+
+		private object ConvertValue(Type propertyType, string value)
+		{
+			object returnValue = null;
+			if (value == null)
+			{
+				returnValue = Convert.ChangeType(value, propertyType);
+			}
+			else
+			{
+				if (propertyType == typeof(int) || propertyType == typeof(int?))
+				{
+					returnValue = int.Parse(value);
+				}
+				else if (propertyType == typeof(double) || propertyType == typeof(double?))
+				{
+					returnValue = double.Parse(value);
+				}
+				else if (propertyType == typeof(float) || propertyType == typeof(float?))
+				{
+					returnValue = float.Parse(value);
+				}
+				else if (propertyType == typeof(long) || propertyType == typeof(long?))
+				{
+					returnValue = long.Parse(value);
+				}
+				else
+				{
+					returnValue = Convert.ChangeType(value, propertyType);
+				}
+			}
+			return returnValue;
 		}
 
         // GET: /JobManager/Delete/5
