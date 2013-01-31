@@ -1,0 +1,79 @@
+﻿@model IEnumerable<MMDB.DataService.Data.Dto.Jobs.JobDefinition>
+
+@{
+    ViewBag.Title = "Export";
+}
+<script type="text/javascript">
+	$(document).ready(function () {
+		$("#btnExport").click(function () {
+			var checkedList = $("input:checkbox:checked[name='chkExport']");
+			if (checkedList.length == 0) {
+				alert("Please select at least one job to export");
+				return false;
+			}
+			else {
+				var values = [];
+				for (i = 0; i < checkedList.length; i++) {
+					var idValue = $(checkedList[i]).attr("data-id");
+					values.push(idValue);
+				}
+				$("input:hidden[name='SelectedJobIDs']").val(values.join());
+				return true;
+			}
+		});
+	});
+</script>
+<h2>Export</h2>
+
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>
+<h3>Select jobs definitions to export</h3>
+@using(Html.BeginForm("ExportComplete", "JobManager", FormMethod.Post, new { target="_blank"})) 
+{
+	@Html.Hidden("SelectedJobIDs")
+	<table>
+		<tr class="ui-widget-header">
+			<th></th>
+			<th>
+				JobName
+			</th>
+			<th>
+				AssemblyName
+			</th>
+			<th>
+				ClassName
+			</th>
+			<th>
+				JobGuid
+			</th>
+			<th></th>
+		</tr>
+
+	@foreach (var item in Model) {
+		<tr>
+			<td>	
+				<input type="checkbox" name="chkExport" data-id="@item.Id" />
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.JobName)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.AssemblyName)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.ClassName)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.JobGuid)
+			</td>
+			<td>
+				@Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+				@Html.ActionLink("Details", "Details", new { id=item.Id }) |
+				@Html.ActionLink("Delete", "Delete", new { id=item.Id })
+			</td>
+		</tr>
+	}
+	</table>
+	<button id="btnExport">Export</button>
+}

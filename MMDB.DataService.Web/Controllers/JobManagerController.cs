@@ -9,6 +9,8 @@ using MMDB.DataService.Data.Dto.Jobs;
 using MMDB.DataService.Data.Dto;
 using MMDB.DataService.Data.Jobs;
 using Raven.Imports.Newtonsoft.Json;
+using System.IO;
+using MMDB.Shared;
 
 namespace MMDB.DataService.Web.Controllers
 {
@@ -63,8 +65,7 @@ namespace MMDB.DataService.Web.Controllers
 			this.JobManager.EnsureConfiguration(jobDefinition);
 			return View(jobDefinition);
 		}
-
-		[HttpPost]
+[HttpPost]
 		public ActionResult Edit(int id, string jobName, string assemblyName, string className, string schedule, string configJson, int intervalMinutes=0, int delayStartMinutes=0, string cronScheduleExpression=null)
 		{
 			var jobDefinition = this.JobManager.LoadJobDefinition(id);
@@ -210,6 +211,26 @@ namespace MMDB.DataService.Web.Controllers
 			var item = query.Single(i => i.Id == jobDataId);
 			this.JobManager.DeleteJobData(item);
 			return this.RedirectToAction("QueueStatusList", new { jobDefinitionId, status = item.Status });
+		}
+
+		public ActionResult Export()
+		{
+			var jobDefinitionList = this.JobManager.LoadJobList();
+			return View(jobDefinitionList);
+		}
+
+		public ActionResult ExportComplete(string SelectedJobIDs)
+		{
+			var idList = SelectedJobIDs.Split(',').Select(i=>int.Parse(i));
+			List<JobDefinition> jobList = new List<JobDefinition>();
+			foreach(int id in idList)
+			{
+				var job = this.JobManager.GetJobDefinition(id);
+				jobList.Add(job);
+			}
+			string json = JsonConvert.SerializeObject(jobList);
+			byte[] bytes = System.Text.Encoding.UTF8.GetBytes(json);
+			return File(bytes, "text/json", "JobExport.txt");
 		}
 	}
 }
