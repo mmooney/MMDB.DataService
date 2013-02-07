@@ -125,6 +125,7 @@
   <ItemGroup>
     <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="ConfigurationModelBinder.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\DataObjectController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -142,7 +143,9 @@
     <Compile Include="Helpers\ViewSettingsHelper.cs" />
     <Compile Include="Models\AssemblyClassItem.cs" />
     <Compile Include="Models\CreateJobDefinitionViewModel.cs" />
+    <Compile Include="Models\ExportSettingsViewModel.cs" />
     <Compile Include="Models\HomePageViewModel.cs" />
+    <Compile Include="Models\ImportExportFile.cs" />
     <Compile Include="Models\JobQueueDataListViewModel.cs" />
     <Compile Include="Models\MetadataDetailsViewModel.cs" />
     <Compile Include="Models\PagedViewModel.cs" />
@@ -305,6 +308,8 @@
     <Content Include="Views\Shared\EditorTemplates\FtpDownloadJobConfiguration_temp.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\String.cshtml" />
     <Content Include="Views\JobManager\Export.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\Admin\Export.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll" />
     <None Include="_bin_deployableAssemblies\WebMatrix.WebData.xml" />
     <None Include="_bin_deployableAssemblies\WebMatrix.WebData.dll" />

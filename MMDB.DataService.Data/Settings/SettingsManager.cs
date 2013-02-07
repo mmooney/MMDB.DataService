@@ -62,10 +62,15 @@ namespace MMDB.DataService.Data.Settings
 			}
 		}
 
-		public virtual IEnumerable<SettingsContainer> GetList()
+		public virtual List<SettingsContainer> GetList()
 		{
 			return this.DocumentSession.Query<SettingsContainer>().ToList();
 		}
 
+
+		public SettingsContainer GetSettings(int id)
+		{
+			return this.DocumentSession.Load<SettingsContainer>(id);
+		}
 	}
 }
