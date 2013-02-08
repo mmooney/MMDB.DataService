@@ -8,7 +8,7 @@ using Raven.Imports.Newtonsoft.Json;
 
 namespace System
 {
-	public static class JsonExtensions
+	public static class MMDBJsonExtensions
 	{
 		public static string ToJson(this object obj, bool format=false)
 		{

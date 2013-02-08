@@ -72,5 +72,25 @@ namespace MMDB.DataService.Data.Settings
 		{
 			return this.DocumentSession.Load<SettingsContainer>(id);
 		}
+
+		public void ImportSettings(List<SettingsContainer> list)
+		{
+			foreach (var newSettings in list)
+			{
+				var existingSettings = this.DocumentSession.Query<SettingsContainer>().FirstOrDefault(i => i.Settings.TypeName == newSettings.Settings.TypeName);
+				if (existingSettings == null)
+				{
+					newSettings.Id = 0;
+					this.DocumentSession.Store(newSettings);
+				}
+				else
+				{
+					int originalID = existingSettings.Id;
+					AutoMapper.Mapper.Map(newSettings, existingSettings);
+					newSettings.Id = originalID;
+				}
+				this.DocumentSession.SaveChanges();
+			}
+		}
 	}
 }

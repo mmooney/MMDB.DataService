@@ -321,5 +321,25 @@ namespace MMDB.DataService.Data
 				return FindDataServiceJobBase(jobType.BaseType);
 			}
 		}
+
+		public void ImportJobs(List<JobDefinition> list)
+		{
+			foreach(var newJob in list)
+			{
+				var existingJob = this.DocumentSession.Query<JobDefinition>().FirstOrDefault(i=>i.JobGuid == newJob.JobGuid);
+				if(existingJob == null)
+				{
+					newJob.Id = 0;
+					this.DocumentSession.Store(newJob);
+				}
+				else
+				{
+					int originalID = existingJob.Id;
+					AutoMapper.Mapper.Map(newJob,existingJob);
+					newJob.Id = originalID;
+				}
+				this.DocumentSession.SaveChanges();
+			}
+		}
 	}
 }
