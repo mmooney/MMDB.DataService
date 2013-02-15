@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MMDB.DataService.Data.Dto;
 using MMDB.Shared;
 using Raven.Client;
 using System.Configuration;
 using System.Collections.Concurrent;
 using System.Reflection;
+using MMDB.DataService.Data.Settings;
 
 namespace MMDB.DataService.Data
 {

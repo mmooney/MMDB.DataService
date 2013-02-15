@@ -42,9 +42,9 @@
     <Reference Include="Common.Logging">
       <HintPath>..\packages\Common.Logging.2.0.0\lib\2.0\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="MMDB.RazorEmail, Version=1.0.0.4, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MMDB.RazorEmail, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MMDB.RazorEmail.1.0.0.4\lib\net40\MMDB.RazorEmail.dll</HintPath>
+      <HintPath>..\..\packages\MMDB.RazorEmail.1.0.0.5\lib\net40\MMDB.RazorEmail.dll</HintPath>
     </Reference>
     <Reference Include="MMDB.Shared, Version=2.0.0.15, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -91,8 +91,9 @@
     <Compile Include="DataServiceLogger.cs" />
     <Compile Include="Dto\Assemblies\AssemblyImportResult.cs" />
     <Compile Include="Dto\Assemblies\JobAssembly.cs" />
-    <Compile Include="Dto\Enums.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="Dto\Ftp\FtpDownloadMetadata.cs" />
+    <Compile Include="DocumentSessionExtensions.cs" />
     <Compile Include="Jobs\FtpDownloadJobConfiguration.cs" />
     <Compile Include="Jobs\ItemProcessingJobBase.cs" />
     <Compile Include="Jobs\DataServiceJobBase.cs" />
@@ -100,7 +101,8 @@
     <Compile Include="Jobs\FtpDownloadServiceSettings.cs" />
     <Compile Include="Dto\Ftp\FtpInboundData.cs" />
     <Compile Include="Dto\Ftp\FtpOutboundData.cs" />
-    <Compile Include="Dto\Ftp\FtpSettings.cs" />
+    <Compile Include="Settings\EmailConnectionSettings.cs" />
+    <Compile Include="Settings\FtpConnectionSettings.cs" />
     <Compile Include="Dto\Jobs\JobCronSchedule.cs" />
     <Compile Include="Dto\Jobs\JobData.cs" />
     <Compile Include="Dto\Jobs\JobDefinition.cs" />
@@ -112,7 +114,7 @@
     <Compile Include="Dto\Jobs\JobStatusIndex.cs" />
     <Compile Include="Dto\Logging\Enums.cs" />
     <Compile Include="Dto\Logging\ServiceMessage.cs" />
-    <Compile Include="Dto\ConnectionSettingBase.cs" />
+    <Compile Include="Settings\ConnectionSettingBase.cs" />
     <Compile Include="EventReporter.cs" />
     <Compile Include="ExceptionReporter.cs" />
     <Compile Include="FtpManager.cs" />
@@ -140,6 +142,7 @@
     <Compile Include="Settings\SettingsBase.cs" />
     <Compile Include="Settings\SettingsContainer.cs" />
     <Compile Include="Settings\SettingsManager.cs" />
+    <Compile Include="Settings\SqlConnectionSettings.cs" />
     <Compile Include="TypeLoader.cs" />
   </ItemGroup>
   <ItemGroup>

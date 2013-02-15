@@ -9,6 +9,7 @@ using System.Transactions;
 using Raven.Client;
 using System.IO;
 using MMDB.DataService.Data.Jobs;
+using MMDB.DataService.Data.Settings;
 
 namespace MMDB.DataService.Data
 {
@@ -76,7 +77,7 @@ namespace MMDB.DataService.Data
 
 		public List<FtpDownloadMetadata> GetAvailableDownloadList(FtpDownloadSettings ftpDownloadSettings)
 		{
-			var settings = this.SettingsManager.Load<FtpSettings>(ftpDownloadSettings.SettingSource, ftpDownloadSettings.SettingKey);
+			var settings = this.SettingsManager.Load<FtpConnectionSettings>(ftpDownloadSettings.SettingSource, ftpDownloadSettings.SettingKey);
 			Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
 			ftp.Connect();
 
@@ -131,7 +132,7 @@ namespace MMDB.DataService.Data
 
 		public string DownloadFile(FtpDownloadMetadata item)
 		{
-			var settings = this.SettingsManager.Load<FtpSettings>(item.Settings.SettingSource, item.Settings.SettingKey);
+			var settings = this.SettingsManager.Load<FtpConnectionSettings>(item.Settings.SettingSource, item.Settings.SettingKey);
 			Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
 			ftp.Connect();
 
@@ -184,7 +185,7 @@ namespace MMDB.DataService.Data
 
 		public void UploadFile(FtpOutboundData jobItem)
 		{
-			var settings = this.SettingsManager.Load<FtpSettings>(jobItem.SettingSource, jobItem.SettingKey);
+			var settings = this.SettingsManager.Load<FtpConnectionSettings>(jobItem.SettingSource, jobItem.SettingKey);
 			Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
 			ftp.Connect();
 

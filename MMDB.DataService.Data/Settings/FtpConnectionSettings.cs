@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MMDB.DataService.Data.Dto.Ftp
+namespace MMDB.DataService.Data.Settings
 {
-	public class FtpSettings : ConnectionSettingBase
+	public class FtpConnectionSettings : ConnectionSettingBase
 	{
 		public string FtpUserName { get; set; }
 		public string FtpPassword { get; set; }

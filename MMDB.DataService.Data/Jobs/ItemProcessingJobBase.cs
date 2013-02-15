@@ -57,15 +57,19 @@ namespace MMDB.DataService.Data.Jobs
 
 		protected virtual void MarkItemSuccessful(JobDataType jobData)
 		{
-			jobData.Status = EnumJobStatus.Complete;
+			var item = (JobDataType)this.DocumentSession.Load(jobData.GetType(), jobData.Id);
+			item.Status = EnumJobStatus.Complete;
 			this.DocumentSession.SaveChanges();
 		}
 
 		protected virtual void MarkItemFailed(JobDataType jobData, Exception err)
 		{
+			var item = (JobDataType)this.DocumentSession.Load(jobData.GetType(), jobData.Id);
+			item.Status = EnumJobStatus.Complete;
+
 			var errorObject = this.EventReporter.ExceptionForObject(err, jobData);
-			jobData.Status = EnumJobStatus.Error;
-			jobData.ExceptionIdList.Add(errorObject.Id);
+			item.Status = EnumJobStatus.Error;
+			item.ExceptionIdList.Add(errorObject.Id);
 			this.DocumentSession.SaveChanges();
 		}
 	}

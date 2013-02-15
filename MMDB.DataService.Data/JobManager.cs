@@ -42,7 +42,7 @@ namespace MMDB.DataService.Data
 		{
 			this.EventReporter.Trace("Creating " + jobDefinition.JobName);
 			var jobType = this.TypeLoader.LoadType(jobDefinition.AssemblyName, jobDefinition.ClassName);
-			var configType = jobType.GetGenericArguments()[0];
+			var configType = jobType.BaseType.GetGenericArguments()[0];
 			var wrapperType = typeof(JobWrapper<,>).MakeGenericType(jobType, configType);
 			var jobDetail = new JobDetailImpl(jobDefinition.JobName, wrapperType);
 			jobDetail.JobDataMap.Add("Configuration", jobDefinition.Configuration);

@@ -20,7 +20,13 @@ namespace MMDB.DataService.Data.DataProvider
 					FindTypeTagName = type =>
 					{
 						if (typeof(SettingsBase).IsAssignableFrom(type))
+						{
 							return "SettingsBases";
+						}
+						if (typeof(ConnectionSettingBase).IsAssignableFrom(type))
+						{
+							return "ConnectionSettingBases";
+						}
 						return DocumentConvention.DefaultTypeTagName(type);
 					}
 				}

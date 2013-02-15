@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using MMDB.Shared;
 
-namespace MMDB.DataService.Data.Dto
+namespace MMDB.DataService.Data
 {
 	public enum JobScheduleType
 	{
