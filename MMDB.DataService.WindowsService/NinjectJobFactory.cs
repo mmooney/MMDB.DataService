@@ -30,5 +30,17 @@ namespace MMDB.DataService.WindowsService
 				throw;
 			}
 		}
+
+
+		public void ReturnJob(IJob job)
+		{
+			//https://groups.google.com/forum/?fromgroups=#!topic/quartznet/nu_OKpi3rLw
+			/* 
+				This method is for job factory to allow returning of the instance back 
+				to IoC container for proper cleanup. By default you don't need to do 
+				anything if you haven't managed destroying of object using the 
+				container before. 
+			 */
+		}
 	}
 }
