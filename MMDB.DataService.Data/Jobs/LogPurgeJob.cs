@@ -22,30 +22,29 @@ namespace MMDB.DataService.Data.Jobs
 		}
 
 		private EventReporter EventReporter { get; set; }
-		private DateTime UtcNow { get; set; }
 
-		public LogPurgeJob(IDocumentSession documentSession, EventReporter eventReporter, DateTime? utcNow=null) : base(documentSession)
+		public LogPurgeJob(IDocumentSession documentSession, EventReporter eventReporter) : base(documentSession)
 		{
 			this.EventReporter = eventReporter;
-			this.UtcNow = utcNow.GetValueOrDefault(DateTime.UtcNow);
 		}
 
 		public override void Run(LogPurgeJobConfiguration configuration)
 		{
+			DateTime utcNow = configuration.UtcNow.GetValueOrDefault(DateTime.UtcNow);
 			this.EventReporter.Trace(this.GetType().Name + ": job run started");
-			this.PurgeData(EnumServiceMessageLevel.Debug, configuration.DebugAgeMinutes);
-			this.PurgeData(EnumServiceMessageLevel.Trace, configuration.TraceAgeMinutes);
-			this.PurgeData(EnumServiceMessageLevel.Info, configuration.InfoAgeMinutes);
-			this.PurgeData(EnumServiceMessageLevel.Warning, configuration.WarningAgeMinutes);
-			this.PurgeData(EnumServiceMessageLevel.Error, configuration.ErrorAgeMinutes);
+			this.PurgeData(utcNow, EnumServiceMessageLevel.Debug, configuration.DebugAgeMinutes);
+			this.PurgeData(utcNow, EnumServiceMessageLevel.Trace, configuration.TraceAgeMinutes);
+			this.PurgeData(utcNow, EnumServiceMessageLevel.Info, configuration.InfoAgeMinutes);
+			this.PurgeData(utcNow, EnumServiceMessageLevel.Warning, configuration.WarningAgeMinutes);
+			this.PurgeData(utcNow, EnumServiceMessageLevel.Error, configuration.ErrorAgeMinutes);
 			this.EventReporter.Trace(this.GetType().Name + ": job run done");
 		}
 
-		private void PurgeData(EnumServiceMessageLevel messageLevel, int? ageMinutes)
+		private void PurgeData(DateTime utcNow, EnumServiceMessageLevel messageLevel, int? ageMinutes)
 		{
 			if(ageMinutes.HasValue)
 			{
-				DateTime maxDate = this.UtcNow.AddMinutes(0-ageMinutes.Value);
+				DateTime maxDate = utcNow.AddMinutes(0-ageMinutes.Value);
 				this.EventReporter.Trace("Deleting {0} messages older than {1}", messageLevel, maxDate);
 				var query = this.DocumentSession.Advanced.LuceneQuery<ServiceMessage, ServiceMessagesByDateIndex>()
 												.WhereEquals("Level", messageLevel)

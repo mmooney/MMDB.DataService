@@ -5,6 +5,7 @@ using System.Text;
 using MMDB.DataService.Data.Settings;
 using Raven.Client;
 using Raven.Client.Document;
+using Raven.Client.Indexes;
 
 namespace MMDB.DataService.Data.DataProvider
 {
@@ -12,7 +13,7 @@ namespace MMDB.DataService.Data.DataProvider
 	{
 		public static IDocumentStore CreateDocumentStore()
 		{
-			return new DocumentStore
+			var documentStore = new DocumentStore
 			{
 				ConnectionStringName = "RavenDB",
 				Conventions =
@@ -31,6 +32,8 @@ namespace MMDB.DataService.Data.DataProvider
 					}
 				}
 			}.Initialize();
+			IndexCreation.CreateIndexes(typeof(MMDB.DataService.Data.Jobs.DataServiceJobBase<>).Assembly, documentStore);
+			return documentStore;
 		}
 	}
 }

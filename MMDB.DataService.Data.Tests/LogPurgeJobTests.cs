@@ -45,7 +45,8 @@ namespace MMDB.DataService.Data.Tests
 				var beforeMessages= session.Query<ServiceMessage>().OrderBy(i=>i.MessageDateTimeUtc).ToList();
 				int originalOldMesssageCount = session.Query<ServiceMessage>().Where(i=>i.MessageDateTimeUtc < cutoff).Count();
 				int originalNewMessageCount = session.Query<ServiceMessage>().Where(i=>i.MessageDateTimeUtc > cutoff).Count();
-				var sut = new LogPurgeJob(session, eventReporter.Object, now);
+				configuration.UtcNow = now;
+				var sut = new LogPurgeJob(session, eventReporter.Object);
 				sut.Run(configuration);
 
 				var afterMesages = session.Query<ServiceMessage>().OrderBy(i => i.MessageDateTimeUtc).ToList();

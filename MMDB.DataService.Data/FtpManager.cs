@@ -10,6 +10,8 @@ using Raven.Client;
 using System.IO;
 using MMDB.DataService.Data.Jobs;
 using MMDB.DataService.Data.Settings;
+using System.Net;
+using FtpLib;
 
 namespace MMDB.DataService.Data
 {
@@ -78,108 +80,202 @@ namespace MMDB.DataService.Data
 		public List<FtpDownloadMetadata> GetAvailableDownloadList(FtpDownloadSettings ftpDownloadSettings)
 		{
 			var settings = this.SettingsManager.Load<FtpConnectionSettings>(ftpDownloadSettings.SettingSource, ftpDownloadSettings.SettingKey);
-			Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
-			ftp.Connect();
 
-			var patternList = new List<string>();
-			if(ftpDownloadSettings.FilePatternList == null || ftpDownloadSettings.FilePatternList.Count == 0)
-			{
-				if (string.IsNullOrEmpty(ftpDownloadSettings.DownloadDirectory))
-				{
-					patternList.Add("*.*");
-				}
-				else if (ftpDownloadSettings.DownloadDirectory.EndsWith("/"))
-				{
-					patternList.Add(ftpDownloadSettings.DownloadDirectory + "*.*");
-				}
-				else
-				{
-					patternList.Add(ftpDownloadSettings.DownloadDirectory + "/*.*");
-				}
-			}
-			foreach(var pattern in ftpDownloadSettings.FilePatternList)
-			{
-				if(string.IsNullOrEmpty(ftpDownloadSettings.DownloadDirectory))
-				{
-					patternList.Add("*." + pattern);
-				}
-				else if(ftpDownloadSettings.DownloadDirectory.EndsWith("/"))
-				{
-					patternList.Add(ftpDownloadSettings.DownloadDirectory + pattern);
-				}
-				else 
-				{
-					patternList.Add(ftpDownloadSettings.DownloadDirectory + "/" + pattern);
-				}
-			}
 			var returnList = new List<FtpDownloadMetadata>();
-			foreach (var path in patternList)
+			if (settings.SecureFTP || true)
 			{
-				var list = ftp.GetFileList(path);
-				foreach (string fileName in list)
+				var patternList = new List<string>();
+				if (ftpDownloadSettings.FilePatternList == null || ftpDownloadSettings.FilePatternList.Count == 0)
 				{
-					var newItem = new FtpDownloadMetadata
+					if (string.IsNullOrEmpty(ftpDownloadSettings.DownloadDirectory))
 					{
-						Directory = ftpDownloadSettings.DownloadDirectory,
-						FileName = fileName,
-						Settings = ftpDownloadSettings
-					};
-					returnList.Add(newItem);
+						patternList.Add("*.*");
+					}
+					else if (ftpDownloadSettings.DownloadDirectory.EndsWith("/"))
+					{
+						patternList.Add(ftpDownloadSettings.DownloadDirectory + "*.*");
+					}
+					else
+					{
+						patternList.Add(ftpDownloadSettings.DownloadDirectory + "/*.*");
+					}
+				}
+				foreach (var pattern in ftpDownloadSettings.FilePatternList)
+				{
+					if (string.IsNullOrEmpty(ftpDownloadSettings.DownloadDirectory))
+					{
+						patternList.Add("*." + pattern);
+					}
+					else if (ftpDownloadSettings.DownloadDirectory.EndsWith("/"))
+					{
+						patternList.Add(ftpDownloadSettings.DownloadDirectory + pattern);
+					}
+					else
+					{
+						patternList.Add(ftpDownloadSettings.DownloadDirectory + "/" + pattern);
+					}
+				}
+
+				Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
+				ftp.Connect();
+				foreach (var path in patternList)
+				{
+					var list = ftp.GetFileList(path);
+					foreach (string fileName in list)
+					{
+						var newItem = new FtpDownloadMetadata
+						{
+							Directory = ftpDownloadSettings.DownloadDirectory,
+							FileName = fileName,
+							Settings = ftpDownloadSettings
+						};
+						returnList.Add(newItem);
+					}
 				}
 			}
+			else 
+			{
+				using(var client = new FtpConnection(settings.FtpHost, settings.FtpUserName, settings.FtpPassword))
+				{
+					client.Open();
+					client.Login();
+					FtpDirectoryInfo directoryInfo;
+					if(string.IsNullOrEmpty(ftpDownloadSettings.DownloadDirectory) || client.GetCurrentDirectory() == ftpDownloadSettings.DownloadDirectory)
+					{
+						directoryInfo = client.GetCurrentDirectoryInfo();
+					}
+					else
+					{
+						var list = client.GetDirectories(ftpDownloadSettings.DownloadDirectory);
+						if(list.Length > 0)
+						{
+							directoryInfo = list[0];
+						}
+						else 
+						{
+							directoryInfo = null;
+						}
+					}
+					if(directoryInfo != null)
+					{
+						foreach(var pattern in ftpDownloadSettings.FilePatternList)
+						{
+							var fileList = client.GetFiles(pattern);
+							if(fileList != null)
+							{
+								foreach(var file in fileList)
+								{
+									var newItem = new FtpDownloadMetadata
+									{
+										Directory = ftpDownloadSettings.DownloadDirectory,
+										FileName = file.Name,
+										Settings = ftpDownloadSettings
+									};
+									returnList.Add(newItem);
+								}
+							}
+						}
+					}
+				}
+			}
+
 			return returnList;
 		}
 
 		public string DownloadFile(FtpDownloadMetadata item)
 		{
 			var settings = this.SettingsManager.Load<FtpConnectionSettings>(item.Settings.SettingSource, item.Settings.SettingKey);
-			Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
-			ftp.Connect();
+			if (settings.SecureFTP || true)
+			{
+				Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
+				ftp.Connect();
 
-			string ftpFilePath;
-			if (!string.IsNullOrEmpty(item.Directory))
-			{
-				if(item.Directory.EndsWith("/"))
+				string ftpFilePath;
+				if (!string.IsNullOrEmpty(item.Directory))
 				{
-					ftpFilePath = item.Directory + item.FileName;
-				}
-				else 
-				{
-					ftpFilePath = item.Directory + "/" + item.FileName;
-				}
-			}
-			else
-			{
-				ftpFilePath = item.FileName;
-			}
-
-			string tempDirectory = Path.Combine(Path.GetTempPath(), "MMDB.DataService");
-			if (!Directory.Exists(tempDirectory))
-			{
-				Directory.CreateDirectory(tempDirectory);
-			}
-			string tempPath = Path.Combine(tempDirectory, Guid.NewGuid().ToString() + "." + item.FileName);
-			try
-			{
-				ftp.Get(ftpFilePath, tempPath);
-				string attachmentID = Guid.NewGuid().ToString();
-				using(FileStream stream = new FileStream(tempPath, FileMode.Open))
-				{
-					this.DocumentStore.DatabaseCommands.PutAttachment(attachmentID, null, stream, new Raven.Json.Linq.RavenJObject());
-				}
-				return attachmentID;
-			}
-			finally
-			{
-				try
-				{
-					if (File.Exists(tempPath))
+					if(item.Directory.EndsWith("/"))
 					{
-						File.Delete(tempPath);
-						tempPath = null;
+						ftpFilePath = item.Directory + item.FileName;
+					}
+					else 
+					{
+						ftpFilePath = item.Directory + "/" + item.FileName;
 					}
 				}
-				catch { }
+				else
+				{
+					ftpFilePath = item.FileName;
+				}
+
+				string tempDirectory = Path.Combine(Path.GetTempPath(), "MMDB.DataService");
+				if (!Directory.Exists(tempDirectory))
+				{
+					Directory.CreateDirectory(tempDirectory);
+				}
+				string tempPath = Path.Combine(tempDirectory, Guid.NewGuid().ToString() + "." + item.FileName);
+				try
+				{
+					ftp.Get(ftpFilePath, tempPath);
+					string attachmentID = Guid.NewGuid().ToString();
+					using(FileStream stream = new FileStream(tempPath, FileMode.Open))
+					{
+						this.DocumentStore.DatabaseCommands.PutAttachment(attachmentID, null, stream, new Raven.Json.Linq.RavenJObject());
+					}
+					return attachmentID;
+				}
+				finally
+				{
+					try
+					{
+						if (File.Exists(tempPath))
+						{
+							File.Delete(tempPath);
+							tempPath = null;
+						}
+					}
+					catch { }
+				}
+			}
+			else 
+			{
+				using(var ftp = new FtpConnection(settings.FtpHost, settings.FtpUserName, settings.FtpPassword))
+				{
+					ftp.Open();
+					ftp.Login();
+					if (!string.IsNullOrEmpty(item.Directory))
+					{
+						ftp.SetCurrentDirectory(item.Directory);
+					}
+
+					string tempDirectory = Path.Combine(Path.GetTempPath(), "MMDB.DataService");
+					if (!Directory.Exists(tempDirectory))
+					{
+						Directory.CreateDirectory(tempDirectory);
+					}
+					string tempPath = Path.Combine(tempDirectory, Guid.NewGuid().ToString() + "." + item.FileName);
+					try
+					{
+						ftp.GetFile(item.FileName, tempPath, false);
+						string attachmentID = Guid.NewGuid().ToString();
+						using (FileStream stream = new FileStream(tempPath, FileMode.Open))
+						{
+							this.DocumentStore.DatabaseCommands.PutAttachment(attachmentID, null, stream, new Raven.Json.Linq.RavenJObject());
+						}
+						return attachmentID;
+					}
+					finally
+					{
+						try
+						{
+							if (File.Exists(tempPath))
+							{
+								File.Delete(tempPath);
+								tempPath = null;
+							}
+						}
+						catch { }
+					}
+				}
 			}
 		}
 

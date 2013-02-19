@@ -12,5 +12,6 @@ namespace MMDB.DataService.Data.Jobs
 		public int? InfoAgeMinutes { get; set; }
 		public int? WarningAgeMinutes { get; set; }
 		public int? ErrorAgeMinutes { get; set; }
+		public DateTime? UtcNow { get; set; }
 	}
 }
