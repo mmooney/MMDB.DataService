@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using MMDB.DataService.Data.Dto.Logging;
 using MMDB.DataService.Data.Settings;
@@ -45,7 +46,17 @@ namespace MMDB.DataService.Data
 					UserName = settings.Email.UserName,
 					Password = settings.Email.Password
 				};
-				this.EmailSender.SendEmail(emailSettings,, subject, body.ToString(), settings.ExceptionNotificationEmailAddressList, settings.ExceptionNotificationFromEmailAddress);
+				var from = new MailAddress(settings.ExceptionNotificationFromEmailAddress);
+				var toList = new List<MailAddress>();
+				if(settings.ExceptionNotificationFromEmailAddress != null)
+				{
+					foreach(var item in settings.ExceptionNotificationEmailAddressList)
+					{
+						var to = new MailAddress(item);
+						toList.Add(to);
+					}
+				}
+				this.EmailSender.SendEmail(emailSettings, subject, body.ToString(), toList, from);
 			}
 			catch (Exception err)
 			{
