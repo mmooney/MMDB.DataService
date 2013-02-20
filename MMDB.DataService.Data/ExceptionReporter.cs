@@ -38,8 +38,14 @@ namespace MMDB.DataService.Data
 				}
 
 				var settings = this.SettingsManager.Get<CoreDataServiceSettings>();
-
-				this.EmailSender.SendEmail(subject, body.ToString(), settings.ExceptionNotificationEmailAddressList, settings.ExceptionNotificationFromEmailAddress);
+				var emailSettings = new EmailServerSettings 
+				{
+					Host = settings.Email.Host,
+					Port = settings.Email.Port,
+					UserName = settings.Email.UserName,
+					Password = settings.Email.Password
+				};
+				this.EmailSender.SendEmail(emailSettings,, subject, body.ToString(), settings.ExceptionNotificationEmailAddressList, settings.ExceptionNotificationFromEmailAddress);
 			}
 			catch (Exception err)
 			{
