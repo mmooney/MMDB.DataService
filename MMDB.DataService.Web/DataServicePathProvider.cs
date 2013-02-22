@@ -20,9 +20,9 @@ namespace MMDB.DataService.Web
 		public override bool FileExists(string virtualPath)
 		{
 			var viewList = GetViewList();
-			if(virtualPath.StartsWith("/DataObject/", StringComparison.CurrentCultureIgnoreCase) && virtualPath.EndsWith(".cshtml", StringComparison.CurrentCultureIgnoreCase))
+			if (virtualPath.StartsWith("/Views/DataObject/", StringComparison.CurrentCultureIgnoreCase) && virtualPath.EndsWith(".cshtml", StringComparison.CurrentCultureIgnoreCase))
 			{
-				var matchingView = viewList.Any(i=>virtualPath.Equals("/DataObject/" + i.ViewName + ".cshtml", StringComparison.CurrentCultureIgnoreCase));
+				var matchingView = viewList.Any(i=>virtualPath.Equals("/Views/DataObject/" + i.ViewName + ".cshtml", StringComparison.CurrentCultureIgnoreCase));
 				if(matchingView)
 				{
 					return true;
@@ -46,9 +46,9 @@ namespace MMDB.DataService.Web
 		public override VirtualFile GetFile(string virtualPath)
 		{
 			var viewList = GetViewList();
-			if(virtualPath.StartsWith("/DataObject/", StringComparison.CurrentCultureIgnoreCase) && virtualPath.EndsWith(".cshtml", StringComparison.CurrentCultureIgnoreCase))
+			if (virtualPath.StartsWith("/Views/DataObject/", StringComparison.CurrentCultureIgnoreCase) && virtualPath.EndsWith(".cshtml", StringComparison.CurrentCultureIgnoreCase))
 			{
-				var matchingView = viewList.FirstOrDefault(i=>virtualPath.Equals("/DataObject/" + i.ViewName + ".cshtml", StringComparison.CurrentCultureIgnoreCase));
+				var matchingView = viewList.FirstOrDefault(i => virtualPath.Equals("/Views/DataObject/" + i.ViewName + ".cshtml", StringComparison.CurrentCultureIgnoreCase));
 				if (matchingView != null)
 				{
 					string viewData = this.ViewManager.GetViewData(matchingView);
