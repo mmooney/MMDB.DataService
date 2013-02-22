@@ -44,9 +44,9 @@
     <Reference Include="ftplib">
       <HintPath>..\packages\ftplib.1.0.1.2\lib\net35\ftplib.dll</HintPath>
     </Reference>
-    <Reference Include="MMDB.RazorEmail, Version=1.0.0.5, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="MMDB.RazorEmail, Version=1.0.0.6, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MMDB.RazorEmail.1.0.0.5\lib\net40\MMDB.RazorEmail.dll</HintPath>
+      <HintPath>..\packages\MMDB.RazorEmail.1.0.0.6\lib\net40\MMDB.RazorEmail.dll</HintPath>
     </Reference>
     <Reference Include="MMDB.Shared, Version=2.0.0.15, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
