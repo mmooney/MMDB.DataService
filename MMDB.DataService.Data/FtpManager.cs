@@ -12,6 +12,7 @@ using MMDB.DataService.Data.Jobs;
 using MMDB.DataService.Data.Settings;
 using System.Net;
 using FtpLib;
+using System.Collections;
 
 namespace MMDB.DataService.Data
 {
@@ -120,7 +121,9 @@ namespace MMDB.DataService.Data
 				ftp.Connect();
 				foreach (var path in patternList)
 				{
+					this.EventReporter.Trace("Searching on {0} for: {1}", settings.FtpHost, path);
 					var list = ftp.GetFileList(path);
+					this.EventReporter.Trace("{0} records found", (list??new ArrayList()).Count);
 					foreach (string fileName in list)
 					{
 						var newItem = new FtpDownloadMetadata

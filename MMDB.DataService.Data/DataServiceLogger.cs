@@ -100,7 +100,7 @@ namespace MMDB.DataService.Data
 		{
 			if(level.HasValue)
 			{
-				return this.DocumentSession.Query<ServiceMessage>().Where(i=>i.Level == level.Value).OrderByDescending(i => i.MessageDateTimeUtc).Skip((pageIndex) * pageSize).Take(pageSize);
+				return this.DocumentSession.Query<ServiceMessage>().Where(i=>i.Level == level.Value).OrderByDescending(i => i.MessageDateTimeUtc).Skip((pageIndex) * pageSize).Take(pageSize).OrderByDescending(i=>i.MessageDateTimeUtc);
 			}
 			else 
 			{
