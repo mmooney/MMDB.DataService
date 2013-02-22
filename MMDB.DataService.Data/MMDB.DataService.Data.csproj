@@ -104,6 +104,7 @@
     <Compile Include="Jobs\FtpDownloadServiceSettings.cs" />
     <Compile Include="Dto\Ftp\FtpInboundData.cs" />
     <Compile Include="Dto\Ftp\FtpOutboundData.cs" />
+    <Compile Include="RavenManager.cs" />
     <Compile Include="Settings\EmailConnectionSettings.cs" />
     <Compile Include="Settings\FtpConnectionSettings.cs" />
     <Compile Include="Dto\Jobs\JobCronSchedule.cs" />

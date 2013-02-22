@@ -65,5 +65,6 @@ namespace MMDB.DataService.Web.Controllers
 			this.DataObjectManager.UpdateMetadata(id, objectName, assemblyName, className);
 			return RedirectToAction("Index");
 		}
+
     }
 }

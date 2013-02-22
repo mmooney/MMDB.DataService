@@ -143,6 +143,7 @@
     <Compile Include="Controllers\JobAssemblyController.cs" />
     <Compile Include="Controllers\JobDataQueueController.cs" />
     <Compile Include="Controllers\JobManagerController.cs" />
+    <Compile Include="Controllers\RavenController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\ViewManagerController.cs" />
     <Compile Include="DataServicePathProvider.cs" />
@@ -322,6 +323,7 @@
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Admin\Export.cshtml" />
     <Content Include="Views\Admin\Import.cshtml" />
+    <Content Include="Views\Raven\AttachmentList.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

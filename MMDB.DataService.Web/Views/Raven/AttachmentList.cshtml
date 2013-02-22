@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Raven.Abstractions.Data.Attachment>
+
+@{
+    ViewBag.Title = "Attachment";
+}
+
+<h2>Attachment</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            Size
+        </th>
+        <th>
+            Etag
+        </th>
+        <th>
+            Key
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Size)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Etag)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Key)
+        </td>
+        <td>
+            @Html.ActionLink("View", "Attachment", new { attachmentID=item.Key }, new { target="_blank"}) |
+            @Html.ActionLink("Delete", "DeleteAttachment", new { attachmentID=item.Key })
+        </td>
+    </tr>
+}
+
+</table>
