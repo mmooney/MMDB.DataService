@@ -44,11 +44,13 @@ namespace MMDB.DataService.Data.Metadata
 			}
 		}
 
-		public void CreateView(string virtualPath, string resourceAssemblyName, string resourceIdentifier)
+		public void CreateView(string objectTypeName, string viewName, string resourceAssemblyName, string resourceIdentifier)
 		{
 			var item = new DataObjectView
 			{
-				VirtualPath = virtualPath,
+				ObjectTypeName = objectTypeName,
+				ViewName = viewName,
+				//VirtualPath = virtualPath,
 				StorageType = EnumViewStorageType.ResourceFile,
 				ResourceAssemblyName = resourceAssemblyName,
 				ResourceIdentifier = resourceIdentifier
@@ -62,13 +64,29 @@ namespace MMDB.DataService.Data.Metadata
 			return this.DocumentSession.Load<DataObjectView>(id);
 		}
 
-		public void UpdateView(int id, string virtualPath, string resourceAssemblyName, string resourceIdentifier)
+		public void UpdateView(int id, string objectTypeName, string viewName, string resourceAssemblyName, string resourceIdentifier)
 		{
 			var item = this.GetView(id);
-			item.VirtualPath = virtualPath;
+			//item.VirtualPath = virtualPath;
+			item.ObjectTypeName = objectTypeName;
+			item.ViewName = viewName;
 			item.ResourceAssemblyName = resourceAssemblyName;
 			item.ResourceIdentifier = resourceIdentifier;
 			this.DocumentSession.SaveChanges();
+		}
+
+		public string GetViewNameForObjectType(string objectTypeName)
+		{
+			var viewList = GetViewList();
+			var matchingView = viewList.FirstOrDefault(i => objectTypeName.Equals(i.ObjectTypeName, StringComparison.CurrentCultureIgnoreCase));
+			if(matchingView == null)
+			{
+				return "DefaultObjectView";
+			}
+			else 
+			{
+				return matchingView.ViewName;
+			}
 		}
 	}
 }

@@ -12,8 +12,11 @@
 <table>
     <tr class="ui-widget-header">
         <th>
-            VirtualPath
+            ObjectTypeName
         </th>
+		<th>
+			ViewName
+		</th>
         <th>
             ResourceAssemblyName
         </th>
@@ -26,7 +29,10 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.VirtualPath)
+            @Html.DisplayFor(modelItem => item.ObjectTypeName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ViewName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.ResourceAssemblyName)

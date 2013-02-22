@@ -1,0 +1,10 @@
+﻿@using System
+@{
+    ViewBag.Title = "DefaultObjectView";
+}
+
+<h2>DefaultObjectView</h2>
+<fieldset>
+	<legend>@Model.GetType().FullName</legend>
+	<pre>@MMDB.DataService.Data.MMDBJsonHelper.ToJson(Model,true)</pre>
+</fieldset>

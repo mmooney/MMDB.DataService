@@ -15,11 +15,19 @@
         <legend>DataObjectView</legend>
 
         <div class="editor-label">
-            @Html.LabelFor(model => model.VirtualPath)
+            @Html.LabelFor(model => model.ObjectTypeName)
         </div>
         <div class="editor-field">
-            @Html.EditorFor(model => model.VirtualPath)
-            @Html.ValidationMessageFor(model => model.VirtualPath)
+            @Html.EditorFor(model => model.ObjectTypeName)
+            @Html.ValidationMessageFor(model => model.ObjectTypeName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ViewName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ViewName)
+            @Html.ValidationMessageFor(model => model.ViewName)
         </div>
 
         <div class="editor-label">

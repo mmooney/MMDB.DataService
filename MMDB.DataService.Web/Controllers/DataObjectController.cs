@@ -11,10 +11,12 @@ namespace MMDB.DataService.Web.Controllers
     public class DataObjectController : Controller
     {
 		private DataObjectManager DataObjectManager { get; set; }
+		private DataServiceViewManager ViewManager { get; set; }
 
-		public DataObjectController(DataObjectManager dataObjectManager)
+		public DataObjectController(DataObjectManager dataObjectManager, DataServiceViewManager viewManager)
 		{
 			this.DataObjectManager = dataObjectManager;
+			this.ViewManager = viewManager;
 		}
         //
         // GET: /DataObject/
@@ -50,7 +52,8 @@ namespace MMDB.DataService.Web.Controllers
 		public ActionResult ViewDataItem(string objectName, int objectId)
 		{
 			var item = this.DataObjectManager.GetDataObject(objectName, objectId);
-			return View(item);
+			string viewName = this.ViewManager.GetViewNameForObjectType(objectName);
+			return View(viewName, item);
 		}
 
 		public ActionResult Edit(int id)

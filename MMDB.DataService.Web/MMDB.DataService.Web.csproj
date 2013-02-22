@@ -324,6 +324,7 @@
     <Content Include="Views\Admin\Export.cshtml" />
     <Content Include="Views\Admin\Import.cshtml" />
     <Content Include="Views\Raven\AttachmentList.cshtml" />
+    <Content Include="Views\DataObject\DefaultObjectView.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

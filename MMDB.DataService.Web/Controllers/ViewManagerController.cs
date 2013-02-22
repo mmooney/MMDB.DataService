@@ -30,9 +30,9 @@ namespace MMDB.DataService.Web.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult Create(string virtualPath, string resourceAssemblyName, string resourceIdentifier)
+		public ActionResult Create(string objectTypeName, string viewName, string resourceAssemblyName, string resourceIdentifier)
 		{
-			this.ViewManager.CreateView(virtualPath, resourceAssemblyName, resourceIdentifier);
+			this.ViewManager.CreateView(objectTypeName, viewName, resourceAssemblyName, resourceIdentifier);
 			System.Web.HttpContext.Current.Cache.Remove(DataServicePathProvider.CacheKey);
 			return RedirectToAction("Index");
 		}
@@ -45,9 +45,9 @@ namespace MMDB.DataService.Web.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult Edit(int id, string virtualPath, string resourceAssemblyName, string resourceIdentifier)
+		public ActionResult Edit(int id, string objectTypeName, string viewName, string resourceAssemblyName, string resourceIdentifier)
 		{
-			this.ViewManager.UpdateView(id, virtualPath, resourceAssemblyName, resourceIdentifier);
+			this.ViewManager.UpdateView(id, objectTypeName, viewName, resourceAssemblyName, resourceIdentifier);
 			System.Web.HttpContext.Current.Cache.Remove(DataServicePathProvider.CacheKey);
 			return RedirectToAction("Index");
 		}
