@@ -121,9 +121,9 @@ namespace MMDB.DataService.Data
 				ftp.Connect();
 				foreach (var path in patternList)
 				{
-					this.EventReporter.Trace("Searching on {0} for: {1}", settings.FtpHost, path);
+					this.EventReporter.Trace("Searching on " + settings.FtpHost + " for: " + path);
 					var list = ftp.GetFileList(path);
-					this.EventReporter.Trace("{0} records found", (list??new ArrayList()).Count);
+					this.EventReporter.Trace((list??new ArrayList()).Count.ToString() + "{0} records found");
 					foreach (string fileName in list)
 					{
 						var newItem = new FtpDownloadMetadata
