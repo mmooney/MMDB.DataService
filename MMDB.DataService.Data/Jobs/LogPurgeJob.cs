@@ -45,7 +45,7 @@ namespace MMDB.DataService.Data.Jobs
 			if(ageMinutes.HasValue)
 			{
 				DateTime maxDate = utcNow.AddMinutes(0-ageMinutes.Value);
-				this.EventReporter.Trace("Deleting {0} messages older than {1}", messageLevel, maxDate);
+				this.EventReporter.Trace(string.Format("Deleting {0} messages older than {1}", messageLevel, maxDate));
 				var query = this.DocumentSession.Advanced.LuceneQuery<ServiceMessage, ServiceMessagesByDateIndex>()
 												.WhereEquals("Level", messageLevel)
 												.AndAlso().WhereLessThan("MessageDateTimeUtc", maxDate);
