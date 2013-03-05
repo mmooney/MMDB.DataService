@@ -29,7 +29,8 @@ namespace MMDB.DataService.Data.DataProvider
 							return "ConnectionSettingBases";
 						}
 						return DocumentConvention.DefaultTypeTagName(type);
-					}
+					},
+					MaxNumberOfRequestsPerSession = 300
 				}
 			}.Initialize();
 			IndexCreation.CreateIndexes(typeof(MMDB.DataService.Data.Jobs.DataServiceJobBase<>).Assembly, documentStore);
