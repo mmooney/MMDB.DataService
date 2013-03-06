@@ -62,7 +62,6 @@ namespace MMDB.DataService.Data
 
 			if(runNow)
 			{
-				var schedule = (JobSimpleSchedule)jobDefinition.Schedule;
 				var trigger = new SimpleTriggerImpl(jobDefinition.JobName + "Trigger", DateBuilder.FutureDate(0, IntervalUnit.Minute), null, 1, TimeSpan.FromMinutes(int.MaxValue));
 				this.Scheduler.ScheduleJob(jobDetail, trigger);
 			}
