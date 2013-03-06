@@ -71,6 +71,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConsoleDataServiceLogger.cs" />
     <Compile Include="NinjectBootstrapper.cs" />
     <Compile Include="NinjectJobFactory.cs" />
     <Compile Include="Program.cs" />

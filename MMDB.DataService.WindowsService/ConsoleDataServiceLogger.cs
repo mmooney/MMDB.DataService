@@ -2,21 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Raven.Client;
+using MMDB.DataService.Data;
 using MMDB.DataService.Data.Dto.Logging;
 
-namespace MMDB.DataService.Data
+namespace MMDB.DataService.WindowsService
 {
-	public class DataServiceLogger
+	public class ConsoleDataServiceLogger : DataServiceLogger
 	{
-		private IDocumentSession DocumentSession { get; set; }
-
-		public DataServiceLogger(IDocumentSession documentSession)
+		public ConsoleDataServiceLogger() : base(null)
 		{
-			this.DocumentSession = documentSession;
 		}
 
-		public virtual ServiceMessage Trace(string message, object[] args)
+		public override ServiceMessage Trace(string message, object[] args)
 		{
 			string formattedMessage;
 			if (args == null || args.Length == 0)
@@ -34,8 +31,7 @@ namespace MMDB.DataService.Data
 				Detail = message,
 				MessageDateTimeUtc = DateTime.UtcNow
 			};
-			this.DocumentSession.Store(traceMessage);
-			this.DocumentSession.SaveChanges();
+			this.WriteServiceMessage(traceMessage);
 			return traceMessage;
 		}
 
@@ -47,10 +43,9 @@ namespace MMDB.DataService.Data
 				Message = message,
 				Detail = message,
 				MessageDateTimeUtc = DateTime.UtcNow,
-				DataObjectJson = (dataObject!=null) ? dataObject.ToJson() : null
+				DataObjectJson = (dataObject != null) ? dataObject.ToJson() : null
 			};
-			this.DocumentSession.Store(infoMessage);
-			this.DocumentSession.SaveChanges();
+			this.WriteServiceMessage(infoMessage);
 			return infoMessage;
 		}
 
@@ -64,8 +59,7 @@ namespace MMDB.DataService.Data
 				MessageDateTimeUtc = DateTime.UtcNow,
 				DataObjectJson = (dataObject != null) ? dataObject.ToJson() : null
 			};
-			this.DocumentSession.Store(warningMessage);
-			this.DocumentSession.SaveChanges();
+			this.WriteServiceMessage(warningMessage);
 			return warningMessage;
 		}
 
@@ -79,38 +73,39 @@ namespace MMDB.DataService.Data
 				MessageDateTimeUtc = DateTime.UtcNow,
 				DataObjectJson = (dataObject != null) ? dataObject.ToJson(true) : null
 			};
-			this.DocumentSession.Store(exceptionMessage);
-			this.DocumentSession.SaveChanges();
+			this.WriteServiceMessage(exceptionMessage);
 			return exceptionMessage;
 		}
 
 		public virtual int GetEventCount(EnumServiceMessageLevel? level)
 		{
-			if (level.HasValue)
-			{
-				return this.DocumentSession.Query<ServiceMessage>().Where(i => i.Level == level.Value).Count();
-			}
-			else
-			{
-				return this.DocumentSession.Query<ServiceMessage>().Count();
-			}
+			throw new NotImplementedException();
 		}
 
 		public virtual IQueryable<ServiceMessage> GetEventList(int pageIndex, int pageSize, EnumServiceMessageLevel? level)
 		{
-			if(level.HasValue)
-			{
-				return this.DocumentSession.Query<ServiceMessage>().Where(i=>i.Level == level.Value).OrderByDescending(i => i.MessageDateTimeUtc).Skip((pageIndex) * pageSize).Take(pageSize).OrderByDescending(i=>i.MessageDateTimeUtc);
-			}
-			else 
-			{
-				return this.DocumentSession.Query<ServiceMessage>().OrderByDescending(i => i.MessageDateTimeUtc).Skip((pageIndex) * pageSize).Take(pageSize);
-			}
+			throw new NotImplementedException();
 		}
 
 		public virtual ServiceMessage GetEventItem(int id)
 		{
-			return this.DocumentSession.Load<ServiceMessage>(id);
+			throw new NotImplementedException();
+		}
+
+		private void WriteServiceMessage(ServiceMessage message)
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.AppendFormat("[{0}: {1}] {2} - {3}",message.Level, message.MessageDateTimeUtc, message.Message, message.Detail);
+			if(!string.IsNullOrEmpty(message.DataObjectJson))
+			{
+				sb.AppendLine();
+				sb.AppendLine("JSON:");
+				sb.AppendLine(message.DataObjectJson);
+				sb.AppendLine();
+			}
+			sb.AppendLine();
+
+			Console.WriteLine(sb.ToString());
 		}
 	}
 }

@@ -10,6 +10,7 @@ using Quartz.Impl.Triggers;
 using System.Reflection;
 using MMDB.DataService.Data.Dto;
 using MMDB.DataService.Data.Jobs;
+using Tamir.SharpSsh.java.lang;
 
 namespace MMDB.DataService.Data
 {
@@ -38,7 +39,19 @@ namespace MMDB.DataService.Data
 			this.Scheduler.Start();
 		}
 
-		private void StartJob(JobDefinition jobDefinition)
+		public void RunJobNow(int jobID)
+		{
+			var jobDefinition = this.GetJobDefinition(jobID);
+			this.StartJob(jobDefinition, runNow:true);
+			this.Scheduler.Start();
+			Thread.Sleep(1000);
+			while (this.Scheduler.GetCurrentlyExecutingJobs().Count > 0)
+			{
+				Thread.Sleep(100);
+			}
+		}
+
+		private void StartJob(JobDefinition jobDefinition, bool runNow=false)
 		{
 			this.EventReporter.Trace("Creating " + jobDefinition.JobName);
 			var jobType = this.TypeLoader.LoadType(jobDefinition.AssemblyName, jobDefinition.ClassName);
@@ -47,7 +60,13 @@ namespace MMDB.DataService.Data
 			var jobDetail = new JobDetailImpl(jobDefinition.JobName, wrapperType);
 			jobDetail.JobDataMap.Add("Configuration", jobDefinition.Configuration);
 
-			if(jobDefinition.Schedule is JobSimpleSchedule)
+			if(runNow)
+			{
+				var schedule = (JobSimpleSchedule)jobDefinition.Schedule;
+				var trigger = new SimpleTriggerImpl(jobDefinition.JobName + "Trigger", DateBuilder.FutureDate(0, IntervalUnit.Minute), null, 1, TimeSpan.FromMinutes(int.MaxValue));
+				this.Scheduler.ScheduleJob(jobDetail, trigger);
+			}
+			else if(jobDefinition.Schedule is JobSimpleSchedule)
 			{
 				var schedule = (JobSimpleSchedule)jobDefinition.Schedule;
 				var trigger = new SimpleTriggerImpl(jobDefinition.JobName + "Trigger", DateBuilder.FutureDate(schedule.DelayStartMinutes, IntervalUnit.Minute), null, SimpleTriggerImpl.RepeatIndefinitely, TimeSpan.FromMinutes(schedule.IntervalMinutes));
@@ -341,5 +360,6 @@ namespace MMDB.DataService.Data
 				this.DocumentSession.SaveChanges();
 			}
 		}
+
 	}
 }

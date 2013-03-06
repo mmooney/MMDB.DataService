@@ -5,6 +5,7 @@ using System.Text;
 using Quartz.Spi;
 using Quartz;
 using MMDB.DataService.Data;
+using MMDB.DataService.Data.Jobs;
 
 namespace MMDB.DataService.WindowsService
 {
@@ -31,7 +32,6 @@ namespace MMDB.DataService.WindowsService
 			}
 		}
 
-
 		public void ReturnJob(IJob job)
 		{
 			//https://groups.google.com/forum/?fromgroups=#!topic/quartznet/nu_OKpi3rLw
@@ -42,5 +42,6 @@ namespace MMDB.DataService.WindowsService
 				container before. 
 			 */
 		}
+
 	}
 }

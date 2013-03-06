@@ -12,6 +12,7 @@ using Quartz;
 using MMDB.DataService.Data.Settings;
 using MMDB.DataService.Data.DataProvider;
 using MMDB.DataService.Data.Jobs;
+using MMDB.DataService.Data;
 
 namespace MMDB.DataService.WindowsService
 {
@@ -40,6 +41,17 @@ namespace MMDB.DataService.WindowsService
 					Console.WriteLine("\t-Starting in debug mode...");
 					var service = NinjectBootstrapper.Get<WinService>();
 					service.DebugStart();
+				}
+				else if (args.Length > 0 && args[0].ToLower() == "/runjobnow")
+				{
+					int jobID = 0;
+					if(args.Length < 2 || !int.TryParse(args[1], out jobID))
+					{
+						Console.WriteLine("/runjobname [jobid] - jobid must be an integer");
+					}
+					NinjectBootstrapper.Kernel.Bind<DataServiceLogger>().To<ConsoleDataServiceLogger>();
+					var jobManager = NinjectBootstrapper.Kernel.Get<JobManager>();
+					jobManager.RunJobNow(jobID);
 				}
 				else 
 				{

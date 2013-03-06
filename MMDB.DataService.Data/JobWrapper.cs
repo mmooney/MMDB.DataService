@@ -20,7 +20,7 @@ namespace MMDB.DataService.Data
 
 		public void Execute(IJobExecutionContext context)
 		{
-			this.EventReporter.Trace("Starting Job " + context.JobDetail.Description);
+			this.EventReporter.Trace("Starting Job " + context.JobDetail.Key.Name);
 			try 
 			{
 				var configuation = (ConfigType)context.JobDetail.JobDataMap["Configuration"];
@@ -30,7 +30,7 @@ namespace MMDB.DataService.Data
 			{
 				this.EventReporter.Exception(err);
 			}
-			this.EventReporter.Trace("Completed Job " + context.JobDetail.Description);
+			this.EventReporter.Trace("Completed Job " + context.JobDetail.Key.Name);
 		}
 	}
 }
