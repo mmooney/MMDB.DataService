@@ -35,7 +35,7 @@ namespace MMDB.DataService.WindowsService
 			return traceMessage;
 		}
 
-		public virtual ServiceMessage InfoForObject(string message, object dataObject)
+		public override ServiceMessage InfoForObject(string message, object dataObject)
 		{
 			var infoMessage = new ServiceMessage
 			{
@@ -49,7 +49,7 @@ namespace MMDB.DataService.WindowsService
 			return infoMessage;
 		}
 
-		public virtual ServiceMessage WarningForObject(string message, object dataObject)
+		public override ServiceMessage WarningForObject(string message, object dataObject)
 		{
 			var warningMessage = new ServiceMessage
 			{
@@ -63,7 +63,7 @@ namespace MMDB.DataService.WindowsService
 			return warningMessage;
 		}
 
-		public virtual ServiceMessage Exception(Exception err, object dataObject = null)
+		public override ServiceMessage Exception(Exception err, object dataObject = null)
 		{
 			var exceptionMessage = new ServiceMessage
 			{
@@ -77,17 +77,17 @@ namespace MMDB.DataService.WindowsService
 			return exceptionMessage;
 		}
 
-		public virtual int GetEventCount(EnumServiceMessageLevel? level)
+		public override int GetEventCount(EnumServiceMessageLevel? level)
 		{
 			throw new NotImplementedException();
 		}
 
-		public virtual IQueryable<ServiceMessage> GetEventList(int pageIndex, int pageSize, EnumServiceMessageLevel? level)
+		public override IQueryable<ServiceMessage> GetEventList(int pageIndex, int pageSize, EnumServiceMessageLevel? level)
 		{
 			throw new NotImplementedException();
 		}
 
-		public virtual ServiceMessage GetEventItem(int id)
+		public override ServiceMessage GetEventItem(int id)
 		{
 			throw new NotImplementedException();
 		}

@@ -54,6 +54,11 @@ namespace MMDB.DataService.Data
 			return infoMessage;
 		}
 
+		public virtual ServiceMessage Info(string message)
+		{
+			return this.InfoForObject(message, null);
+		}
+
 		public virtual ServiceMessage WarningForObject(string message, object dataObject)
 		{
 			var warningMessage = new ServiceMessage
@@ -112,5 +117,6 @@ namespace MMDB.DataService.Data
 		{
 			return this.DocumentSession.Load<ServiceMessage>(id);
 		}
+
 	}
 }

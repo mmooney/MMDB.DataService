@@ -44,6 +44,11 @@ namespace MMDB.DataService.Data
 			return returnValue;
 		}
 
+		public virtual ServiceMessage Info(string message)
+		{
+			return this.Logger.Info(message);
+		}
+
 		public virtual ServiceMessage InfoForObject(string message, object dataObject)
 		{
 			return this.Logger.InfoForObject(message, dataObject);
@@ -53,5 +58,6 @@ namespace MMDB.DataService.Data
 		{
 			return this.Logger.WarningForObject(message, dataObject);
 		}
+
 	}
 }
