@@ -65,7 +65,7 @@ namespace MMDB.DataService.Data.Jobs
 		protected virtual void MarkItemFailed(JobDataType jobData, Exception err)
 		{
 			var item = (JobDataType)this.DocumentSession.Load(jobData.GetType(), jobData.Id);
-			item.Status = EnumJobStatus.Complete;
+			item.Status = EnumJobStatus.Error;
 
 			var errorObject = this.EventReporter.ExceptionForObject(err, jobData);
 			item.Status = EnumJobStatus.Error;
