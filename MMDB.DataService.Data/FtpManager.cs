@@ -53,29 +53,43 @@ namespace MMDB.DataService.Data
 		public FtpOutboundData QueueUploadItem(string fileData, string targetDirectory, string targetFileName, string ftpSettingsKey, EnumSettingSource ftpSettingsSource)
 		{
 			string attachmentID = Guid.NewGuid().ToString();
-			using(var stream = new MemoryStream())
+
+			using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
 			{
-				using(var writer = new StreamWriter(stream))
+				bool anyExistingItems = this.DocumentSession.Query<FtpOutboundData>()
+											.Customize(i => i.WaitForNonStaleResultsAsOfNow(TimeSpan.FromSeconds(120)))
+											.Where(i=>i.TargetFileName == targetFileName)
+											.Any();
+				if (anyExistingItems)
 				{
-					writer.Write(fileData);
-					writer.Flush();
-					stream.Position = 0;
-					this.DocumentStore.DatabaseCommands.PutAttachment(attachmentID, null, stream, new Raven.Json.Linq.RavenJObject());
+					throw new Exception(string.Format("FtpOutputData record for file name {0} already exists", targetFileName));
 				}
+				using (var stream = new MemoryStream())
+				{
+					using(var writer = new StreamWriter(stream))
+					{
+						writer.Write(fileData);
+						writer.Flush();
+						stream.Position = 0;
+						this.DocumentStore.DatabaseCommands.PutAttachment(attachmentID, null, stream, new Raven.Json.Linq.RavenJObject());
+					}
+				}
+				var newItem = new FtpOutboundData
+				{
+					AttachmentId = attachmentID,
+					QueuedDateTimeUtc = DateTime.UtcNow,
+					SettingKey = ftpSettingsKey,
+					SettingSource = ftpSettingsSource,
+					Status = EnumJobStatus.New,
+					TargetDirectory = targetDirectory,
+					TargetFileName = targetFileName
+				};
+				this.DocumentSession.Store(newItem);
+				this.DocumentSession.SaveChanges();
+				transaction.Complete();
+
+				return newItem;
 			}
-			var newItem = new FtpOutboundData
-			{
-				AttachmentId = attachmentID,
-				QueuedDateTimeUtc = DateTime.UtcNow,
-				SettingKey = ftpSettingsKey,
-				SettingSource = ftpSettingsSource,
-				Status = EnumJobStatus.New,
-				TargetDirectory = targetDirectory,
-				TargetFileName = targetFileName
-			};
-			this.DocumentSession.Store(newItem);
-			this.DocumentSession.SaveChanges();
-			return newItem;
 		}
 
 		public List<FtpDownloadMetadata> GetAvailableDownloadList(FtpDownloadSettings ftpDownloadSettings)
