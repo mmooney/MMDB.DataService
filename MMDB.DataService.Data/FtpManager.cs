@@ -37,7 +37,7 @@ namespace MMDB.DataService.Data
 			using(var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel=IsolationLevel.Serializable }))
 			{
 				returnValue = this.DocumentSession.Query<FtpOutboundData>()
-													.Customize(i => i.WaitForNonStaleResultsAsOfNow())
+													.Customize(i => i.WaitForNonStaleResultsAsOfNow(TimeSpan.FromSeconds(120)))
 													.OrderByDescending(i => i.QueuedDateTimeUtc)
 													.FirstOrDefault(i => i.Status == EnumJobStatus.New);
 				if(returnValue != null)
@@ -307,12 +307,14 @@ namespace MMDB.DataService.Data
 			string tempPath = Path.Combine(tempDirectory, Guid.NewGuid().ToString() + "." + targetFileName);
 			try 
 			{
+				this.EventReporter.Info("Uploading file " + tempPath + " to " + targetFilePath + "...");
 				var attachment = this.DocumentStore.DatabaseCommands.GetAttachment(jobItem.AttachmentId);
 				using (var fileStream = File.Create(tempPath))
 				{
 					attachment.Data().CopyTo(fileStream);
 				}
 				ftp.Put(tempPath, targetFilePath);
+				this.EventReporter.Info("Uploading file " + tempPath + " to " + targetFilePath + " complete");
 			}
 			finally
 			{

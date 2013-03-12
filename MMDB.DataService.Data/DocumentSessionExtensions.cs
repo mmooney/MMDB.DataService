@@ -12,7 +12,7 @@ namespace MMDB.DataService.Data
 		{
 			var entityName = session.Advanced.DocumentStore.Conventions.GetTypeTagName(type);
 			string idStringValue = entityName + "/" + id.ToString();
-			var itemQuery = session.Advanced.LuceneQuery<dynamic>().WhereEquals("@metadata.Raven-Entity-Name", entityName).AndAlso().WhereEquals("Id", idStringValue);
+			var itemQuery = session.Advanced.LuceneQuery<dynamic>().WaitForNonStaleResultsAsOfNow(TimeSpan.FromSeconds(120)).WhereEquals("@metadata.Raven-Entity-Name", entityName).AndAlso().WhereEquals("Id", idStringValue);
 			var item = itemQuery.SingleOrDefault();//(i => id == i.Id);
 			if(item == null)
 			{
@@ -24,7 +24,7 @@ namespace MMDB.DataService.Data
 		public static object Load(this IDocumentSession session, Type type, string id)
 		{
 			var entityName = session.Advanced.DocumentStore.Conventions.GetTypeTagName(type);
-			var itemQuery = session.Advanced.LuceneQuery<dynamic>().WhereEquals("@metadata.Raven-Entity-Name", entityName).AndAlso().WhereEquals("Id", id);
+			var itemQuery = session.Advanced.LuceneQuery<dynamic>().WaitForNonStaleResultsAsOfNow(TimeSpan.FromSeconds(120)).WhereEquals("@metadata.Raven-Entity-Name", entityName).AndAlso().WhereEquals("Id", id);
 			var item = itemQuery.SingleOrDefault(i => i.Id == id);
 			if(item == null)
 			{
