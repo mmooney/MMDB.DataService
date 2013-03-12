@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MMDB.DataService.Data.Settings;
+using MMDB.Shared;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Indexes;
@@ -30,7 +31,7 @@ namespace MMDB.DataService.Data.DataProvider
 						}
 						return DocumentConvention.DefaultTypeTagName(type);
 					},
-					MaxNumberOfRequestsPerSession = 300
+					MaxNumberOfRequestsPerSession = AppSettingsHelper.GetIntSetting("RavenMaxNumberOfRequestsPerSession", 3000)
 				}
 			}.Initialize();
 			IndexCreation.CreateIndexes(typeof(MMDB.DataService.Data.Jobs.DataServiceJobBase<>).Assembly, documentStore);
