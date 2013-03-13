@@ -8,11 +8,12 @@ namespace MMDB.DataService.Data.Tests
 {
 	public static class DataServiceTestHelper
 	{
-		public static Mock<EventReporter> GetEventReporter()
+		public static Mock<IEventReporter> GetEventReporter()
 		{
-			var logger = new Mock<DataServiceLogger>();
-			var exceptionReporter = new Mock<ExceptionReporter>();
-			return new Mock<EventReporter>(logger.Object, exceptionReporter.Object);
+			return new Mock<IEventReporter>();
+			//var logger = new Mock<DataServiceLogger>();
+			//var exceptionReporter = new Mock<ExceptionReporter>();
+			//return new Mock<EventReporter>(logger.Object, exceptionReporter.Object);
 		}
 	}
 }

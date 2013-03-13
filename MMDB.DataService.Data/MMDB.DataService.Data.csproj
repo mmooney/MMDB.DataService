@@ -97,6 +97,8 @@
     <Compile Include="Enums.cs" />
     <Compile Include="Dto\Ftp\FtpDownloadMetadata.cs" />
     <Compile Include="DocumentSessionExtensions.cs" />
+    <Compile Include="IEventReporter.cs" />
+    <Compile Include="IRavenManager.cs" />
     <Compile Include="Jobs\FtpDownloadJobConfiguration.cs" />
     <Compile Include="Jobs\ItemProcessingJobBase.cs" />
     <Compile Include="Jobs\DataServiceJobBase.cs" />

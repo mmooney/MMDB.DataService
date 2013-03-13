@@ -11,12 +11,12 @@ namespace MMDB.DataService.Data.Tests
 {
 	public class LogPurgeJobTests
 	{
-		[Test]
+		[Test, Explicit]
 		public void PurgesTraceMessages()
 		{
 			using(var session = EmbeddedRavenProvider.DocumentStore.OpenSession())
 			{
-				Mock<EventReporter> eventReporter = new Mock<EventReporter>(null,null);
+				Mock<IEventReporter> eventReporter = new Mock<IEventReporter>();
 				var configuration = new LogPurgeJobConfiguration
 				{
 					TraceAgeMinutes = 1000

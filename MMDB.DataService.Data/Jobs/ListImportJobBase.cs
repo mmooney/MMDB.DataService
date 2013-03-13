@@ -9,9 +9,9 @@ namespace MMDB.DataService.Data.Jobs
 {
 	public abstract class ListImportJobBase<ConfigType, ImportDataType, JobDataType> : QueueJobBase<ConfigType, JobDataType> where ConfigType : JobConfigurationBase where JobDataType : JobData
 	{
-		protected EventReporter EventReporter { get; private set; }
+		protected IEventReporter EventReporter { get; private set; }
 
-		public ListImportJobBase(EventReporter eventReporter, IDocumentSession documentSession) : base(documentSession)
+		public ListImportJobBase(IEventReporter eventReporter, IDocumentSession documentSession) : base(documentSession)
 		{
 			this.EventReporter = eventReporter;
 		}

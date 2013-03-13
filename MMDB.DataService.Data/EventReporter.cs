@@ -6,7 +6,7 @@ using MMDB.DataService.Data.Dto.Logging;
 
 namespace MMDB.DataService.Data
 {
-	public class EventReporter
+	public class EventReporter : IEventReporter
 	{
 		private DataServiceLogger Logger { get; set; }
 		private ExceptionReporter ExceptionReporter { get; set; }
@@ -17,26 +17,26 @@ namespace MMDB.DataService.Data
 			this.ExceptionReporter = exceptionReporter;
 		}
 
-		public virtual ServiceMessage Trace(string message, params object[] args)
+		public ServiceMessage Trace(string message)
 		{
-			return this.Logger.Trace(message, args);
+			return this.Logger.Trace(message);
 		}
 
-		public virtual ServiceMessage Exception(Exception err)
+		public ServiceMessage Exception(Exception err)
 		{
 			var returnValue = this.Logger.Exception(err);
 			this.ExceptionReporter.Exception(returnValue);
 			return returnValue;
 		}
 
-		public virtual ServiceMessage ExceptionForObject(Exception err, object dataObject)
+		public ServiceMessage ExceptionForObject(Exception err, object dataObject)
 		{
 			var returnValue = this.Logger.Exception(err, dataObject);
 			this.ExceptionReporter.Exception(returnValue);
 			return returnValue;
 		}
 
-		public virtual ServiceMessage ExceptionForObject(string errorMessage, object dataObject)
+		public ServiceMessage ExceptionForObject(string errorMessage, object dataObject)
 		{
 			var err = new Exception(errorMessage);
 			var returnValue = this.Logger.Exception(err, dataObject);
@@ -44,20 +44,19 @@ namespace MMDB.DataService.Data
 			return returnValue;
 		}
 
-		public virtual ServiceMessage Info(string message)
+		public ServiceMessage Info(string message)
 		{
 			return this.Logger.Info(message);
 		}
 
-		public virtual ServiceMessage InfoForObject(string message, object dataObject)
+		public ServiceMessage InfoForObject(string message, object dataObject)
 		{
 			return this.Logger.InfoForObject(message, dataObject);
 		}
 
-		public virtual ServiceMessage WarningForObject(string message, object dataObject)
+		public ServiceMessage WarningForObject(string message, object dataObject)
 		{
 			return this.Logger.WarningForObject(message, dataObject);
 		}
-
 	}
 }

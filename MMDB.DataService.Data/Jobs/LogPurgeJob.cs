@@ -21,9 +21,9 @@ namespace MMDB.DataService.Data.Jobs
 			}
 		}
 
-		private EventReporter EventReporter { get; set; }
+		private IEventReporter EventReporter { get; set; }
 
-		public LogPurgeJob(IDocumentSession documentSession, EventReporter eventReporter) : base(documentSession)
+		public LogPurgeJob(IDocumentSession documentSession, IEventReporter eventReporter) : base(documentSession)
 		{
 			this.EventReporter = eventReporter;
 		}

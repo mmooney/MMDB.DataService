@@ -11,7 +11,7 @@ namespace MMDB.DataService.Data.Jobs
 	{
 		private FtpManager FtpManager { get; set; }
 		
-		public FtpUploadJob(FtpManager ftpManager, IDocumentSession documentSession, EventReporter eventReporter) : base(documentSession, eventReporter)
+		public FtpUploadJob(FtpManager ftpManager, IDocumentSession documentSession, IEventReporter eventReporter) : base(documentSession, eventReporter)
 		{
 			this.FtpManager = ftpManager;
 		}
@@ -26,5 +26,15 @@ namespace MMDB.DataService.Data.Jobs
 			this.FtpManager.UploadFile(jobItem);
 		}
 
+
+		protected override void MarkItemSuccessful(FtpOutboundData jobData)
+		{
+			this.FtpManager.MarkItemSuccessful(jobData);
+		}
+
+		protected override void MarkItemFailed(FtpOutboundData jobData, Exception err)
+		{
+			this.FtpManager.MarkItemFailed(jobData, err);
+		}
 	}
 }

@@ -27,6 +27,11 @@ namespace MMDB.DataService.Data
 			{
 				formattedMessage = string.Format(message, args);
 			}
+			return Trace(message);
+		}
+
+		public ServiceMessage Trace(string message)
+		{
 			var traceMessage = new ServiceMessage
 			{
 				Level = EnumServiceMessageLevel.Trace,

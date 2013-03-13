@@ -38,7 +38,7 @@ namespace MMDB.DataService.Data.Metadata
 							return StreamHelper.ReadAll(stream);
 						}
 					}
-					break;
+					//break;
 				default:
 					throw new NotImplementedException();
 			}

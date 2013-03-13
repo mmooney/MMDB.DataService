@@ -13,7 +13,7 @@ namespace MMDB.DataService.Data.Jobs
 	{
 		private FtpManager FtpManager { get; set; }
 		
-		public FtpDownloadJob(IDocumentSession documentSession, EventReporter eventReporter, FtpManager ftpManager) : base(eventReporter, documentSession)
+		public FtpDownloadJob(IDocumentSession documentSession, IEventReporter eventReporter, FtpManager ftpManager) : base(eventReporter, documentSession)
 		{
 			this.FtpManager = ftpManager;
 		}

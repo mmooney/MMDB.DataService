@@ -10,9 +10,9 @@ namespace MMDB.DataService.Data.Jobs
 {
 	public abstract class ItemProcessingJob<ConfigType, JobDataType> : QueueJobBase<ConfigType, JobDataType> where ConfigType:JobConfigurationBase where JobDataType:JobData
 	{
-		protected EventReporter EventReporter { get; private set; }
+		protected IEventReporter EventReporter { get; private set; }
 
-		public ItemProcessingJob(IDocumentSession documentSession, EventReporter eventReporter) : base(documentSession)
+		public ItemProcessingJob(IDocumentSession documentSession, IEventReporter eventReporter) : base(documentSession)
 		{
 			this.DocumentSession = documentSession;
 			this.EventReporter = eventReporter;
@@ -55,22 +55,24 @@ namespace MMDB.DataService.Data.Jobs
 		protected abstract JobDataType GetNextItemToProcess(ConfigType configuration);
 		protected abstract void ProcessItem(ConfigType configuration, JobDataType jobItem);
 
-		protected virtual void MarkItemSuccessful(JobDataType jobData)
-		{
-			var item = (JobDataType)this.DocumentSession.Load(jobData.GetType(), jobData.Id);
-			item.Status = EnumJobStatus.Complete;
-			this.DocumentSession.SaveChanges();
-		}
+		protected abstract void MarkItemSuccessful(JobDataType jobData);
+		//protected virtual void MarkItemSuccessful(JobDataType jobData);
+		//{
+		//	var item = (JobDataType)this.DocumentSession.Load(jobData.GetType(), jobData.Id);
+		//	item.Status = EnumJobStatus.Complete;
+		//	this.DocumentSession.SaveChanges();
+		//}
 
-		protected virtual void MarkItemFailed(JobDataType jobData, Exception err)
-		{
-			var item = (JobDataType)this.DocumentSession.Load(jobData.GetType(), jobData.Id);
-			item.Status = EnumJobStatus.Error;
+		protected abstract void MarkItemFailed(JobDataType jobData, Exception err);
+		//protected virtual void MarkItemFailed(JobDataType jobData, Exception err)
+		//{
+		//	var item = (JobDataType)this.DocumentSession.Load(jobData.GetType(), jobData.Id);
+		//	item.Status = EnumJobStatus.Error;
 
-			var errorObject = this.EventReporter.ExceptionForObject(err, jobData);
-			item.Status = EnumJobStatus.Error;
-			item.ExceptionIdList.Add(errorObject.Id);
-			this.DocumentSession.SaveChanges();
-		}
+		//	var errorObject = this.EventReporter.ExceptionForObject(err, jobData);
+		//	item.Status = EnumJobStatus.Error;
+		//	item.ExceptionIdList.Add(errorObject.Id);
+		//	this.DocumentSession.SaveChanges();
+		//}
 	}
 }

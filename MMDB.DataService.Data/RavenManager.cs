@@ -7,7 +7,7 @@ using Raven.Client;
 
 namespace MMDB.DataService.Data
 {
-	public class RavenManager
+	public class RavenManager : IRavenManager
 	{
 		private IDocumentSession DocumentSession { get; set; }
 
@@ -16,12 +16,25 @@ namespace MMDB.DataService.Data
 			this.DocumentSession = documentSession;
 		}
 
-		public byte[] GetAttachment(string attachmentID)
+		public string GetAttachmentString(string attachmentId)
 		{
-			var attachment = this.DocumentSession.Advanced.DocumentStore.DatabaseCommands.GetAttachment(attachmentID);
+			var attachment = this.DocumentSession.Advanced.DocumentStore.DatabaseCommands.GetAttachment(attachmentId);
 			if(attachment == null)
 			{
-				throw new Exception("Attachment Not Found: " + attachmentID);
+				throw new Exception(string.Format("Attachment {0} not found", attachmentId));
+			}
+			using (var reader = new StreamReader(attachment.Data()))
+			{
+				return reader.ReadToEnd();
+			}
+
+		}
+		public byte[] GetAttachment(string attachmentId)
+		{
+			var attachment = this.DocumentSession.Advanced.DocumentStore.DatabaseCommands.GetAttachment(attachmentId);
+			if(attachment == null)
+			{
+				throw new Exception("Attachment Not Found: " + attachmentId);
 			}
 			using(var memoryStream = new MemoryStream())
 			{

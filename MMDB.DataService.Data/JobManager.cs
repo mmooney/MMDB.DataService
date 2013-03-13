@@ -17,11 +17,11 @@ namespace MMDB.DataService.Data
 	public class JobManager
 	{
 		private IDocumentSession DocumentSession { get; set; } 
-		private EventReporter EventReporter { get; set; }
+		private IEventReporter EventReporter { get; set; }
 		private IScheduler Scheduler { get; set; }
 		private TypeLoader TypeLoader { get; set; }
 
-		public JobManager(IDocumentSession documentSession, EventReporter eventReporter, IScheduler scheduler, TypeLoader typeLoader)
+		public JobManager(IDocumentSession documentSession, IEventReporter eventReporter, IScheduler scheduler, TypeLoader typeLoader)
 		{
 			this.DocumentSession = documentSession;
 			this.EventReporter = eventReporter;

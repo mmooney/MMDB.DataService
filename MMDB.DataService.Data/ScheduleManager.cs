@@ -36,7 +36,7 @@ namespace MMDB.DataService.Data
 
 		private void StartJob(JobDefinition job)
 		{
-			this.EventReporter.Trace("Creating job {0}",job.JobName);
+			this.EventReporter.Trace("Creating job: " + job.JobName);
 			if(job.Schedule is JobCronSchedule)
 			{
 			}
