@@ -27,6 +27,7 @@ namespace MMDB.DataService.Data.Tests
 							Conventions = new DocumentConvention
 							{
 								DefaultQueryingConsistency =  ConsistencyOptions.QueryYourWrites,
+								MaxNumberOfRequestsPerSession = 3000
 							},
 						};
 						_documentStore.Initialize();

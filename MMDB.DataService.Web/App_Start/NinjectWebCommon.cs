@@ -19,6 +19,7 @@ using Ninject.Activation;
 	using MMDB.DataService.Data.DataProvider;
 	using System.Web.Mvc;
 	using MMDB.DataService.Data.Jobs;
+	using Ninject.Extensions.Conventions;
 
     public static class NinjectWebCommon 
     {
@@ -52,8 +53,8 @@ using Ninject.Activation;
         /// <returns>The created kernel.</returns>
         private static IKernel CreateKernel()
         {
-            var kernel = new StandardKernel();
-            kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
+            var kernel = new StandardKernel(new NinjectSettings() { UseReflectionBasedInjection=false});
+			kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
             
             RegisterServices(kernel);
@@ -66,10 +67,17 @@ using Ninject.Activation;
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-			kernel.Bind<IDocumentStore>().ToMethod(CreateDocumentStore).InSingletonScope();
-			kernel.Bind<IDocumentSession>().ToMethod(c => c.Kernel.Get<IDocumentStore>().OpenSession()).InRequestScope();
-			kernel.Bind<ISchedulerFactory>().To<StdSchedulerFactory>();
+			kernel.Rebind<IDocumentStore>().ToMethod(CreateDocumentStore).InSingletonScope();
+			kernel.Rebind<IDocumentSession>().ToMethod(c => c.Kernel.Get<IDocumentStore>().OpenSession()).InRequestScope();
+			kernel.Rebind<ISchedulerFactory>().To<StdSchedulerFactory>();
 			kernel.Bind<IScheduler>().ToMethod(c => c.Kernel.Get<ISchedulerFactory>().GetScheduler());
+
+			kernel.Bind(x =>
+			{
+				x.FromAssembliesMatching("*") // Scans currently assembly
+				 .SelectAllClasses() // Retrieve all non-abstract classes
+				 .BindDefaultInterface();// Binds the default interface to them;
+			});
 
 			ModelBinders.Binders.Add(typeof(JobConfigurationBase), kernel.Get<ConfigurationModelBinder>());
 		}

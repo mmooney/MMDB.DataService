@@ -73,6 +73,9 @@
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject.Extensions.Conventions">
+      <HintPath>..\..\packages\ninject.extensions.conventions.3.0.0.11\lib\net40\Ninject.Extensions.Conventions.dll</HintPath>
+    </Reference>
     <Reference Include="Ninject.Web.Common">
       <HintPath>..\packages\Ninject.Web.Common.3.0.0.7\lib\net40-full\Ninject.Web.Common.dll</HintPath>
     </Reference>
@@ -377,10 +380,6 @@
     <ProjectReference Include="..\MMDB.DataService.Data\MMDB.DataService.Data.csproj">
       <Project>{948C1F2B-7562-4F84-8521-4B151CF6AE6D}</Project>
       <Name>MMDB.DataService.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MMDB.RavenDB.DynamicData\MMDB.RavenDB.DynamicData.csproj">
-      <Project>{F7C0C907-571E-467A-A792-C84D33B9A989}</Project>
-      <Name>MMDB.RavenDB.DynamicData</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

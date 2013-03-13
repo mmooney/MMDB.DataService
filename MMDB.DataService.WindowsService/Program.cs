@@ -29,10 +29,10 @@ namespace MMDB.DataService.WindowsService
 				Console.WriteLine("\t-Initializing Ninject...");
 				NinjectBootstrapper.Initialize();
 				Console.WriteLine("\t-Binding components to Ninject...");
-				NinjectBootstrapper.Kernel.Bind<IDocumentStore>().ToMethod(CreateDocumentStore).InSingletonScope();
-				NinjectBootstrapper.Kernel.Bind<IDocumentSession>().ToMethod(c=>c.Kernel.Get<IDocumentStore>().OpenSession()).InTransientScope();
-				NinjectBootstrapper.Kernel.Bind<ISchedulerFactory>().To<StdSchedulerFactory>();
-				NinjectBootstrapper.Kernel.Bind<IScheduler>().ToMethod(CreateScheduler).InSingletonScope();
+				NinjectBootstrapper.Kernel.Rebind<IDocumentStore>().ToMethod(CreateDocumentStore).InSingletonScope();
+				NinjectBootstrapper.Kernel.Rebind<IDocumentSession>().ToMethod(c => c.Kernel.Get<IDocumentStore>().OpenSession()).InTransientScope();
+				NinjectBootstrapper.Kernel.Rebind<ISchedulerFactory>().To<StdSchedulerFactory>();
+				NinjectBootstrapper.Kernel.Rebind<IScheduler>().ToMethod(CreateScheduler).InSingletonScope();
 				Console.WriteLine("\t-Ninject initialization complete...");
 			
 				var settings = NinjectBootstrapper.Kernel.Get<CoreDataServiceSettings>();

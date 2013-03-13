@@ -30,7 +30,7 @@ namespace MMDB.DataService.Data
 			return Trace(message);
 		}
 
-		public ServiceMessage Trace(string message)
+		public virtual ServiceMessage Trace(string message)
 		{
 			var traceMessage = new ServiceMessage
 			{

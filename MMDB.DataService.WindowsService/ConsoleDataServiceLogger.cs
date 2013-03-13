@@ -49,6 +49,24 @@ namespace MMDB.DataService.WindowsService
 			return infoMessage;
 		}
 
+		public override ServiceMessage Info(string message)
+		{
+			return this.InfoForObject(message, null);
+		}
+
+		public override ServiceMessage Trace(string message)
+		{
+			var traceMessage = new ServiceMessage
+			{
+				Level = EnumServiceMessageLevel.Trace,
+				Message = message,
+				Detail = message,
+				MessageDateTimeUtc = DateTime.UtcNow
+			};
+			this.WriteServiceMessage(traceMessage);
+			return traceMessage;
+		}
+
 		public override ServiceMessage WarningForObject(string message, object dataObject)
 		{
 			var warningMessage = new ServiceMessage
