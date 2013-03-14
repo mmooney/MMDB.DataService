@@ -39,6 +39,7 @@ namespace MMDB.DataService.Data.Jobs
 					this.ProcessedFileNames.Add(item.TargetFileName);
 				}
 			}
+			return item;
 		}
 
 		protected override void ProcessItem(NullJobConfiguration configuration, FtpOutboundData jobItem)
