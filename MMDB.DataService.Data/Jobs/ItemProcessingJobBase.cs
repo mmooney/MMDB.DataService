@@ -27,8 +27,14 @@ namespace MMDB.DataService.Data.Jobs
 		{
 			this.EventReporter.Trace(this.GetType().Name + ": job run started");
 			bool done = false;
+			int counter = 0;
+			int maxItemsToProcess = this.GetMaxItemsToProcess(configuration);
 			while (!done)
 			{
+				if(counter > maxItemsToProcess)
+				{
+					done = true;
+				}
 				JobDataType jobData = this.GetNextItemToProcess(configuration);
 				if (jobData == null)
 				{
@@ -50,6 +56,11 @@ namespace MMDB.DataService.Data.Jobs
 					}
 				}
 			}
+		}
+
+		protected virtual int GetMaxItemsToProcess(ConfigType configuration)
+		{
+			return int.MaxValue;
 		}
 
 		protected abstract JobDataType GetNextItemToProcess(ConfigType configuration);
