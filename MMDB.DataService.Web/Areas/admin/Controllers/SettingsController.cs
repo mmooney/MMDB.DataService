@@ -11,24 +11,21 @@ using MMDB.Shared;
 using Raven.Client;
 using Raven.Imports.Newtonsoft.Json;
 
-namespace MMDB.DataService.Web.Controllers
+namespace MMDB.DataService.Web.Areas.admin.Controllers
 {
-    public class AdminController : Controller
+    public class SettingsController : Controller
     {
 		private JobManager JobManager { get; set; }
 		private SettingsManager SettingsManager { get; set; }
 		private IDocumentSession DocumentSession { get; set; }
 
-		public AdminController(JobManager jobManager, SettingsManager settingsManager, IDocumentSession documentSession)
+		public SettingsController(JobManager jobManager, SettingsManager settingsManager, IDocumentSession documentSession)
 		{
 			this.JobManager = jobManager;
 			this.SettingsManager = settingsManager;
 			this.DocumentSession = documentSession;
 		}
-        //
-        // GET: /Admin/
-
-        public ActionResult Index()
+		public ActionResult Index()
         {
             return View();
         }
@@ -43,9 +40,9 @@ namespace MMDB.DataService.Web.Controllers
 		{
 			string fileString = StreamHelper.ReadAll(fileData.InputStream);
 			var serializer = this.DocumentSession.Advanced.DocumentStore.Conventions.CreateSerializer();
-			using(var streamReader = new StreamReader(fileData.InputStream))
+			using (var streamReader = new StreamReader(fileData.InputStream))
 			{
-				using(var jsonReader = new JsonTextReader(streamReader))
+				using (var jsonReader = new JsonTextReader(streamReader))
 				{
 					var data = serializer.Deserialize<ImportExportFile>(jsonReader);
 					this.JobManager.ImportJobs(data.JobDefinitionList);
@@ -69,7 +66,7 @@ namespace MMDB.DataService.Web.Controllers
 		{
 			var viewModel = new ImportExportFile();
 
-			if(!string.IsNullOrEmpty(selectedJobIDs))
+			if (!string.IsNullOrEmpty(selectedJobIDs))
 			{
 				var jobIDList = selectedJobIDs.Split(',').Select(i => int.Parse(i));
 				foreach (int id in jobIDList)
@@ -79,10 +76,10 @@ namespace MMDB.DataService.Web.Controllers
 				}
 			}
 
-			if(!string.IsNullOrEmpty(selectedSettingsIDs))
+			if (!string.IsNullOrEmpty(selectedSettingsIDs))
 			{
-				var settingsIDList = selectedSettingsIDs.Split(',').Select(i=>int.Parse(i));
-				foreach(int id in settingsIDList)
+				var settingsIDList = selectedSettingsIDs.Split(',').Select(i => int.Parse(i));
+				foreach (int id in settingsIDList)
 				{
 					var settings = this.SettingsManager.GetSettings(id);
 					viewModel.SettingsContainerList.Add(settings);
@@ -90,7 +87,7 @@ namespace MMDB.DataService.Web.Controllers
 			}
 
 			var serializer = this.DocumentSession.Advanced.DocumentStore.Conventions.CreateSerializer();
-			using(var writer = new StringWriter())
+			using (var writer = new StringWriter())
 			{
 				serializer.Serialize(writer, viewModel);
 				string json = writer.ToString();
@@ -99,5 +96,5 @@ namespace MMDB.DataService.Web.Controllers
 				return File(bytes, "text/json", "JobExport.txt");
 			}
 		}
-	}
+    }
 }

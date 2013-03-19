@@ -1,0 +1,141 @@
+﻿@model MMDB.DataService.Web.Models.ExportSettingsViewModel
+
+@{
+    ViewBag.Title = "Export";
+}
+<script type="text/javascript">
+	$(document).ready(function () {
+		$("#btnExport").click(function () {
+			var anyToExport = false;
+
+			var checkedJobList = $("input:checkbox:checked[name='chkExportJob']");
+			if (checkedJobList.length != 0) {
+				anyToExport = true;
+			}
+			var jobValues = [];
+			for (i = 0; i < checkedJobList.length; i++) {
+				var idValue = $(checkedJobList[i]).attr("data-id");
+				jobValues.push(idValue);
+			}
+			$("input:hidden[name='SelectedJobIDs']").val(jobValues.join());
+
+			var checkedSettingsList = $("input:checkbox:checked[name='chkExportSettings']");
+			if (checkedSettingsList.length != 0) {
+				anyToExport = true;
+			}
+			var settingsValues = [];
+			for (i = 0; i < checkedSettingsList.length; i++) {
+				var idValue = $(checkedSettingsList[i]).attr("data-id");
+				settingsValues.push(idValue);
+			}
+			$("input:hidden[name='SelectedSettingsIDs']").val(settingsValues.join());
+
+			if (!anyToExport)
+			{
+				alert("Please select at least one thing to export");
+				return false;
+			}
+			else 
+			{
+				return true;
+			}
+		});
+
+		SetupCheckAll("chkExportAllJobs", "chkExportJob");
+		SetupCheckAll("chkExportAllSettings", "chkExportSettings");
+
+	});
+
+	function SetupCheckAll(checkAllBoxID, itemCheckboxName) {
+		$("#" + checkAllBoxID).click(function () {
+			var checked = $(this).prop("checked");
+			var list = $("input:checkbox[name='" + itemCheckboxName + "']");
+			list.prop("checked", checked);
+		});
+		$("input:checkbox[name='" + itemCheckboxName + "']").click(function () {
+			var uncheckedList = $("input:checkbox:not(:checked)[name='" + itemCheckboxName + "']");
+			if (uncheckedList.length == 0) {
+				$("#" + checkAllBoxID).prop("checked", true);
+			}
+			else {
+				$("#" + checkAllBoxID).prop("checked", false);
+			}
+		});
+
+	}
+</script>
+
+<h2>Export Settings</h2>
+
+Please select the items you'd like to export:
+@using(Html.BeginForm("ExportComplete", "Admin", FormMethod.Post, new { target="_blank"})) 
+{
+	<ul>
+		<li>
+			<h3>Settings Containers</h3>
+
+			@Html.Hidden("SelectedSettingsIDs")
+			<table>
+				<tr class="ui-widget-header">
+					<th><input id="chkExportAllSettings" type="checkbox"/></th>
+					<th>
+						TypeName
+					</th>
+				</tr>
+
+			@foreach (var item in Model.SettingsContainerList) {
+				<tr>
+					<td>	
+						<input type="checkbox" name="chkExportSettings" data-id="@item.Id" />
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Settings.TypeName)
+					</td>
+				</tr>
+			}
+			</table>
+		</li>
+		<li>
+			<h3>Job Definitions</h3>
+			@Html.Hidden("SelectedJobIDs")
+			<table>
+				<tr class="ui-widget-header">
+					<th><input id="chkExportAllJobs" type="checkbox"/></th>
+					<th>
+						JobName
+					</th>
+					<th>
+						AssemblyName
+					</th>
+					<th>
+						ClassName
+					</th>
+					<th>
+						JobGuid
+					</th>
+				</tr>
+
+			@foreach (var item in Model.JobDefinitionList) {
+				<tr>
+					<td>	
+						<input type="checkbox" name="chkExportJob" data-id="@item.Id" />
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.JobName)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.AssemblyName)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.ClassName)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.JobGuid)
+					</td>
+				</tr>
+			}
+			</table>
+		</li>
+	</ul>
+	<button id="btnExport">Export</button>
+}

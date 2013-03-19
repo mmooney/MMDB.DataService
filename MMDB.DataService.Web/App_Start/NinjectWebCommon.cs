@@ -20,6 +20,8 @@ using Ninject.Activation;
 	using System.Web.Mvc;
 	using MMDB.DataService.Data.Jobs;
 	using Ninject.Extensions.Conventions;
+	using MMDB.DataService.Data.Metadata;
+	using System.Web.Routing;
 
     public static class NinjectWebCommon 
     {
@@ -67,19 +69,20 @@ using Ninject.Activation;
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
+			kernel.Bind(x =>
+			{
+				x.FromAssembliesMatching("*")
+				 .SelectAllClasses() // Retrieve all non-abstract classes
+				 .BindDefaultInterface();// Binds the default interface to them;
+			});
+
 			kernel.Rebind<IDocumentStore>().ToMethod(CreateDocumentStore).InSingletonScope();
 			kernel.Rebind<IDocumentSession>().ToMethod(c => c.Kernel.Get<IDocumentStore>().OpenSession()).InRequestScope();
 			kernel.Rebind<ISchedulerFactory>().To<StdSchedulerFactory>();
 			kernel.Bind<IScheduler>().ToMethod(c => c.Kernel.Get<ISchedulerFactory>().GetScheduler());
 
-			kernel.Bind(x =>
-			{
-				x.FromAssembliesMatching("*") // Scans currently assembly
-				 .SelectAllClasses() // Retrieve all non-abstract classes
-				 .BindDefaultInterface();// Binds the default interface to them;
-			});
-
 			ModelBinders.Binders.Add(typeof(JobConfigurationBase), kernel.Get<ConfigurationModelBinder>());
+
 		}
 
 		public static IDocumentStore CreateDocumentStore(IContext context)

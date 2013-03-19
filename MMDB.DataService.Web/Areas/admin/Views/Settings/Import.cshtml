@@ -1,0 +1,17 @@
+﻿@model MMDB.DataService.Web.Models.ExportSettingsViewModel
+
+@{
+    ViewBag.Title = "Import";
+}
+
+<h2>Import Settings</h2>
+Please select a file to import
+@using (Html.BeginForm("Import", null, FormMethod.Post, new { enctype = "multipart/form-data" })) 
+{
+	<div>
+		<input type="file" name="fileData" id="fileData" required="required" />
+	</div>
+	<div>
+		<input type="submit" value="Import" />
+	</div>
+}

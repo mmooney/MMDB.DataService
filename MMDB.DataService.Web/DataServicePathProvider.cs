@@ -34,7 +34,15 @@ namespace MMDB.DataService.Web
 			}
 			else
 			{
-				return base.FileExists(virtualPath);
+				var matchingView = viewList.Any(i=>virtualPath.EndsWith("/" + i.ViewName + ".cshtml", StringComparison.CurrentCultureIgnoreCase));
+				if(matchingView)
+				{
+					return true;
+				}
+				else 
+				{
+					return base.FileExists(virtualPath);
+				}
 			}
 		}
 
@@ -61,7 +69,30 @@ namespace MMDB.DataService.Web
 			}
 			else 
 			{
-				return base.GetFile(virtualPath);
+				var matchingView = viewList.FirstOrDefault(i => virtualPath.EndsWith("/" + i.ViewName + ".cshtml", StringComparison.CurrentCultureIgnoreCase));
+				if (matchingView != null)
+				{
+					string viewData = this.ViewManager.GetViewData(matchingView);
+					return new DataServiceVirtualFile(viewData, virtualPath);
+				}
+				else
+				{
+					return base.GetFile(virtualPath);
+				}
+			}
+		}
+
+		public override System.Web.Caching.CacheDependency GetCacheDependency(string virtualPath, System.Collections.IEnumerable virtualPathDependencies, DateTime utcStart)
+		{
+			var viewList = GetViewList();
+			var matchingView = viewList.FirstOrDefault(i => virtualPath.EndsWith("/" + i.ViewName + ".cshtml", StringComparison.CurrentCultureIgnoreCase));
+			if (matchingView != null)
+			{
+				return null;
+			}
+			else
+			{
+				return base.GetCacheDependency(virtualPath, virtualPathDependencies, utcStart);
 			}
 		}
 

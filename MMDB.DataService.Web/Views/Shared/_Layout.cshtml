@@ -18,8 +18,10 @@
     </a>
     <div style="float:right" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
     <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" role="tablist">
-		<li class="ui-state-default ui-corner-top" role="tab"><a href="@Url.Action("Index","Events")" class="ui-tabs-anchor">Diagnostics</a></li>
-		<li class="ui-state-default ui-corner-top" role="tab"><a href="@Url.Action("Index","JobManager")" class="ui-tabs-anchor">Job Manager</a></li>
+		@foreach(var navigationItem in MMDB.DataService.Web.DataServiceHtmlHelper.GetNavigationItems())
+		{
+			<li class="ui-state-default ui-corner-top" role="tab"><a href="@Url.Action(navigationItem.ActionName,navigationItem.ControllerName)" class="ui-tabs-anchor">@navigationItem.DisplayValue</a></li>
+		}
 	</ul>
     </div>
     <h1 class="ui-widget-header">@MMDB.DataService.Web.Helpers.ViewSettingsHelper.ApplicationDisplayName Administration</h1>

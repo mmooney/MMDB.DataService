@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
+using System.Web.Hosting;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Raven.Client.Document;
-using System.Configuration;
+using MMDB.DataService.Data;
+using MMDB.DataService.Data.Metadata;
 using Raven.Client;
-using System.Web.Hosting;
-using MMDB.DataService.Data.Jobs;
 
 namespace MMDB.DataService.Web
 {
@@ -18,6 +14,13 @@ namespace MMDB.DataService.Web
 	public class MvcApplication : System.Web.HttpApplication
 	{
 		private IDocumentStore DocumentStore { get; set; }
+		
+		public static List<NavigationItem> NavigationItems { get; private set; }
+
+		static MvcApplication()
+		{
+			MvcApplication.NavigationItems = new List<NavigationItem>();
+		}
 
 		public static void RegisterGlobalFilters(GlobalFilterCollection filters)
 		{
@@ -36,7 +39,7 @@ namespace MMDB.DataService.Web
 
 		}
 
-		protected void Application_Start()
+		protected void Application_Start() 
 		{
 			AreaRegistration.RegisterAllAreas();
 
@@ -45,7 +48,11 @@ namespace MMDB.DataService.Web
 
 			var pathProvider = App_Start.NinjectWebCommon.Get<DataServicePathProvider>();
 			HostingEnvironment.RegisterVirtualPathProvider(pathProvider);
-			//RavenDataHandler.Register(this.DocumentStore, "admin", new RazorViewEngine());
+
+			MvcApplication.NavigationItems.Add(new NavigationItem("Diagnostics", "Events"));
+			MvcApplication.NavigationItems.Add(new NavigationItem("JobManager", "JobManager"));
+			//var customControllerManager = App_Start.NinjectWebCommon.Get<ICustomControllerManager>();
+			//customControllerManager.RegisterRoutes(RouteTable.Routes, MvcApplication.NavigationItems);
 		}
 	}
 }

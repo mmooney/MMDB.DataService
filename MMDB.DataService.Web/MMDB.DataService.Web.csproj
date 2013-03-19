@@ -89,15 +89,18 @@
     </Reference>
     <Reference Include="Raven.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Abstractions.dll</HintPath>
+      <HintPath>..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="Raven.Client.Lightweight, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Client.Lightweight.dll</HintPath>
+      <HintPath>..\..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
     <Reference Include="RazorEngine, Version=3.2.0.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\RazorEngine.3.2.0\lib\net40\RazorEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="RouteDebugger">
+      <HintPath>..\..\packages\routedebugger.2.1.4.0\lib\net40\RouteDebugger.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data.Entity" />
@@ -139,8 +142,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\NinjectWebCommon.cs" />
+    <Compile Include="Areas\admin\adminAreaRegistration.cs" />
+    <Compile Include="Areas\admin\Controllers\CustomControllersController.cs" />
+    <Compile Include="Areas\admin\Controllers\SettingsController.cs" />
     <Compile Include="ConfigurationModelBinder.cs" />
-    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\DataObjectController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -150,6 +155,7 @@
     <Compile Include="Controllers\RavenController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\ViewManagerController.cs" />
+    <Compile Include="DataServiceHtmlHelper.cs" />
     <Compile Include="DataServicePathProvider.cs" />
     <Compile Include="DataServiceVirtualFile.cs" />
     <Compile Include="Global.asax.cs">
@@ -234,7 +240,6 @@
     <Content Include="Content\themes\base\minified\jquery.ui.tooltip.min.css" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="README.jQuery.vsdoc.txt" />
     <Content Include="Scripts\Events.js" />
     <Content Include="Scripts\i18n\grid.locale-ar.js" />
     <Content Include="Scripts\i18n\grid.locale-bg.js" />
@@ -324,11 +329,20 @@
     <Content Include="Views\Shared\EditorTemplates\FtpDownloadJobConfiguration_temp.cshtml" />
     <Content Include="Views\Shared\EditorTemplates\String.cshtml" />
     <Content Include="Views\JobManager\Export.cshtml" />
-    <Content Include="Views\Admin\Index.cshtml" />
-    <Content Include="Views\Admin\Export.cshtml" />
-    <Content Include="Views\Admin\Import.cshtml" />
+    <Content Include="Views\AdminOld\Index.cshtml" />
+    <Content Include="Views\AdminOld\Export.cshtml" />
+    <Content Include="Views\AdminOld\Import.cshtml" />
     <Content Include="Views\Raven\AttachmentList.cshtml" />
     <Content Include="Views\DataObject\DefaultObjectView.cshtml" />
+    <Content Include="Areas\admin\Views\Web.config" />
+    <Content Include="Areas\admin\Views\Settings\Index.cshtml" />
+    <Content Include="Areas\admin\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\admin\Views\Settings\Export.cshtml" />
+    <Content Include="Areas\admin\Views\Settings\Import.cshtml" />
+    <Content Include="Areas\admin\Views\CustomControllers\Index.cshtml" />
+    <Content Include="Areas\admin\Views\CustomControllers\Create.cshtml" />
+    <Content Include="Areas\admin\Views\CustomControllers\Edit.cshtml" />
+    <Content Include="Areas\admin\Views\CustomControllers\Delete.cshtml" />
     <None Include="_bin_deployableAssemblies\System.Web.Mvc.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -457,6 +471,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\DataObject\Edit.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Areas\admin\Models\" />
+    <Folder Include="Areas\admin\Views\Shared\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
