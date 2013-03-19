@@ -7,7 +7,7 @@ using Raven.Client;
 
 namespace MMDB.DataService.Data.Settings
 {
-	public class SettingsManager 
+	public class SettingsManager : ISettingsManager
 	{
 		private IDocumentSession DocumentSession { get; set; }
 

@@ -8,11 +8,8 @@ namespace MMDB.DataService.Data.Jobs
 {
 	public abstract class DataServiceJobBase<ConfigType> where ConfigType: JobConfigurationBase
 	{
-		protected IDocumentSession DocumentSession { get; set; }
-
-		public DataServiceJobBase(IDocumentSession documentSession)
+		public DataServiceJobBase()
 		{
-			this.DocumentSession = documentSession;	
 		}
 
 		public abstract void Run(ConfigType configuration);

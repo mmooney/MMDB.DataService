@@ -23,7 +23,11 @@ namespace MMDB.DataService.Data
 		[EnumDisplayValue("Complete")]
 		Complete,
 		[EnumDisplayValue("Error")]
-		Error
+		Error,
+		[EnumDisplayValue("Pending Approval")]
+		PendingApproval,
+		[EnumDisplayValue("Cancelled")]
+		Cancelled
 	}
 
 	public enum EnumSettingSource

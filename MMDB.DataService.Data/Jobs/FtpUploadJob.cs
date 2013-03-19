@@ -12,7 +12,7 @@ namespace MMDB.DataService.Data.Jobs
 		private FtpManager FtpManager { get; set; }
 		private List<string> ProcessedFileNames { get; set; }
 		
-		public FtpUploadJob(FtpManager ftpManager, IDocumentSession documentSession, IEventReporter eventReporter) : base(documentSession, eventReporter)
+		public FtpUploadJob(FtpManager ftpManager, IEventReporter eventReporter) : base(eventReporter)
 		{
 			this.FtpManager = ftpManager;
 			this.ProcessedFileNames = new List<string>();

@@ -9,7 +9,7 @@ namespace MMDB.DataService.Data.Jobs
 {
 	public abstract class QueueJobBase<ConfigType, JobDataType> : DataServiceJobBase<ConfigType> where ConfigType:JobConfigurationBase where JobDataType:JobData
 	{
-		public QueueJobBase(IDocumentSession documentSession) : base(documentSession)
+		public QueueJobBase() : base()
 		{
 				
 		}

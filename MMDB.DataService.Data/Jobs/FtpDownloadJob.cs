@@ -12,41 +12,15 @@ namespace MMDB.DataService.Data.Jobs
 	public class FtpDownloadJob : ListImportJobBase<FtpDownloadJobConfiguration, FtpDownloadMetadata, FtpInboundData>
 	{
 		private FtpManager FtpManager { get; set; }
-		
-		public FtpDownloadJob(IDocumentSession documentSession, IEventReporter eventReporter, FtpManager ftpManager) : base(eventReporter, documentSession)
+
+		public FtpDownloadJob(IEventReporter eventReporter, FtpManager ftpManager) : base(eventReporter)
 		{
 			this.FtpManager = ftpManager;
 		}
 
 		protected override FtpInboundData TryCreateJobData(FtpDownloadJobConfiguration configuration, FtpDownloadMetadata item, out bool jobAlreadyExisted)
 		{
-			FtpInboundData returnValue;
-			//using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
-			//{
-				//returnValue = this.DocumentSession.Query<FtpInboundData>()
-				//									.Customize(i => i.WaitForNonStaleResultsAsOfNow())
-				//									.SingleOrDefault(i => i.Directory == item.Directory && i.FileName == item.FileName);
-				//if (returnValue == null)
-				//{
-					returnValue = new FtpInboundData
-					{
-						Directory = item.Directory,
-						FileName = item.FileName,
-						QueuedDateTimeUtc = DateTime.UtcNow,
-						AttachmentId = this.FtpManager.DownloadFile(item)
-					};
-					jobAlreadyExisted = false;
-
-					this.DocumentSession.Store(returnValue);
-					this.DocumentSession.SaveChanges();
-					//transaction.Complete();
-				//}
-				//else
-				//{
-				//	jobAlreadyExisted = true;
-				//}
-			//}
-			return returnValue;
+			return this.FtpManager.TryCreateJobData(item, out jobAlreadyExisted);
 		}
 
 		protected override List<FtpDownloadMetadata> GetListToProcess(FtpDownloadJobConfiguration configuration)

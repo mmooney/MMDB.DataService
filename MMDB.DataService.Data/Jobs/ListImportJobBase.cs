@@ -11,7 +11,7 @@ namespace MMDB.DataService.Data.Jobs
 	{
 		protected IEventReporter EventReporter { get; private set; }
 
-		public ListImportJobBase(IEventReporter eventReporter, IDocumentSession documentSession) : base(documentSession)
+		public ListImportJobBase(IEventReporter eventReporter) : base()
 		{
 			this.EventReporter = eventReporter;
 		}

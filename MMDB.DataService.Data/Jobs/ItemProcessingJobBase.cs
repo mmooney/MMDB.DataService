@@ -12,9 +12,8 @@ namespace MMDB.DataService.Data.Jobs
 	{
 		protected IEventReporter EventReporter { get; private set; }
 
-		public ItemProcessingJob(IDocumentSession documentSession, IEventReporter eventReporter) : base(documentSession)
+		public ItemProcessingJob(IEventReporter eventReporter) : base()
 		{
-			this.DocumentSession = documentSession;
 			this.EventReporter = eventReporter;
 		}
 
