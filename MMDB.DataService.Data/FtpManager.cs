@@ -377,8 +377,8 @@ namespace MMDB.DataService.Data
 					};
 					jobAlreadyExisted = false;
 
-					//this.DocumentSession.Store(returnValue);
-					//this.DocumentSession.SaveChanges();
+					this.DocumentSession.Store(returnValue);
+					this.DocumentSession.SaveChanges();
 					//transaction.Complete();
 			//	}
 			//	else
