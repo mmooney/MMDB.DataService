@@ -361,13 +361,13 @@ namespace MMDB.DataService.Data
 		public FtpInboundData TryCreateJobData(FtpDownloadMetadata item, out bool jobAlreadyExisted)
 		{
 			FtpInboundData returnValue;
-			using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
-			{
-				returnValue = this.DocumentSession.Query<FtpInboundData>()
-													.Customize(i => i.WaitForNonStaleResultsAsOfNow())
-													.SingleOrDefault(i => i.Directory == item.Directory && i.FileName == item.FileName);
-				if (returnValue == null)
-				{
+			//using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
+			//{
+			//	returnValue = this.DocumentSession.Query<FtpInboundData>()
+			//										.Customize(i => i.WaitForNonStaleResultsAsOfNow())
+			//										.SingleOrDefault(i => i.Directory == item.Directory && i.FileName == item.FileName);
+			//	if (returnValue == null)
+			//	{
 					returnValue = new FtpInboundData
 					{
 						Directory = item.Directory,
@@ -377,15 +377,15 @@ namespace MMDB.DataService.Data
 					};
 					jobAlreadyExisted = false;
 
-					this.DocumentSession.Store(returnValue);
-					this.DocumentSession.SaveChanges();
-					transaction.Complete();
-				}
-				else
-				{
-					jobAlreadyExisted = true;
-				}
-			}
+					//this.DocumentSession.Store(returnValue);
+					//this.DocumentSession.SaveChanges();
+					//transaction.Complete();
+			//	}
+			//	else
+			//	{
+			//		jobAlreadyExisted = true;
+			//	}
+			//}
 			return returnValue;
 		}
 	}
