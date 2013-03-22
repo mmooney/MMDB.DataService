@@ -23,6 +23,7 @@ namespace MMDB.DataService.WindowsService
 
 		protected override void OnStart(string[] args)
 		{
+			this.RequestAdditionalTime(300000);	//Sometimes RavenDB is slow to start, give it 5 minutes just to be save
 			this.JobManager.StartJobs();
 		}
 
@@ -33,8 +34,8 @@ namespace MMDB.DataService.WindowsService
 
 		public void DebugStart()
 		{
-			this.OnStart(null);
-			while(true)
+			this.JobManager.StartJobs();
+			while (true)
 			{
 				Thread.Sleep(1000);
 			}
