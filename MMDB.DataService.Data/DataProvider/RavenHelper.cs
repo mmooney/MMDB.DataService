@@ -7,6 +7,7 @@ using MMDB.Shared;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Indexes;
+using Raven.Client.UniqueConstraints;
 
 namespace MMDB.DataService.Data.DataProvider
 {
@@ -33,7 +34,7 @@ namespace MMDB.DataService.Data.DataProvider
 					},
 					MaxNumberOfRequestsPerSession = AppSettingsHelper.GetIntSetting("RavenMaxNumberOfRequestsPerSession", 3000)
 				}
-			}.Initialize();
+			}.RegisterListener(new UniqueConstraintsStoreListener()).Initialize();
 			IndexCreation.CreateIndexes(typeof(MMDB.DataService.Data.Jobs.DataServiceJobBase<>).Assembly, documentStore);
 			return documentStore;
 		}
