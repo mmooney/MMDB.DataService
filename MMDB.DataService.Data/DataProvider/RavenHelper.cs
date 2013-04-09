@@ -36,6 +36,7 @@ namespace MMDB.DataService.Data.DataProvider
 				}
 			}.RegisterListener(new UniqueConstraintsStoreListener()).Initialize();
 			IndexCreation.CreateIndexes(typeof(MMDB.DataService.Data.Jobs.DataServiceJobBase<>).Assembly, documentStore);
+			documentStore.DatabaseCommands.DisableAllCaching();
 			return documentStore;
 		}
 	}
