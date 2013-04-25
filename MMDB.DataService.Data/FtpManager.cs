@@ -42,9 +42,18 @@ namespace MMDB.DataService.Data
 													.FirstOrDefault(i => i.Status == EnumJobStatus.New);
 				if(returnValue != null)
 				{
-					returnValue.Status = EnumJobStatus.InProcess;
-					this.DocumentSession.SaveChanges();
-					transaction.Complete();
+					returnValue = this.DocumentSession.Load<FtpOutboundData>(returnValue.Id);
+					if (returnValue.Status != EnumJobStatus.New)
+					{
+						this.EventReporter.WarningForObject("FtpOutboundData was returned as New from query but was really " + returnValue.Status.ToString(), returnValue);
+						return null;
+					}
+					else 
+					{
+						returnValue.Status = EnumJobStatus.InProcess;
+						this.DocumentSession.SaveChanges();
+						transaction.Complete();
+					}
 				}
 			}
 			return returnValue;
