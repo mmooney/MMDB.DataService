@@ -301,49 +301,8 @@ namespace MMDB.DataService.Data
 		public void UploadFile(FtpOutboundData jobItem)
 		{
 			var settings = this.SettingsManager.Load<FtpConnectionSettings>(jobItem.SettingSource, jobItem.SettingKey);
-			Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
-			ftp.Connect();
-
-			string targetFilePath;
-			string targetFileName = jobItem.TargetFileName.Replace("/","_");
-			if(!string.IsNullOrEmpty(jobItem.TargetDirectory))
-			{
-				targetFilePath = jobItem.TargetDirectory + targetFileName;
-			}
-			else 
-			{
-				targetFilePath = targetFileName;
-			}
-
-			string tempDirectory = Path.Combine(Path.GetTempPath(), "MMDB.DataService");
-			if(!Directory.Exists(tempDirectory))
-			{
-				Directory.CreateDirectory(tempDirectory);
-			}
-			string tempPath = Path.Combine(tempDirectory, Guid.NewGuid().ToString() + "." + targetFileName);
-			try 
-			{
-				this.EventReporter.Info("Uploading file " + tempPath + " to " + targetFilePath + "...");
-				var attachment = this.DocumentSession.Advanced.DocumentStore.DatabaseCommands.GetAttachment(jobItem.AttachmentId);
-				using (var fileStream = File.Create(tempPath))
-				{
-					attachment.Data().CopyTo(fileStream);
-				}
-				ftp.Put(tempPath, targetFilePath);
-				this.EventReporter.Info("Uploading file " + tempPath + " to " + targetFilePath + " complete");
-			}
-			finally
-			{
-				try 
-				{
-					if(File.Exists(tempPath))
-					{
-						File.Delete(tempPath);
-						tempPath = null;
-					}
-				}
-				catch {}
-			}
+			var attachmentData = this.RavenManager.GetAttachment(jobItem.AttachmentId);
+			this.FtpCommunicator.UploadFile(jobItem.SettingSource, jobItem.SettingKey, jobItem.TargetFileName, jobItem.TargetDirectory, attachmentData);
 		}
 
 		public void MarkItemSuccessful(FtpOutboundData jobData)
