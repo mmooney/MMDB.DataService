@@ -11,16 +11,16 @@ namespace MMDB.DataService.Data.Jobs
 {
 	public class FtpDownloadJob : ListImportJobBase<FtpDownloadJobConfiguration, FtpDownloadMetadata, FtpInboundData>
 	{
-		private FtpManager FtpManager { get; set; }
+		private IFtpJobManager FtpJobManager { get; set; }
 
-		public FtpDownloadJob(IEventReporter eventReporter, FtpManager ftpManager) : base(eventReporter)
+		public FtpDownloadJob(IEventReporter eventReporter, IFtpJobManager ftpJobManager) : base(eventReporter)
 		{
-			this.FtpManager = ftpManager;
+			this.FtpJobManager = ftpJobManager;
 		}
 
 		protected override FtpInboundData TryCreateJobData(FtpDownloadJobConfiguration configuration, FtpDownloadMetadata item, out bool jobAlreadyExisted)
 		{
-			return this.FtpManager.TryCreateJobData(item, out jobAlreadyExisted);
+			return this.FtpJobManager.TryCreateJobData(item, out jobAlreadyExisted);
 		}
 
 		protected override List<FtpDownloadMetadata> GetListToProcess(FtpDownloadJobConfiguration configuration)
@@ -32,7 +32,7 @@ namespace MMDB.DataService.Data.Jobs
 			List<FtpDownloadMetadata> returnList = new List<FtpDownloadMetadata>();
 			foreach (var item in configuration.FtpDownloadSettings)
 			{
-				var tempList = this.FtpManager.GetAvailableDownloadList(item);
+				var tempList = this.FtpJobManager.GetAvailableDownloadList(item);
 				returnList.AddRange(tempList);
 			}
 			return returnList;

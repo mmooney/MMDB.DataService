@@ -16,19 +16,21 @@ using System.Collections;
 
 namespace MMDB.DataService.Data
 {
-	public class FtpManager
+	public class FtpJobManager : IFtpJobManager
 	{
 		private IDocumentSession DocumentSession { get; set; }
 		private ConnectionSettingsManager SettingsManager { get; set; }
 		private IEventReporter EventReporter { get; set; }
-		private IDocumentStore DocumentStore;
+		private IFtpCommunicator FtpCommunicator { get; set; }
+		private IRavenManager RavenManager { get; set; }
 
-		public FtpManager(IDocumentSession documentSession, ConnectionSettingsManager settingsManager, IEventReporter eventReporter, IDocumentStore documentStore)
+		public FtpJobManager(IDocumentSession documentSession, ConnectionSettingsManager settingsManager, IEventReporter eventReporter, IFtpCommunicator ftpCommunicator, IRavenManager ravenManager)
 		{
 			this.DocumentSession = documentSession;
 			this.SettingsManager = settingsManager;
 			this.EventReporter = eventReporter;
-			this.DocumentStore = documentStore;
+			this.FtpCommunicator = ftpCommunicator;
+			this.RavenManager = ravenManager;
 		}
 
 		public FtpOutboundData GetNextUploadItem()
@@ -73,16 +75,7 @@ namespace MMDB.DataService.Data
 				{
 					throw new Exception(string.Format("FtpOutputData record for file name {0} already exists", targetFileName));
 				}
-				using (var stream = new MemoryStream())
-				{
-					using(var writer = new StreamWriter(stream))
-					{
-						writer.Write(fileData);
-						writer.Flush();
-						stream.Position = 0;
-						this.DocumentStore.DatabaseCommands.PutAttachment(attachmentID, null, stream, new Raven.Json.Linq.RavenJObject());
-					}
-				}
+				this.RavenManager.SetAttachment(attachmentID, fileData);
 				var newItem = new FtpOutboundData
 				{
 					AttachmentId = attachmentID,
@@ -245,7 +238,7 @@ namespace MMDB.DataService.Data
 					string attachmentID = Guid.NewGuid().ToString();
 					using(FileStream stream = new FileStream(tempPath, FileMode.Open))
 					{
-						this.DocumentStore.DatabaseCommands.PutAttachment(attachmentID, null, stream, new Raven.Json.Linq.RavenJObject());
+						this.DocumentSession.Advanced.DocumentStore.DatabaseCommands.PutAttachment(attachmentID, null, stream, new Raven.Json.Linq.RavenJObject());
 					}
 					return attachmentID;
 				}
@@ -285,7 +278,7 @@ namespace MMDB.DataService.Data
 						string attachmentID = Guid.NewGuid().ToString();
 						using (FileStream stream = new FileStream(tempPath, FileMode.Open))
 						{
-							this.DocumentStore.DatabaseCommands.PutAttachment(attachmentID, null, stream, new Raven.Json.Linq.RavenJObject());
+							this.DocumentSession.Advanced.DocumentStore.DatabaseCommands.PutAttachment(attachmentID, null, stream, new Raven.Json.Linq.RavenJObject());
 						}
 						return attachmentID;
 					}
@@ -331,7 +324,7 @@ namespace MMDB.DataService.Data
 			try 
 			{
 				this.EventReporter.Info("Uploading file " + tempPath + " to " + targetFilePath + "...");
-				var attachment = this.DocumentStore.DatabaseCommands.GetAttachment(jobItem.AttachmentId);
+				var attachment = this.DocumentSession.Advanced.DocumentStore.DatabaseCommands.GetAttachment(jobItem.AttachmentId);
 				using (var fileStream = File.Create(tempPath))
 				{
 					attachment.Data().CopyTo(fileStream);

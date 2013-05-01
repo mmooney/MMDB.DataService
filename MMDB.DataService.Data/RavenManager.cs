@@ -29,6 +29,21 @@ namespace MMDB.DataService.Data
 			}
 
 		}
+
+		public void SetAttachment(string attachmentId, string attachmentData)
+		{
+			using (var stream = new MemoryStream())
+			{
+				using (var writer = new StreamWriter(stream))
+				{
+					writer.Write(attachmentData);
+					writer.Flush();
+					stream.Position = 0;
+					this.DocumentSession.Advanced.DocumentStore.DatabaseCommands.PutAttachment(attachmentId, null, stream, new Raven.Json.Linq.RavenJObject());
+				}
+			}
+		}
+
 		public byte[] GetAttachment(string attachmentId)
 		{
 			var attachment = this.DocumentSession.Advanced.DocumentStore.DatabaseCommands.GetAttachment(attachmentId);
@@ -47,5 +62,6 @@ namespace MMDB.DataService.Data
 		{
 			return this.DocumentSession.Advanced.DocumentStore.DatabaseCommands.GetAttachmentHeadersStartingWith("",0,int.MaxValue).ToList();
 		}
+
 	}
 }

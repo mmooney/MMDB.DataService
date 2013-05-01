@@ -94,7 +94,10 @@
     <Compile Include="AssemblyManager.cs" />
     <Compile Include="BaseCustomController.cs" />
     <Compile Include="DataServiceEmailSender.cs" />
+    <Compile Include="FtpCommunicator.cs" />
     <Compile Include="IDataServiceEmailSender.cs" />
+    <Compile Include="IFtpCommunicator.cs" />
+    <Compile Include="IFtpJobManager.cs" />
     <Compile Include="ILogPurger.cs" />
     <Compile Include="LogPurger.cs" />
     <Compile Include="Metadata\CustomControllerManager.cs" />
@@ -136,7 +139,7 @@
     <Compile Include="Settings\ConnectionSettingBase.cs" />
     <Compile Include="EventReporter.cs" />
     <Compile Include="ExceptionReporter.cs" />
-    <Compile Include="FtpManager.cs" />
+    <Compile Include="FtpJobManager.cs" />
     <Compile Include="JobManager.cs" />
     <Compile Include="Jobs\FtpDownloadJob.cs" />
     <Compile Include="Jobs\FtpDownloadSettings.cs" />

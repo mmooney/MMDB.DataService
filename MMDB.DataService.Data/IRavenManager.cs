@@ -8,5 +8,6 @@ namespace MMDB.DataService.Data
 	public interface IRavenManager
 	{
 		string GetAttachmentString(string attachmentId);
+		void SetAttachment(string attachmentId, string attachmentData);
 	}
 }

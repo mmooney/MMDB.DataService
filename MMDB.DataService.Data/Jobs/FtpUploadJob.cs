@@ -9,12 +9,12 @@ namespace MMDB.DataService.Data.Jobs
 {
 	public class FtpUploadJob : ItemProcessingJob<NullJobConfiguration, FtpOutboundData>
 	{
-		private FtpManager FtpManager { get; set; }
+		private IFtpJobManager FtpJobManager { get; set; }
 		private List<string> ProcessedFileNames { get; set; }
 		
-		public FtpUploadJob(FtpManager ftpManager, IEventReporter eventReporter) : base(eventReporter)
+		public FtpUploadJob(IFtpJobManager ftpJobManager, IEventReporter eventReporter) : base(eventReporter)
 		{
-			this.FtpManager = ftpManager;
+			this.FtpJobManager = ftpJobManager;
 			this.ProcessedFileNames = new List<string>();
 		}
 
@@ -25,13 +25,13 @@ namespace MMDB.DataService.Data.Jobs
 
 		protected override FtpOutboundData GetNextItemToProcess(NullJobConfiguration configuration)
 		{
-			var item = this.FtpManager.GetNextUploadItem();
+			var item = this.FtpJobManager.GetNextUploadItem();
 			if(item != null)
 			{
 				if(this.ProcessedFileNames.Contains(item.TargetFileName, StringComparer.CurrentCultureIgnoreCase))
 				{
 					var err = new Exception("Already processed " + item.TargetFileName);
-					this.FtpManager.MarkItemFailed(item, err);
+					this.FtpJobManager.MarkItemFailed(item, err);
 					throw err;
 				}
 				else 
@@ -44,17 +44,17 @@ namespace MMDB.DataService.Data.Jobs
 
 		protected override void ProcessItem(NullJobConfiguration configuration, FtpOutboundData jobItem)
 		{
-			this.FtpManager.UploadFile(jobItem);
+			this.FtpJobManager.UploadFile(jobItem);
 		}
 
 		protected override void MarkItemSuccessful(FtpOutboundData jobData)
 		{
-			this.FtpManager.MarkItemSuccessful(jobData);
+			this.FtpJobManager.MarkItemSuccessful(jobData);
 		}
 
 		protected override void MarkItemFailed(FtpOutboundData jobData, Exception err)
 		{
-			this.FtpManager.MarkItemFailed(jobData, err);
+			this.FtpJobManager.MarkItemFailed(jobData, err);
 		}
 	}
 }
