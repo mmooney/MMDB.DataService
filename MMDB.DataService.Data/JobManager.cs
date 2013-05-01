@@ -36,7 +36,7 @@ namespace MMDB.DataService.Data
 			{
 				this.StartJob(jobDefinition);
 			}
-			this.Scheduler.Start();
+			this.Scheduler.StartDelayed(TimeSpan.FromMilliseconds(100));
 		}
 
 		public void RunJobNow(int jobID)
