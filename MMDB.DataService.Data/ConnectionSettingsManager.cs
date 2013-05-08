@@ -103,6 +103,11 @@ namespace MMDB.DataService.Data
 						}
 					}
 				}
+				var connectionStringProperty = propertyList.FirstOrDefault(i=>i.Name == "ConnectionString");
+				if(connectionStringProperty != null)
+				{
+					connectionStringProperty.SetValue(returnValue, data, null);
+				}
 			}
 			return returnValue;
 		}
