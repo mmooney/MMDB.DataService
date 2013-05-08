@@ -39,9 +39,14 @@ namespace MMDB.DataService.Data
 					writer.Write(attachmentData);
 					writer.Flush();
 					stream.Position = 0;
-					this.DocumentSession.Advanced.DocumentStore.DatabaseCommands.PutAttachment(attachmentId, null, stream, new Raven.Json.Linq.RavenJObject());
+					this.SetAttachment(attachmentId, stream);
 				}
 			}
+		}
+
+		public void SetAttachment(string attachmentId, Stream stream)
+		{
+			this.DocumentSession.Advanced.DocumentStore.DatabaseCommands.PutAttachment(attachmentId, null, stream, new Raven.Json.Linq.RavenJObject());
 		}
 
 		public byte[] GetAttachment(string attachmentId)

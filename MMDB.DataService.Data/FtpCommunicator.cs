@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using MMDB.DataService.Data.Dto.Ftp;
 using MMDB.DataService.Data.Settings;
 
 namespace MMDB.DataService.Data
@@ -60,6 +62,32 @@ namespace MMDB.DataService.Data
 				}
 				catch { }
 			}
+		}
+
+
+		public List<string> GetFileList(EnumSettingSource settingSource, string settingKey, string path)
+		{
+			var settings = this.ConnectionSettingsManager.Load<FtpConnectionSettings>(settingSource, settingKey); 
+			var returnList = new List<string>();
+			this.EventReporter.Trace("Searching on " + settings.FtpHost + " for: " + path);
+			Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
+			ftp.Connect();
+			var list = ftp.GetFileList(path);
+			this.EventReporter.Trace((list ?? new ArrayList()).Count.ToString() + " records found for " + path + " on " + settings.FtpHost);
+			foreach (string fileName in list)
+			{
+				returnList.Add(fileName);
+			}
+			return returnList;
+		}
+
+
+		public void DownloadFile(EnumSettingSource settingSource, string settingKey, string ftpSourcrePath, string localDestinationPath)
+		{
+			var settings = this.ConnectionSettingsManager.Load<FtpConnectionSettings>(settingSource, settingKey);
+			Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
+			ftp.Connect();
+			ftp.Get(ftpSourcrePath, localDestinationPath);
 		}
 	}
 }

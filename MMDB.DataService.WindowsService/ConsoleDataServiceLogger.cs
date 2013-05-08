@@ -13,23 +13,15 @@ namespace MMDB.DataService.WindowsService
 		{
 		}
 
-		public override ServiceMessage Trace(string message, object[] args)
+		public override ServiceMessage TraceForObject(string message, object dataObject)
 		{
-			string formattedMessage;
-			if (args == null || args.Length == 0)
-			{
-				formattedMessage = message;
-			}
-			else
-			{
-				formattedMessage = string.Format(message, args);
-			}
 			var traceMessage = new ServiceMessage
 			{
 				Level = EnumServiceMessageLevel.Trace,
 				Message = message,
 				Detail = message,
-				MessageDateTimeUtc = DateTime.UtcNow
+				MessageDateTimeUtc = DateTime.UtcNow,
+				DataObjectJson = (dataObject != null) ? dataObject.ToJson() : null
 			};
 			this.WriteServiceMessage(traceMessage);
 			return traceMessage;

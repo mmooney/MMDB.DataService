@@ -16,28 +16,20 @@ namespace MMDB.DataService.Data
 			this.DocumentSession = documentSession;
 		}
 
-		public virtual ServiceMessage Trace(string message, object[] args)
+		public virtual ServiceMessage Trace(string message)
 		{
-			string formattedMessage;
-			if (args == null || args.Length == 0)
-			{
-				formattedMessage = message;
-			}
-			else
-			{
-				formattedMessage = string.Format(message, args);
-			}
-			return Trace(message);
+			return this.TraceForObject(message, null);
 		}
 
-		public virtual ServiceMessage Trace(string message)
+		public virtual ServiceMessage TraceForObject(string message, object dataObject)
 		{
 			var traceMessage = new ServiceMessage
 			{
 				Level = EnumServiceMessageLevel.Trace,
 				Message = message,
 				Detail = message,
-				MessageDateTimeUtc = DateTime.UtcNow
+				MessageDateTimeUtc = DateTime.UtcNow,
+				DataObjectJson = (dataObject!=null) ? dataObject.ToJson() : null
 			};
 			this.DocumentSession.Store(traceMessage);
 			this.DocumentSession.SaveChanges();
@@ -122,6 +114,7 @@ namespace MMDB.DataService.Data
 		{
 			return this.DocumentSession.Load<ServiceMessage>(id);
 		}
+
 
 	}
 }

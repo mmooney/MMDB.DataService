@@ -22,6 +22,11 @@ namespace MMDB.DataService.Data
 			return this.Logger.Trace(message);
 		}
 
+		public ServiceMessage TraceForObject(string message, object dataObject)
+		{
+			return this.Logger.TraceForObject(message, dataObject);
+		}
+
 		public ServiceMessage Exception(Exception err)
 		{
 			var returnValue = this.Logger.Exception(err);
@@ -58,5 +63,6 @@ namespace MMDB.DataService.Data
 		{
 			return this.Logger.WarningForObject(message, dataObject);
 		}
+
 	}
 }
