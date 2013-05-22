@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -11,7 +12,7 @@ namespace MMDB.DataService.Data.Metadata
 	public class DataServiceViewManager
 	{
 		private IDocumentSession DocumentSession { get; set; }
-
+		
 		public DataServiceViewManager(IDocumentSession documentSession)
 		{
 			this.DocumentSession = documentSession;

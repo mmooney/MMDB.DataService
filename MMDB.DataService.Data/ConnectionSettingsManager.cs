@@ -96,10 +96,18 @@ namespace MMDB.DataService.Data
 						string keyItem = keyValueParts[0].Trim();
 						string valueItem = keyValueParts[1].Trim();
 						var propInfo = propertyList.FirstOrDefault(i=>i.Name == keyItem);
-						if(propInfo != null)
+						if(propInfo != null && !string.IsNullOrEmpty(valueItem))
 						{
-							var typedValue = Convert.ChangeType(valueItem, propInfo.PropertyType);
-							propInfo.SetValue(returnValue, typedValue, null);
+							if(propInfo.PropertyType == typeof(int?)) 
+							{
+								var typedValue = int.Parse(valueItem);
+								propInfo.SetValue(returnValue, typedValue, null);
+							}
+							else 
+							{
+								var typedValue = Convert.ChangeType(valueItem, propInfo.PropertyType);
+								propInfo.SetValue(returnValue, typedValue, null);
+							}
 						}
 					}
 				}
