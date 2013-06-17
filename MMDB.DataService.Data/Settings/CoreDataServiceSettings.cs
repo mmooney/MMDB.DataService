@@ -14,6 +14,9 @@ namespace MMDB.DataService.Data.Settings
 
 		public string ExceptionNotificationFromEmailAddress { get; set; }
 		public List<string> ExceptionNotificationEmailAddressList { get; set; }
-		public EmailServerSettings Email { get; set; }
+		//public EmailServerSettings Email { get; set; }
+
+		public EnumSettingSource EmailSettingSource { get; set; }
+		public string EmailSettingKey { get; set; }
 	}
 }

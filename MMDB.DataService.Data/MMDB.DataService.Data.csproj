@@ -116,7 +116,6 @@
     <Compile Include="Jobs\ItemProcessingJobBase.cs" />
     <Compile Include="Jobs\DataServiceJobBase.cs" />
     <Compile Include="Jobs\JobConfigurationBase.cs" />
-    <Compile Include="Jobs\FtpDownloadServiceSettings.cs" />
     <Compile Include="Dto\Ftp\FtpInboundData.cs" />
     <Compile Include="Dto\Ftp\FtpOutboundData.cs" />
     <Compile Include="Metadata\CustomControllerMetadata.cs" />

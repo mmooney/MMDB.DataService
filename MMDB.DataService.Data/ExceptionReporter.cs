@@ -13,12 +13,14 @@ namespace MMDB.DataService.Data
 	public class ExceptionReporter
 	{
 		private SettingsManager SettingsManager { get; set; }
+		private ConnectionSettingsManager ConnectionSettingsManager { get; set; }
 		private EmailSender EmailSender { get; set; }
 
-		public ExceptionReporter(SettingsManager settingsManager, EmailSender emailSender)
+		public ExceptionReporter(SettingsManager settingsManager, EmailSender emailSender, ConnectionSettingsManager connectionSettingsManager)
 		{
 			this.SettingsManager = settingsManager;
 			this.EmailSender = emailSender;
+			this.ConnectionSettingsManager = connectionSettingsManager;
 		}
 
 		public void Exception(ServiceMessage exception)
@@ -39,12 +41,20 @@ namespace MMDB.DataService.Data
 				}
 
 				var settings = this.SettingsManager.Get<CoreDataServiceSettings>();
-				var emailSettings = new EmailServerSettings 
+				//var emailSettings = new EmailServerSettings 
+				//{
+				//	Host = settings.Email.Host,
+				//	Port = settings.Email.Port,
+				//	UserName = settings.Email.UserName,
+				//	Password = settings.Email.Password
+				//};
+				var emailSettings = this.ConnectionSettingsManager.Load<EmailConnectionSettings>(settings.EmailSettingSource, settings.EmailSettingKey);
+				var emailServerSettings = new EmailServerSettings
 				{
-					Host = settings.Email.Host,
-					Port = settings.Email.Port,
-					UserName = settings.Email.UserName,
-					Password = settings.Email.Password
+					Host = emailSettings.Host,
+					Password = emailSettings.Password,
+					Port = emailSettings.Port,
+					UserName = emailSettings.UserName
 				};
 				var from = new MailAddress(settings.ExceptionNotificationFromEmailAddress);
 				var toList = new List<MailAddress>();
@@ -56,7 +66,7 @@ namespace MMDB.DataService.Data
 						toList.Add(to);
 					}
 				}
-				this.EmailSender.SendEmail(emailSettings, subject, body.ToString(), toList, from, null);
+				this.EmailSender.SendEmail(emailServerSettings, subject, body.ToString(), toList, from, null);
 			}
 			catch (Exception err)
 			{

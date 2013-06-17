@@ -45,5 +45,17 @@ namespace MMDB.DataService.Data
 		{
 			this.EmailEngine.SendEmail(emailSettings, subject, model, razorView, toAddressList, fromAddress, attachments); 
 		}
+
+		public void SendRazorEmail<T>(EmailConnectionSettings emailSettings, string subject, T model, string razorView, List<string> toAddressList, string fromAddress, params EmailAttachmentData[] attachments)
+		{
+			var emailServerSettings = new  EmailServerSettings
+			{
+				Host = emailSettings.Host,
+				Password = emailSettings.Password,
+				Port = emailSettings.Port,
+				UserName = emailSettings.UserName
+			};
+			this.SendRazorEmail(emailServerSettings, subject, model, razorView, toAddressList, fromAddress, attachments);
+		}
 	}
 }
