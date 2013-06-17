@@ -167,8 +167,6 @@
     <Compile Include="Settings\SettingsManager.cs" />
     <Compile Include="Settings\SqlConnectionSettings.cs" />
     <Compile Include="TypeLoader.cs" />
-    <Compile Include="UI\IUIPopulator.cs" />
-    <Compile Include="UI\IViewProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

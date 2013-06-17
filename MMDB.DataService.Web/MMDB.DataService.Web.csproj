@@ -394,6 +394,10 @@
       <Project>{948C1F2B-7562-4F84-8521-4B151CF6AE6D}</Project>
       <Name>MMDB.DataService.Data</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MMDB.DataService.NinjectModules\MMDB.DataService.NinjectModules.csproj">
+      <Project>{ed804b84-257e-4e4a-8906-cc280239c9d8}</Project>
+      <Name>MMDB.DataService.NinjectModules</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\Index.cshtml" />
