@@ -38,4 +38,9 @@ namespace MMDB.DataService.Data
 		Database
 	}
 
+	public enum EnumEdiVendor
+	{
+		Ussco,
+		SPRichards
+	}
 }
