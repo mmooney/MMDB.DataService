@@ -7,7 +7,7 @@ using System.IO;
 
 namespace MMDB.DataService.Data
 {
-	public class TypeLoader
+	public class TypeLoader : ITypeLoader
 	{
 		public Type LoadType(string assemblyName, string className)
 		{

@@ -100,8 +100,11 @@
     <Compile Include="IFtpJobManager.cs" />
     <Compile Include="IJobImporterExporter.cs" />
     <Compile Include="IJobManager.cs" />
+    <Compile Include="IJobScheduler.cs" />
     <Compile Include="ILogPurger.cs" />
+    <Compile Include="ITypeLoader.cs" />
     <Compile Include="JobImporterExporter.cs" />
+    <Compile Include="JobScheduler.cs" />
     <Compile Include="LogPurger.cs" />
     <Compile Include="Metadata\CustomControllerManager.cs" />
     <Compile Include="DataProvider\RavenHelper.cs" />

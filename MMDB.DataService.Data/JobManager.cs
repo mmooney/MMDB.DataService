@@ -18,73 +18,14 @@ namespace MMDB.DataService.Data
 	{
 		private IDocumentSession DocumentSession { get; set; } 
 		private IEventReporter EventReporter { get; set; }
-		private IScheduler Scheduler { get; set; }
-		private TypeLoader TypeLoader { get; set; }
+		private ITypeLoader TypeLoader { get; set; }
 
-		public JobManager(IDocumentSession documentSession, IEventReporter eventReporter, IScheduler scheduler, TypeLoader typeLoader)
+		public JobManager(IDocumentSession documentSession, IEventReporter eventReporter, ITypeLoader typeLoader)
 		{
 			this.DocumentSession = documentSession;
 			this.EventReporter = eventReporter;
-			this.Scheduler = scheduler;
 			this.TypeLoader = typeLoader;
 		}
-
-		public virtual void StartJobs()
-		{
-			var jobDefintionList = this.DocumentSession.Query<JobDefinition>();
-			foreach(var jobDefinition in jobDefintionList)
-			{
-				this.StartJob(jobDefinition);
-			}
-			this.Scheduler.StartDelayed(TimeSpan.FromMilliseconds(100));
-		}
-
-		public void StopJobs()
-		{
-			this.Scheduler.Shutdown(true);
-		}
-
-		public void RunJobNow(int jobID)
-		{
-			var jobDefinition = this.GetJobDefinition(jobID);
-			this.StartJob(jobDefinition, runNow:true);
-			this.Scheduler.Start();
-			Thread.Sleep(1000);
-			while (this.Scheduler.GetCurrentlyExecutingJobs().Count > 0)
-			{
-				Thread.Sleep(100);
-			}
-		}
-
-		private void StartJob(JobDefinition jobDefinition, bool runNow=false)
-		{
-			this.EventReporter.Trace("Creating " + jobDefinition.JobName);
-			var jobType = this.TypeLoader.LoadType(jobDefinition.AssemblyName, jobDefinition.ClassName);
-			var configType = jobType.BaseType.GetGenericArguments()[0];
-			var wrapperType = typeof(JobWrapper<,>).MakeGenericType(jobType, configType);
-			var jobDetail = new JobDetailImpl(jobDefinition.JobName, wrapperType);
-			jobDetail.JobDataMap.Add("Configuration", jobDefinition.Configuration);
-
-			if(runNow)
-			{
-				var trigger = new SimpleTriggerImpl(jobDefinition.JobName + "Trigger", DateBuilder.FutureDate(0, IntervalUnit.Minute), null, 1, TimeSpan.FromMinutes(int.MaxValue));
-				this.Scheduler.ScheduleJob(jobDetail, trigger);
-			}
-			else if(jobDefinition.Schedule is JobSimpleSchedule)
-			{
-				var schedule = (JobSimpleSchedule)jobDefinition.Schedule;
-				var trigger = new SimpleTriggerImpl(jobDefinition.JobName + "Trigger", DateBuilder.FutureDate(schedule.DelayStartMinutes, IntervalUnit.Minute), null, SimpleTriggerImpl.RepeatIndefinitely, TimeSpan.FromMinutes(schedule.IntervalMinutes));
-				this.Scheduler.ScheduleJob(jobDetail, trigger);
-			}
-			else if (jobDefinition.Schedule is JobCronSchedule)
-			{
-				var schedule = (JobCronSchedule)jobDefinition.Schedule;
-				var trigger = new CronTriggerImpl(jobDefinition.JobName + "Trigger", jobDefinition.JobName + "Group", schedule.CronScheduleExpression);
-				this.Scheduler.ScheduleJob(jobDetail, trigger);
-			}
-			this.EventReporter.Trace("Done Creating " + jobDefinition.JobName);
-		}
-
 
 		public JobDefinition CreateSimpleJob(string jobName, Guid jobGuid, string assemblyName, string className, int intervalMinutes, int delayStartMinutes)
 		{

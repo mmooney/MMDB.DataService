@@ -32,7 +32,6 @@ namespace MMDB.DataService.WindowsService
 				NinjectBootstrapper.Initialize();
 				Console.WriteLine("\t-Ninject initialization complete...");
 			
-				var settings = NinjectBootstrapper.Kernel.Get<CoreDataServiceSettings>();
 				if (args.Length > 0 && args[0].ToLower() == "/debug")
 				{
 					Console.WriteLine("\t-Starting in debug mode...");
@@ -47,8 +46,8 @@ namespace MMDB.DataService.WindowsService
 						Console.WriteLine("/runjobname [jobid] - jobid must be an integer");
 					}
 					NinjectBootstrapper.Kernel.Bind<DataServiceLogger>().To<ConsoleDataServiceLogger>();
-					var jobManager = NinjectBootstrapper.Kernel.Get<IJobManager>();
-					jobManager.RunJobNow(jobID);
+					var jobScheduler = NinjectBootstrapper.Kernel.Get<IJobScheduler>();
+					jobScheduler.RunJobNow(jobID);
 				}
 				else if (args.Length > 0 && args[0].ToLower() == "/exportjobs")
 				{
@@ -66,6 +65,7 @@ namespace MMDB.DataService.WindowsService
 					var importerExporter = NinjectBootstrapper.Kernel.Get<IJobImporterExporter>();
 					importerExporter.ExportJobsToFile(exportPath);
 					Console.WriteLine("\t-Exporting jobs Done");
+					return;
 				}
 				else if (args.Length > 0 && args[0].ToLower() == "/importjobs")
 				{
@@ -98,6 +98,8 @@ namespace MMDB.DataService.WindowsService
 			catch(Exception err)
 			{
 				Console.WriteLine("Error: " + err.ToString());
+				Console.WriteLine("Press any key to continue");
+				Console.ReadKey();
 			}
 		}
 

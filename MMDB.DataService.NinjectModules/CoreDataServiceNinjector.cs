@@ -30,6 +30,8 @@ namespace MMDB.DataService.NinjectModules
 			kernel.Bind<ISettingsManager>().To<SettingsManager>();
 			kernel.Bind<IJobManager>().To<JobManager>();
 			kernel.Bind<IJobImporterExporter>().To<JobImporterExporter>();
+			kernel.Bind<IJobScheduler>().To<JobScheduler>();
+			kernel.Bind<ITypeLoader>().To<TypeLoader>();
 
 			kernel.Bind<IDocumentStore>().ToMethod(CreateDocumentStore).InSingletonScope();
 			kernel.Bind<IDocumentSession>().ToMethod(c => c.Kernel.Get<IDocumentStore>().OpenSession()).InTransientScope();

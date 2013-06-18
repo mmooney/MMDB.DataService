@@ -30,7 +30,5 @@ namespace MMDB.DataService.Data
 
 		IQueryable<JobData> GetJobDataQueue(JobDefinition jobDefinition);
 		IQueryable<JobData> GetJobDataQueue(int jobDefinitionId);
-
-		void RunJobNow(int jobID);
 	}
 }

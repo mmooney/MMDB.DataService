@@ -13,14 +13,14 @@ namespace MMDB.DataService.WindowsService
 {
 	partial class WinService : ServiceBase
 	{
-		private JobManager JobManager { get; set; }
+		private IJobScheduler JobScheduler{ get; set; }
 		private Thread ProcessingThread { get; set; }
 		private volatile bool _stopRequested;
 
-		public WinService(JobManager jobManager)
+		public WinService(IJobScheduler jobScheduler)
 		{
 			InitializeComponent();
-			this.JobManager = jobManager;
+			this.JobScheduler = JobScheduler;
 		}
 
 		protected override void OnStart(string[] args)
@@ -60,12 +60,12 @@ namespace MMDB.DataService.WindowsService
 
 		private void ThreadProc()
 		{
-			this.JobManager.StartJobs();
+			this.JobScheduler.StartJobs();
 			while(!this._stopRequested)
 			{
 				Thread.Sleep(1000);
 			}
-			this.JobManager.StopJobs();
+			this.JobScheduler.StopJobs();
 		}
 	}
 }
