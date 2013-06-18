@@ -12,5 +12,6 @@ namespace MMDB.DataService.Data.Dto.Ftp
 		public string FileName { get; set; }
 		public string AttachmentId { get; set; }
 		public DateTime QueuedDateTimeUtc { get; set; }
+		public string InboundQueueIdentifier { get; set; }
 	}
 }

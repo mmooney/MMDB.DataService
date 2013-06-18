@@ -37,10 +37,4 @@ namespace MMDB.DataService.Data
 		ConnectionString,
 		Database
 	}
-
-	public enum EnumEdiVendor
-	{
-		Ussco,
-		SPRichards
-	}
 }

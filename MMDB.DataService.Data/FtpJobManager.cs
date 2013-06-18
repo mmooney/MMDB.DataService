@@ -335,6 +335,7 @@ namespace MMDB.DataService.Data
 						Directory = item.Directory,
 						FileName = item.FileName,
 						QueuedDateTimeUtc = DateTime.UtcNow,
+						InboundQueueIdentifier = item.Settings.InboundQueueIdentifier,
 						AttachmentId = this.DownloadFile(item)
 					};
 					jobAlreadyExisted = false;

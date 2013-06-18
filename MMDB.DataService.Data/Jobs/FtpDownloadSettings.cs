@@ -12,5 +12,6 @@ namespace MMDB.DataService.Data.Jobs
 		public string SettingKey { get; set; }
 		public string DownloadDirectory { get; set; }
 		public List<string> FilePatternList { get; set; }
+		public string InboundQueueIdentifier { get; set; }
 	}
 }
