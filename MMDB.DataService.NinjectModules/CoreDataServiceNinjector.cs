@@ -35,13 +35,22 @@ namespace MMDB.DataService.NinjectModules
 
 			kernel.Bind<IDocumentStore>().ToMethod(CreateDocumentStore).InSingletonScope();
 			kernel.Bind<IDocumentSession>().ToMethod(c => c.Kernel.Get<IDocumentStore>().OpenSession()).InTransientScope();
+
 			kernel.Bind<ISchedulerFactory>().To<StdSchedulerFactory>();
-			kernel.Bind<IScheduler>().ToMethod(c => c.Kernel.Get<ISchedulerFactory>().GetScheduler());
+			kernel.Bind<IScheduler>().ToMethod(CreateScheduler).InSingletonScope();
 		}
 
 		public static IDocumentStore CreateDocumentStore(IContext context)
 		{
 			return RavenHelper.CreateDocumentStore();
+		}
+
+		public static IScheduler CreateScheduler(IContext context)
+		{
+			var schedulerFactory = context.Kernel.Get<ISchedulerFactory>();
+			var scheduler = schedulerFactory.GetScheduler();
+			scheduler.JobFactory = context.Kernel.Get<NinjectJobFactory>();
+			return scheduler;
 		}
 	}
 }

@@ -59,6 +59,7 @@
     <Compile Include="CoreDataServiceNinjector.cs" />
     <Compile Include="IDataServiceNinjector.cs" />
     <Compile Include="NinjectBinder.cs" />
+    <Compile Include="NinjectJobFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
