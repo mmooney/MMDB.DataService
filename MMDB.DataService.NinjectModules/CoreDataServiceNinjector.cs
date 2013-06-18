@@ -28,6 +28,9 @@ namespace MMDB.DataService.NinjectModules
 			kernel.Bind<IRavenManager>().To<RavenManager>();
 			kernel.Bind<ICustomControllerManager>().To<CustomControllerManager>();
 			kernel.Bind<ISettingsManager>().To<SettingsManager>();
+			kernel.Bind<IJobManager>().To<JobManager>();
+			kernel.Bind<IJobImporterExporter>().To<JobImporterExporter>();
+
 			kernel.Bind<IDocumentStore>().ToMethod(CreateDocumentStore).InSingletonScope();
 			kernel.Bind<IDocumentSession>().ToMethod(c => c.Kernel.Get<IDocumentStore>().OpenSession()).InTransientScope();
 			kernel.Bind<ISchedulerFactory>().To<StdSchedulerFactory>();

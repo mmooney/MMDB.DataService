@@ -15,11 +15,11 @@ namespace MMDB.DataService.Web.Areas.admin.Controllers
 {
     public class SettingsController : Controller
     {
-		private JobManager JobManager { get; set; }
+		private IJobManager JobManager { get; set; }
 		private SettingsManager SettingsManager { get; set; }
 		private IDocumentSession DocumentSession { get; set; }
 
-		public SettingsController(JobManager jobManager, SettingsManager settingsManager, IDocumentSession documentSession)
+		public SettingsController(IJobManager jobManager, SettingsManager settingsManager, IDocumentSession documentSession)
 		{
 			this.JobManager = jobManager;
 			this.SettingsManager = settingsManager;

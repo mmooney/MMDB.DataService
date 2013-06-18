@@ -11,9 +11,9 @@ namespace MMDB.DataService.Web
 	public class ConfigurationModelBinder : DefaultModelBinder
 	{
 		private TypeLoader TypeLoader { get; set; }
-		private JobManager JobManager { get; set; }
+		private IJobManager JobManager { get; set; }
 
-		public ConfigurationModelBinder(TypeLoader typeLoader, JobManager jobManager)
+		public ConfigurationModelBinder(TypeLoader typeLoader, IJobManager jobManager)
 		{
 			this.TypeLoader = typeLoader;
 			this.JobManager = jobManager;

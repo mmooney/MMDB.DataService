@@ -13,11 +13,11 @@ namespace MMDB.DataService.Data
 	public class ScheduleManager
 	{
 		private IScheduler Scheduler { get; set; }
-		private JobManager JobManager { get; set; }
+		private IJobManager JobManager { get; set; }
 		private EventReporter EventReporter { get; set; }
 		private TypeLoader TypeLoader { get; set; }
 
-		public ScheduleManager(JobManager jobManager, IScheduler scheduler, EventReporter eventReporter, TypeLoader typeLoader)
+		public ScheduleManager(IJobManager jobManager, IScheduler scheduler, EventReporter eventReporter, TypeLoader typeLoader)
 		{
 			this.JobManager = jobManager;
 			this.Scheduler = scheduler;

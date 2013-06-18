@@ -10,9 +10,9 @@ namespace MMDB.DataService.Web.Controllers
 {
     public class HomeController : Controller
     {
-		private JobManager JobManager { get; set; }
+		private IJobManager JobManager { get; set; }
 
-		public HomeController(JobManager jobManager)
+		public HomeController(IJobManager jobManager)
 		{
 			this.JobManager = jobManager;
 		}

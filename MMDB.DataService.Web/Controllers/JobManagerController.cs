@@ -16,9 +16,9 @@ namespace MMDB.DataService.Web.Controllers
 {
     public class JobManagerController : Controller
     {
-        private JobManager JobManager { get; set; }
+        private IJobManager JobManager { get; set; }
 
-		public JobManagerController(JobManager jobManager)
+		public JobManagerController(IJobManager jobManager)
 		{
 			this.JobManager = jobManager;
 		}
@@ -65,7 +65,8 @@ namespace MMDB.DataService.Web.Controllers
 			this.JobManager.EnsureConfiguration(jobDefinition);
 			return View(jobDefinition);
 		}
-[HttpPost]
+
+		[HttpPost]
 		public ActionResult Edit(int id, string jobName, string assemblyName, string className, string schedule, string configJson, int intervalMinutes=0, int delayStartMinutes=0, string cronScheduleExpression=null)
 		{
 			var jobDefinition = this.JobManager.LoadJobDefinition(id);

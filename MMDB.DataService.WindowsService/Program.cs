@@ -13,6 +13,8 @@ using MMDB.DataService.Data.Settings;
 using MMDB.DataService.Data.DataProvider;
 using MMDB.DataService.Data.Jobs;
 using MMDB.DataService.Data;
+using System.Reflection;
+using System.IO;
 
 namespace MMDB.DataService.WindowsService
 {
@@ -28,11 +30,6 @@ namespace MMDB.DataService.WindowsService
 				Console.WriteLine("Starting MMDB.DataService.WindowsService");
 				Console.WriteLine("\t-Initializing Ninject...");
 				NinjectBootstrapper.Initialize();
-				Console.WriteLine("\t-Binding components to Ninject...");
-				NinjectBootstrapper.Kernel.Rebind<IDocumentStore>().ToMethod(CreateDocumentStore).InSingletonScope();
-				NinjectBootstrapper.Kernel.Rebind<IDocumentSession>().ToMethod(c => c.Kernel.Get<IDocumentStore>().OpenSession()).InTransientScope();
-				NinjectBootstrapper.Kernel.Rebind<ISchedulerFactory>().To<StdSchedulerFactory>();
-				NinjectBootstrapper.Kernel.Rebind<IScheduler>().ToMethod(CreateScheduler).InSingletonScope();
 				Console.WriteLine("\t-Ninject initialization complete...");
 			
 				var settings = NinjectBootstrapper.Kernel.Get<CoreDataServiceSettings>();
@@ -50,8 +47,42 @@ namespace MMDB.DataService.WindowsService
 						Console.WriteLine("/runjobname [jobid] - jobid must be an integer");
 					}
 					NinjectBootstrapper.Kernel.Bind<DataServiceLogger>().To<ConsoleDataServiceLogger>();
-					var jobManager = NinjectBootstrapper.Kernel.Get<JobManager>();
+					var jobManager = NinjectBootstrapper.Kernel.Get<IJobManager>();
 					jobManager.RunJobNow(jobID);
+				}
+				else if (args.Length > 0 && args[0].ToLower() == "/exportjobs")
+				{
+					Console.WriteLine("Exporting jobs");
+					string exportPath;
+					if(args.Length >= 2)
+					{
+						exportPath = args[1];
+					}
+					else
+					{
+						exportPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "MMDB.DataService.Jobs.json");
+					}
+					Console.WriteLine("\tExporting to " + exportPath);
+					var importerExporter = NinjectBootstrapper.Kernel.Get<IJobImporterExporter>();
+					importerExporter.ExportJobsToFile(exportPath);
+					Console.WriteLine("\t-Exporting jobs Done");
+				}
+				else if (args.Length > 0 && args[0].ToLower() == "/importjobs")
+				{
+					Console.WriteLine("Importing jobs");
+					string importPath;
+					if (args.Length >= 2)
+					{
+						importPath = args[1];
+					}
+					else
+					{
+						importPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "MMDB.DataService.Jobs.json");
+					}
+					Console.WriteLine("\t-Importing from: " + importPath);
+					var importerExporter = NinjectBootstrapper.Kernel.Get<IJobImporterExporter>();
+					importerExporter.ImportJobsFromFile(importPath);
+					Console.WriteLine("\t-Importing jobs done");
 				}
 				else 
 				{

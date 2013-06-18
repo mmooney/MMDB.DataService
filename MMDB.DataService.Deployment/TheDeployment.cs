@@ -110,10 +110,10 @@ namespace MMDB.DataService.Deployment
                                            //.AddDependency("MSMQ")
                                            ;
 
-                                       if (settings.ServiceStartMode != ServiceStartMode.Disabled && settings.ServiceStartMode != ServiceStartMode.Manual)
-                                       {
-                                           s.WinService(serviceName).Start();
-                                       }
+									   //if (settings.ServiceStartMode != ServiceStartMode.Disabled && settings.ServiceStartMode != ServiceStartMode.Manual)
+									   //{
+									   //	s.WinService(serviceName).Start();
+									   //}
                                    });
             });
         }

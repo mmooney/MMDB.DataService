@@ -98,7 +98,10 @@
     <Compile Include="IDataServiceEmailSender.cs" />
     <Compile Include="IFtpCommunicator.cs" />
     <Compile Include="IFtpJobManager.cs" />
+    <Compile Include="IJobImporterExporter.cs" />
+    <Compile Include="IJobManager.cs" />
     <Compile Include="ILogPurger.cs" />
+    <Compile Include="JobImporterExporter.cs" />
     <Compile Include="LogPurger.cs" />
     <Compile Include="Metadata\CustomControllerManager.cs" />
     <Compile Include="DataProvider\RavenHelper.cs" />

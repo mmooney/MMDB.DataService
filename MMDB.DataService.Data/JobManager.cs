@@ -14,7 +14,7 @@ using Tamir.SharpSsh.java.lang;
 
 namespace MMDB.DataService.Data
 {
-	public class JobManager
+	public class JobManager : IJobManager
 	{
 		private IDocumentSession DocumentSession { get; set; } 
 		private IEventReporter EventReporter { get; set; }
@@ -349,7 +349,7 @@ namespace MMDB.DataService.Data
 		{
 			foreach(var newJob in list)
 			{
-				var existingJob = this.DocumentSession.Query<JobDefinition>().FirstOrDefault(i=>i.JobGuid == newJob.JobGuid);
+				var existingJob = this.DocumentSession.Query<JobDefinition>().Customize(i=>i.WaitForNonStaleResultsAsOfNow()).FirstOrDefault(i=>i.JobGuid == newJob.JobGuid);
 				if(existingJob == null)
 				{
 					newJob.Id = 0;

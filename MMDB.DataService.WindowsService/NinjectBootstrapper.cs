@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using MMDB.DataService.NinjectModules;
 using Ninject;
-using Ninject.Extensions.Conventions;
 
 namespace MMDB.DataService.WindowsService
 {
@@ -15,12 +15,7 @@ namespace MMDB.DataService.WindowsService
 		{
 			var kernel = new StandardKernel();
 			NinjectBootstrapper.Kernel = kernel;
-			kernel.Bind(x =>
-				{
-					x.FromAssembliesMatching("*") // Scans currently assembly
-					 .SelectAllClasses() // Retrieve all non-abstract classes
-					 .BindDefaultInterface();// Binds the default interface to them;
-				});
+			NinjectBinder.SetupAll(kernel);
 		}
 
 		public static object Get(Type type)
