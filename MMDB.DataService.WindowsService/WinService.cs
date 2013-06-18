@@ -13,14 +13,14 @@ namespace MMDB.DataService.WindowsService
 {
 	partial class WinService : ServiceBase
 	{
-		private IJobScheduler JobScheduler{ get; set; }
+		private IJobScheduler JobScheduler { get; set; }
 		private Thread ProcessingThread { get; set; }
 		private volatile bool _stopRequested;
 
 		public WinService(IJobScheduler jobScheduler)
 		{
 			InitializeComponent();
-			this.JobScheduler = JobScheduler;
+			this.JobScheduler = jobScheduler;
 		}
 
 		protected override void OnStart(string[] args)
