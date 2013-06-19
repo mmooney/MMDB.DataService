@@ -70,9 +70,8 @@ namespace MMDB.DataService.Data
 					request.Credentials = new NetworkCredential (settings.FtpUserName,settings.FtpPassword);
 
 					using(var requestStream = request.GetRequestStream())
-					using(var writer = new StreamWriter(requestStream))
 					{
-						writer.Write(fileData);
+						requestStream.Write(fileData, 0, fileData.Length);
 					}
 					using(var response = (FtpWebResponse)request.GetResponse())
 					{
