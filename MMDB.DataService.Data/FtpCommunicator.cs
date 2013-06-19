@@ -165,18 +165,18 @@ namespace MMDB.DataService.Data
 					while((item = reader.ReadLine()) != null)
 					{
 						string filePath;
-						if (string.IsNullOrEmpty(directory))
-						{
+						//if (string.IsNullOrEmpty(directory))
+						//{
 							filePath = item;
-						}
-						else if (directory.EndsWith("/"))
-						{
-							filePath = directory + item;
-						}
-						else
-						{
-							filePath = directory + "/" + item;
-						}
+						//}
+						//else if (directory.EndsWith("/"))
+						//{
+						//	filePath = directory + item;
+						//}
+						//else
+						//{
+						//	filePath = directory + "/" + item;
+						//}
 						if (!returnList.Contains(filePath, StringComparer.CurrentCultureIgnoreCase))
 						{
 							returnList.Add(filePath);
