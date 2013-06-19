@@ -50,6 +50,7 @@ namespace MMDB.DataService.WindowsService
 				this.ProcessingThread.Abort();
 				this.ProcessingThread.Join();
 			}
+			System.Environment.Exit(0);
 		}
 
 		public void DebugStart()

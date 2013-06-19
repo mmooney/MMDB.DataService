@@ -48,6 +48,7 @@ namespace MMDB.DataService.WindowsService
 					NinjectBootstrapper.Kernel.Bind<DataServiceLogger>().To<ConsoleDataServiceLogger>();
 					var jobScheduler = NinjectBootstrapper.Kernel.Get<IJobScheduler>();
 					jobScheduler.RunJobNow(jobID);
+					System.Environment.Exit(0);
 				}
 				else if (args.Length > 0 && args[0].ToLower() == "/exportjobs")
 				{

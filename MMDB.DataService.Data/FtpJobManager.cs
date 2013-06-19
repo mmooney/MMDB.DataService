@@ -195,7 +195,7 @@ namespace MMDB.DataService.Data
 		public FtpInboundData TryCreateJobData(FtpDownloadMetadata item, out bool jobAlreadyExisted)
 		{
 			FtpInboundData returnValue;
-			if (!item.Settings.IgnoreDuplicates)
+			if (item.Settings.IgnoreDuplicates)
 			{
 				using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
 				{
