@@ -150,6 +150,8 @@ namespace MMDB.DataService.Data
 
 				request.Credentials = new NetworkCredential(settings.FtpUserName, settings.FtpPassword);
 
+				this.EventReporter.Trace(string.Format("Searching on {0} for: {1}", targetUrl, path));
+
 				string responseData;
 				using(var response = (FtpWebResponse)request.GetResponse())
 				using(var responseStream = response.GetResponseStream())
@@ -181,6 +183,8 @@ namespace MMDB.DataService.Data
 						}
 					}
 				}
+
+				this.EventReporter.Trace(string.Format("{0} records found for {1} on {2}, found {3}", returnList.Count, path, targetUrl, responseData));
 
 				//http://stackoverflow.com/questions/652037/how-do-i-check-if-a-filename-matches-a-wildcard-pattern
 			}
