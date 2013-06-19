@@ -28,7 +28,14 @@ namespace MMDB.DataService.Data
 			targetFileName = targetFileName.Replace("/", "_");
 			if (!string.IsNullOrEmpty(targetDirectory))
 			{
-				targetFilePath = targetDirectory + targetFileName;
+				if(targetDirectory.EndsWith("/"))
+				{
+					targetFilePath = targetDirectory + targetFileName;
+				}
+				else 
+				{
+					targetFilePath = targetDirectory + "/" + targetFileName;
+				}
 			}
 			else
 			{
