@@ -13,5 +13,6 @@ namespace MMDB.DataService.Data.Jobs
 		public string DownloadDirectory { get; set; }
 		public List<string> FilePatternList { get; set; }
 		public string InboundQueueIdentifier { get; set; }
+		public bool IgnoreDuplicates { get; set; }
 	}
 }

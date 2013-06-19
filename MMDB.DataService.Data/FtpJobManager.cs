@@ -96,207 +96,79 @@ namespace MMDB.DataService.Data
 
 		public List<FtpDownloadMetadata> GetAvailableDownloadList(FtpDownloadSettings ftpDownloadSettings)
 		{
-			//var settings = this.SettingsManager.Load<FtpConnectionSettings>(ftpDownloadSettings.SettingSource, ftpDownloadSettings.SettingKey);
-
 			var returnList = new List<FtpDownloadMetadata>();
-			//if (settings.SecureFTP || true)
-			//{
-				var patternList = new List<string>();
-				if (ftpDownloadSettings.FilePatternList == null || ftpDownloadSettings.FilePatternList.Count == 0)
+			List<string> patternList = ftpDownloadSettings.FilePatternList;
+			if(patternList == null || patternList.Count == 0)
+			{
+				patternList.Add("*.*");
+			}
+			foreach(string pattern in patternList)
+			{
+				var list = this.FtpCommunicator.GetFileList(ftpDownloadSettings.SettingSource, ftpDownloadSettings.SettingKey, ftpDownloadSettings.DownloadDirectory, pattern);
+				if(list != null && list.Count > 0)
 				{
-					if (string.IsNullOrEmpty(ftpDownloadSettings.DownloadDirectory))
+					foreach(string fileName in list)
 					{
-						patternList.Add("*.*");
-					}
-					else if (ftpDownloadSettings.DownloadDirectory.EndsWith("/"))
-					{
-						patternList.Add(ftpDownloadSettings.DownloadDirectory + "*.*");
-					}
-					else
-					{
-						patternList.Add(ftpDownloadSettings.DownloadDirectory + "/*.*");
-					}
-				}
-				foreach (var pattern in ftpDownloadSettings.FilePatternList)
-				{
-					if (string.IsNullOrEmpty(ftpDownloadSettings.DownloadDirectory))
-					{
-						patternList.Add("*." + pattern);
-					}
-					else if (ftpDownloadSettings.DownloadDirectory.EndsWith("/"))
-					{
-						patternList.Add(ftpDownloadSettings.DownloadDirectory + pattern);
-					}
-					else
-					{
-						patternList.Add(ftpDownloadSettings.DownloadDirectory + "/" + pattern);
-					}
-				}
-
-				//Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
-				//ftp.Connect();
-				foreach (var path in patternList)
-				{
-					var list = this.FtpCommunicator.GetFileList(ftpDownloadSettings.SettingSource, ftpDownloadSettings.SettingKey, path);
-					if(list != null && list.Count > 0)
-					{
-						foreach(string fileName in list)
+						var newItem = new FtpDownloadMetadata
 						{
-							var newItem = new FtpDownloadMetadata
-							{
-								Directory = ftpDownloadSettings.DownloadDirectory,
-								FileName = fileName,
-								Settings = ftpDownloadSettings
-							};
-							returnList.Add(newItem);
-						}
+							Directory = ftpDownloadSettings.DownloadDirectory,
+							FileName = fileName,
+							Settings = ftpDownloadSettings
+						};
+						returnList.Add(newItem);
 					}
 				}
-			//}
-			//else 
-			//{
-			//	using(var client = new FtpConnection(settings.FtpHost, settings.FtpUserName, settings.FtpPassword))
-			//	{
-			//		client.Open();
-			//		client.Login();
-			//		FtpDirectoryInfo directoryInfo;
-			//		if(string.IsNullOrEmpty(ftpDownloadSettings.DownloadDirectory) || client.GetCurrentDirectory() == ftpDownloadSettings.DownloadDirectory)
-			//		{
-			//			directoryInfo = client.GetCurrentDirectoryInfo();
-			//		}
-			//		else
-			//		{
-			//			var list = client.GetDirectories(ftpDownloadSettings.DownloadDirectory);
-			//			if(list.Length > 0)
-			//			{
-			//				directoryInfo = list[0];
-			//			}
-			//			else 
-			//			{
-			//				directoryInfo = null;
-			//			}
-			//		}
-			//		if(directoryInfo != null)
-			//		{
-			//			foreach(var pattern in ftpDownloadSettings.FilePatternList)
-			//			{
-			//				var fileList = client.GetFiles(pattern);
-			//				if(fileList != null)
-			//				{
-			//					foreach(var file in fileList)
-			//					{
-			//						var newItem = new FtpDownloadMetadata
-			//						{
-			//							Directory = ftpDownloadSettings.DownloadDirectory,
-			//							FileName = file.Name,
-			//							Settings = ftpDownloadSettings
-			//						};
-			//						returnList.Add(newItem);
-			//					}
-			//				}
-			//			}
-			//		}
-			//	}
-			//}
-
+			}
 			return returnList;
 		}
 
 		public string DownloadFile(FtpDownloadMetadata item)
 		{
-			//var settings = this.SettingsManager.Load<FtpConnectionSettings>(item.Settings.SettingSource, item.Settings.SettingKey);
-			//if (settings.SecureFTP || true)
-			//{
-				//Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
-				//ftp.Connect();
+			string ftpFilePath;
+			if (!string.IsNullOrEmpty(item.Directory))
+			{
+				if(item.Directory.EndsWith("/"))
+				{
+					ftpFilePath = item.Directory + item.FileName;
+				}
+				else 
+				{
+					ftpFilePath = item.Directory + "/" + item.FileName;
+				}
+			}
+			else
+			{
+				ftpFilePath = item.FileName;
+			}
 
-				string ftpFilePath;
-				if (!string.IsNullOrEmpty(item.Directory))
+			string tempDirectory = Path.Combine(Path.GetTempPath(), "MMDB.DataService");
+			if (!Directory.Exists(tempDirectory))
+			{
+				Directory.CreateDirectory(tempDirectory);
+			}
+			string tempPath = Path.Combine(tempDirectory, Guid.NewGuid().ToString() + "." + item.FileName);
+			try
+			{
+				this.FtpCommunicator.DownloadFile(item.Settings.SettingSource, item.Settings.SettingKey, ftpFilePath, tempPath);
+				string attachmentID = Guid.NewGuid().ToString();
+				using(FileStream stream = new FileStream(tempPath, FileMode.Open))
 				{
-					if(item.Directory.EndsWith("/"))
-					{
-						ftpFilePath = item.Directory + item.FileName;
-					}
-					else 
-					{
-						ftpFilePath = item.Directory + "/" + item.FileName;
-					}
+					this.RavenManager.SetAttachment(attachmentID, stream);
 				}
-				else
-				{
-					ftpFilePath = item.FileName;
-				}
-
-				string tempDirectory = Path.Combine(Path.GetTempPath(), "MMDB.DataService");
-				if (!Directory.Exists(tempDirectory))
-				{
-					Directory.CreateDirectory(tempDirectory);
-				}
-				string tempPath = Path.Combine(tempDirectory, Guid.NewGuid().ToString() + "." + item.FileName);
+				return attachmentID;
+			}
+			finally
+			{
 				try
 				{
-					this.FtpCommunicator.DownloadFile(item.Settings.SettingSource, item.Settings.SettingKey, ftpFilePath, tempPath);
-					string attachmentID = Guid.NewGuid().ToString();
-					using(FileStream stream = new FileStream(tempPath, FileMode.Open))
+					if (File.Exists(tempPath))
 					{
-						this.RavenManager.SetAttachment(attachmentID, stream);
+						File.Delete(tempPath);
+						tempPath = null;
 					}
-					return attachmentID;
 				}
-				finally
-				{
-					try
-					{
-						if (File.Exists(tempPath))
-						{
-							File.Delete(tempPath);
-							tempPath = null;
-						}
-					}
-					catch { }
-				}
-			//}
-			//else 
-			//{
-			//	using(var ftp = new FtpConnection(settings.FtpHost, settings.FtpUserName, settings.FtpPassword))
-			//	{
-			//		ftp.Open();
-			//		ftp.Login();
-			//		if (!string.IsNullOrEmpty(item.Directory))
-			//		{
-			//			ftp.SetCurrentDirectory(item.Directory);
-			//		}
-
-			//		string tempDirectory = Path.Combine(Path.GetTempPath(), "MMDB.DataService");
-			//		if (!Directory.Exists(tempDirectory))
-			//		{
-			//			Directory.CreateDirectory(tempDirectory);
-			//		}
-			//		string tempPath = Path.Combine(tempDirectory, Guid.NewGuid().ToString() + "." + item.FileName);
-			//		try
-			//		{
-			//			ftp.GetFile(item.FileName, tempPath, false);
-			//			string attachmentID = Guid.NewGuid().ToString();
-			//			using (FileStream stream = new FileStream(tempPath, FileMode.Open))
-			//			{
-			//				this.DocumentSession.Advanced.DocumentStore.DatabaseCommands.PutAttachment(attachmentID, null, stream, new Raven.Json.Linq.RavenJObject());
-			//			}
-			//			return attachmentID;
-			//		}
-			//		finally
-			//		{
-			//			try
-			//			{
-			//				if (File.Exists(tempPath))
-			//				{
-			//					File.Delete(tempPath);
-			//					tempPath = null;
-			//				}
-			//			}
-			//			catch { }
-			//		}
-			//	}
-			//}
+				catch { }
+			}
 		}
 
 		public void UploadFile(FtpOutboundData jobItem)
@@ -323,32 +195,50 @@ namespace MMDB.DataService.Data
 		public FtpInboundData TryCreateJobData(FtpDownloadMetadata item, out bool jobAlreadyExisted)
 		{
 			FtpInboundData returnValue;
-			//using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
-			//{
-			//	returnValue = this.DocumentSession.Query<FtpInboundData>()
-			//										.Customize(i => i.WaitForNonStaleResultsAsOfNow())
-			//										.SingleOrDefault(i => i.Directory == item.Directory && i.FileName == item.FileName);
-			//	if (returnValue == null)
-			//	{
-					returnValue = new FtpInboundData
+			if (!item.Settings.IgnoreDuplicates)
+			{
+				using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
+				{
+					returnValue = this.DocumentSession.Query<FtpInboundData>()
+														.Customize(i => i.WaitForNonStaleResultsAsOfLastWrite(TimeSpan.FromSeconds(120)))
+														.SingleOrDefault(i => i.Directory == item.Directory && i.FileName == item.FileName);
+					if (returnValue == null)
 					{
-						Directory = item.Directory,
-						FileName = item.FileName,
-						QueuedDateTimeUtc = DateTime.UtcNow,
-						InboundQueueIdentifier = item.Settings.InboundQueueIdentifier,
-						AttachmentId = this.DownloadFile(item)
-					};
-					jobAlreadyExisted = false;
+						returnValue = new FtpInboundData
+						{
+							Directory = item.Directory,
+							FileName = item.FileName,
+							QueuedDateTimeUtc = DateTime.UtcNow,
+							InboundQueueIdentifier = item.Settings.InboundQueueIdentifier,
+							AttachmentId = this.DownloadFile(item)
+						};
+						jobAlreadyExisted = false;
 
-					this.DocumentSession.Store(returnValue);
-					this.DocumentSession.SaveChanges();
-					//transaction.Complete();
-			//	}
-			//	else
-			//	{
-			//		jobAlreadyExisted = true;
-			//	}
-			//}
+						this.DocumentSession.Store(returnValue);
+						this.DocumentSession.SaveChanges();
+						transaction.Complete();
+					}
+					else
+					{
+						jobAlreadyExisted = true;
+					}
+				}
+			}
+			else 
+			{
+				returnValue = new FtpInboundData
+				{
+					Directory = item.Directory,
+					FileName = item.FileName,
+					QueuedDateTimeUtc = DateTime.UtcNow,
+					InboundQueueIdentifier = item.Settings.InboundQueueIdentifier,
+					AttachmentId = this.DownloadFile(item)
+				};
+				jobAlreadyExisted = false;
+
+				this.DocumentSession.Store(returnValue);
+				this.DocumentSession.SaveChanges();
+			}
 			return returnValue;
 		}
 	}

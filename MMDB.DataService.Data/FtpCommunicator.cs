@@ -96,29 +96,134 @@ namespace MMDB.DataService.Data
 		}
 
 
-		public List<string> GetFileList(EnumSettingSource settingSource, string settingKey, string path)
+		public List<string> GetFileList(EnumSettingSource settingSource, string settingKey, string directory, string filePattern)
 		{
 			var settings = this.ConnectionSettingsManager.Load<FtpConnectionSettings>(settingSource, settingKey); 
 			var returnList = new List<string>();
-			this.EventReporter.Trace("Searching on " + settings.FtpHost + " for: " + path);
-			Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
-			ftp.Connect();
-			var list = ftp.GetFileList(path);
-			this.EventReporter.Trace((list ?? new ArrayList()).Count.ToString() + " records found for " + path + " on " + settings.FtpHost);
-			foreach (string fileName in list)
+			if(string.IsNullOrEmpty(filePattern))
 			{
-				returnList.Add(fileName);
+				filePattern = "*.*";
+			}
+			if(settings.SecureFTP)
+			{
+				string path;
+				if (string.IsNullOrEmpty(directory))
+				{
+					path = filePattern;
+				}
+				else if (directory.EndsWith("/"))
+				{
+					path = directory + filePattern;
+				}
+				else
+				{
+					path = directory + "/" + filePattern;
+				}
+				this.EventReporter.Trace("Searching on " + settings.FtpHost + " for: " + path);
+				Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
+				ftp.Connect();
+				var list = ftp.GetFileList(path);
+				this.EventReporter.Trace((list ?? new ArrayList()).Count.ToString() + " records found for " + path + " on " + settings.FtpHost);
+				foreach (string fileName in list)
+				{
+					returnList.Add(fileName);
+				}
+			}
+			else 
+			{
+				string path;
+				if (string.IsNullOrEmpty(directory))
+				{
+					path = filePattern;
+				}
+				else if (directory.EndsWith("/"))
+				{
+					path = directory + filePattern;
+				}
+				else
+				{
+					path = directory + "/" + filePattern;
+				}
+				string targetUrl = new Uri(new Uri(Uri.UriSchemeFtp + "://" + settings.FtpHost), path).ToString();
+				FtpWebRequest request = (FtpWebRequest)WebRequest.Create(targetUrl);
+				request.Method = WebRequestMethods.Ftp.ListDirectory;
+
+				request.Credentials = new NetworkCredential(settings.FtpUserName, settings.FtpPassword);
+
+				string responseData;
+				using(var response = (FtpWebResponse)request.GetResponse())
+				using(var responseStream = response.GetResponseStream())
+				using(var reader = new StreamReader(responseStream))
+				{
+					responseData = reader.ReadToEnd();
+				}
+				using(var reader = new StringReader(responseData))
+				{
+					string item;
+					while((item = reader.ReadLine()) != null)
+					{
+						string filePath;
+						if (string.IsNullOrEmpty(directory))
+						{
+							filePath = item;
+						}
+						else if (directory.EndsWith("/"))
+						{
+							filePath = directory + item;
+						}
+						else
+						{
+							filePath = directory + "/" + item;
+						}
+						if (!returnList.Contains(filePath, StringComparer.CurrentCultureIgnoreCase))
+						{
+							returnList.Add(filePath);
+						}
+					}
+				}
+
+				//http://stackoverflow.com/questions/652037/how-do-i-check-if-a-filename-matches-a-wildcard-pattern
 			}
 			return returnList;
 		}
 
 
-		public void DownloadFile(EnumSettingSource settingSource, string settingKey, string ftpSourcrePath, string localDestinationPath)
+		public void DownloadFile(EnumSettingSource settingSource, string settingKey, string ftpSourcePath, string localDestinationPath)
 		{
 			var settings = this.ConnectionSettingsManager.Load<FtpConnectionSettings>(settingSource, settingKey);
-			Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
-			ftp.Connect();
-			ftp.Get(ftpSourcrePath, localDestinationPath);
+			if(settings.SecureFTP)
+			{
+				Tamir.SharpSsh.Sftp ftp = new Tamir.SharpSsh.Sftp(settings.FtpHost, settings.FtpUserName, settings.FtpPassword);
+				ftp.Connect();
+				ftp.Get(ftpSourcePath, localDestinationPath);
+			}
+			else
+			{
+				string targetUrl = new Uri(new Uri(Uri.UriSchemeFtp + "://" + settings.FtpHost), ftpSourcePath).ToString();
+				var request = (FtpWebRequest)WebRequest.Create(targetUrl);
+				request.Method = WebRequestMethods.Ftp.DownloadFile;
+				request.Credentials = new NetworkCredential(settings.FtpUserName, settings.FtpPassword);
+
+				this.EventReporter.Info(string.Format("Downloading {0} to {1}",  ftpSourcePath, localDestinationPath));
+
+				int totalBytesRead = 0;
+				using(var response = (FtpWebResponse)request.GetResponse())
+				using(var responseStream = response.GetResponseStream())
+				using(var fileStream = new FileStream(localDestinationPath, FileMode.Create))
+				{
+					var buffer = new byte[1024];
+					while (true)
+					{
+						int bytesRead = responseStream.Read(buffer, 0, buffer.Length);
+						totalBytesRead += bytesRead;
+						if (bytesRead == 0)
+							break;
+						fileStream.Write(buffer, 0, bytesRead);
+					}
+
+					this.EventReporter.Info(string.Format("Download Complete from {0} to {1}, {2} bytes, status: {3}", ftpSourcePath, localDestinationPath, totalBytesRead, response.StatusDescription));
+				}
+			}
 		}
 	}
 }
