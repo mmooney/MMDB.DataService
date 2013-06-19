@@ -55,7 +55,7 @@ namespace MMDB.DataService.Data
 				}
 				else 
 				{
-					string targetUrl = Uri.UriSchemeFtp + settings.FtpHost + "/" + targetFilePath;
+					string targetUrl = new Uri(new Uri(Uri.UriSchemeFtp + "://" + settings.FtpHost),targetFilePath).ToString();
 					this.EventReporter.Info("Uploading file " + tempPath + " to " + targetUrl + "...");
 					FtpWebRequest request = (FtpWebRequest)WebRequest.Create(targetUrl);
 					request.Method = WebRequestMethods.Ftp.UploadFile;
