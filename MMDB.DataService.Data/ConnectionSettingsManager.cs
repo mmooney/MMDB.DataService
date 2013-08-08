@@ -55,6 +55,10 @@ namespace MMDB.DataService.Data
 		private T TryLoadConnectionString<T>(string key) where T : ConnectionSettingBase, new()
 		{
 			var data = ConfigurationManager.ConnectionStrings[key];
+			if(data == null)
+			{
+				throw new Exception(string.Format("ConnectionString \"{0}\" not found", key));
+			}
 			if(data == null || string.IsNullOrEmpty(data.ConnectionString))
 			{
 				return null;
@@ -68,7 +72,11 @@ namespace MMDB.DataService.Data
 		private T TryLoadAppSettings<T>(string key) where T : ConnectionSettingBase, new()
 		{
 			string data = ConfigurationManager.AppSettings[key];
-			if(string.IsNullOrEmpty(data))
+			if (data == null)
+			{
+				throw new Exception(string.Format("AppSetting \"{0}\" not found", key));
+			}
+			if (string.IsNullOrEmpty(data))
 			{
 				return null;
 			}
