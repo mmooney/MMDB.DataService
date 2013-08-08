@@ -298,9 +298,17 @@ namespace MMDB.DataService.Data
 				}
 				else
 				{
-					int originalID = existingJob.Id;
-					AutoMapper.Mapper.Map(newJob,existingJob);
-					newJob.Id = originalID;
+					var oldJson = Raven.Imports.Newtonsoft.Json.JsonConvert.SerializeObject(existingJob);
+					existingJob.JobName = newJob.JobName;
+					existingJob.AssemblyName = newJob.AssemblyName;
+					existingJob.ClassName = newJob.ClassName;
+					existingJob.Schedule = newJob.Schedule;
+					existingJob.Configuration = newJob.Configuration;
+					var newJson = Raven.Imports.Newtonsoft.Json.JsonConvert.SerializeObject(existingJob);
+					if(oldJson != newJson)
+					{
+						int i = 0;
+					}
 				}
 				this.DocumentSession.SaveChanges();
 			}

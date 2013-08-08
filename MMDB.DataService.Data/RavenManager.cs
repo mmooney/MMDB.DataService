@@ -68,5 +68,9 @@ namespace MMDB.DataService.Data
 			return this.DocumentSession.Advanced.DocumentStore.DatabaseCommands.GetAttachmentHeadersStartingWith("",0,int.MaxValue).ToList();
 		}
 
+		public void DeleteAttachment(string attachmentId)
+		{
+			this.DocumentSession.Advanced.DocumentStore.DatabaseCommands.DeleteAttachment(attachmentId, null);
+		}
 	}
 }
