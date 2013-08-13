@@ -8,15 +8,15 @@ using MMDB.DataService.Data.Dto.Logging;
 using MMDB.DataService.Data.Settings;
 using MMDB.RazorEmail;
 
-namespace MMDB.DataService.Data
+namespace MMDB.DataService.Data.Impl
 {
-	public class ExceptionReporter
+	public class ExceptionReporter : IExceptionReporter
 	{
-		private SettingsManager SettingsManager { get; set; }
-		private ConnectionSettingsManager ConnectionSettingsManager { get; set; }
+		private ISettingsManager SettingsManager { get; set; }
+		private IConnectionSettingsManager ConnectionSettingsManager { get; set; }
 		private EmailSender EmailSender { get; set; }
 
-		public ExceptionReporter(SettingsManager settingsManager, EmailSender emailSender, ConnectionSettingsManager connectionSettingsManager)
+		public ExceptionReporter(ISettingsManager settingsManager, EmailSender emailSender, IConnectionSettingsManager connectionSettingsManager)
 		{
 			this.SettingsManager = settingsManager;
 			this.EmailSender = emailSender;

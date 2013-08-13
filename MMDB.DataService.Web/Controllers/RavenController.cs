@@ -9,9 +9,9 @@ namespace MMDB.DataService.Web.Controllers
 {
     public class RavenController : Controller
     {
-        private RavenManager RavenManager { get; set; }
+        private IRavenManager RavenManager { get; set; }
 
-		public RavenController(RavenManager ravenManager)
+		public RavenController(IRavenManager ravenManager)
 		{
 			this.RavenManager = ravenManager;
 		}

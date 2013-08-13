@@ -5,14 +5,14 @@ using System.Text;
 using Quartz;
 using MMDB.DataService.Data.Jobs;
 
-namespace MMDB.DataService.Data
+namespace MMDB.DataService.Data.Impl
 {
 	public class JobWrapper<JobType, ConfigType> : IJob where JobType : DataServiceJobBase<ConfigType> where ConfigType:JobConfigurationBase
 	{
 		private DataServiceJobBase<ConfigType> DataServiceJob { get; set; }
-		private EventReporter EventReporter { get; set; }
+		private IEventReporter EventReporter { get; set; }
 
-		public JobWrapper(JobType dataServiceJob, EventReporter eventReporter)
+		public JobWrapper(JobType dataServiceJob, IEventReporter eventReporter)
 		{
 			this.DataServiceJob = dataServiceJob;
 			this.EventReporter = eventReporter;

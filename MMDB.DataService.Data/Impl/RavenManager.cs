@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using Raven.Client;
 
-namespace MMDB.DataService.Data
+namespace MMDB.DataService.Data.Impl
 {
 	public class RavenManager : IRavenManager
 	{

@@ -7,9 +7,9 @@ using System.Text;
 using MMDB.Shared;
 using Raven.Client;
 
-namespace MMDB.DataService.Data.Metadata
+namespace MMDB.DataService.Data.Metadata.MetadataImpl
 {
-	public class DataServiceViewManager
+	public class DataServiceViewManager : IDataServiceViewManager
 	{
 		private IDocumentSession DocumentSession { get; set; }
 		

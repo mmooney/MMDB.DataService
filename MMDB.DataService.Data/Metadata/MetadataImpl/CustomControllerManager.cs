@@ -5,7 +5,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Raven.Client;
 
-namespace MMDB.DataService.Data.Metadata
+namespace MMDB.DataService.Data.Metadata.MetadataImpl
 {
 	public class CustomControllerManager : ICustomControllerManager
 	{

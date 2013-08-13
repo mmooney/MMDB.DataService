@@ -6,9 +6,9 @@ using System.Reflection;
 using System.Text;
 using Raven.Client;
 
-namespace MMDB.DataService.Data.Metadata
+namespace MMDB.DataService.Data.Metadata.MetadataImpl
 {
-	public class DataObjectManager
+	public class DataObjectManager : IDataObjectManager
 	{
 		private IDocumentSession DocumentSession { get; set; }
 		private TypeLoader TypeLoader { get; set; }

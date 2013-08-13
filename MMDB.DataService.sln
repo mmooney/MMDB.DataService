@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMDB.DataService.Deployment
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMDB.DataService.NinjectModules", "MMDB.DataService.NinjectModules\MMDB.DataService.NinjectModules.csproj", "{ED804B84-257E-4E4A-8906-CC280239C9D8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMDB.DataService.AutofacModules", "MMDB.DataService.AutofacModules\MMDB.DataService.AutofacModules.csproj", "{E6F7B3E4-0FD9-4415-82AE-29BE582E5101}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +113,16 @@ Global
 		{ED804B84-257E-4E4A-8906-CC280239C9D8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{ED804B84-257E-4E4A-8906-CC280239C9D8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{ED804B84-257E-4E4A-8906-CC280239C9D8}.Release|x86.ActiveCfg = Release|Any CPU
+		{E6F7B3E4-0FD9-4415-82AE-29BE582E5101}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6F7B3E4-0FD9-4415-82AE-29BE582E5101}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6F7B3E4-0FD9-4415-82AE-29BE582E5101}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E6F7B3E4-0FD9-4415-82AE-29BE582E5101}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E6F7B3E4-0FD9-4415-82AE-29BE582E5101}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E6F7B3E4-0FD9-4415-82AE-29BE582E5101}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6F7B3E4-0FD9-4415-82AE-29BE582E5101}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6F7B3E4-0FD9-4415-82AE-29BE582E5101}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E6F7B3E4-0FD9-4415-82AE-29BE582E5101}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E6F7B3E4-0FD9-4415-82AE-29BE582E5101}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

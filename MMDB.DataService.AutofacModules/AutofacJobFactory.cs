@@ -2,27 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Quartz.Spi;
-using Quartz;
+using Autofac;
 using MMDB.DataService.Data;
-using MMDB.DataService.Data.Jobs;
+using Quartz;
+using Quartz.Spi;
 
-namespace MMDB.DataService.WindowsService
+namespace MMDB.DataService.AutofacModules
 {
-	public class NinjectJobFactory : IJobFactory
+	public class AutofacJobFactory : IJobFactory
 	{
 		private IEventReporter EventReporter { get; set; }
+		private IComponentContext Context { get; set; }
 
-		public NinjectJobFactory(IEventReporter eventReporter)
+		public AutofacJobFactory(IEventReporter eventReporter, IComponentContext context)
 		{
 			this.EventReporter = eventReporter;
+			this.Context = context;
 		}
 
 		public IJob NewJob(TriggerFiredBundle bundle, Quartz.IScheduler scheduler)
 		{
 			try 
 			{
-				var x = NinjectBootstrapper.Get(bundle.JobDetail.JobType);
+				var x = this.Context.Resolve(bundle.JobDetail.JobType);
 				return (IJob)x;
 			}
 			catch(Exception err)
@@ -42,6 +44,5 @@ namespace MMDB.DataService.WindowsService
 				container before. 
 			 */
 		}
-
 	}
 }

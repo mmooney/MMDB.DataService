@@ -10,10 +10,10 @@ namespace MMDB.DataService.Web.Controllers
 {
     public class DataObjectController : Controller
     {
-		private DataObjectManager DataObjectManager { get; set; }
-		private DataServiceViewManager ViewManager { get; set; }
+		private IDataObjectManager DataObjectManager { get; set; }
+		private IDataServiceViewManager ViewManager { get; set; }
 
-		public DataObjectController(DataObjectManager dataObjectManager, DataServiceViewManager viewManager)
+		public DataObjectController(IDataObjectManager dataObjectManager, IDataServiceViewManager viewManager)
 		{
 			this.DataObjectManager = dataObjectManager;
 			this.ViewManager = viewManager;

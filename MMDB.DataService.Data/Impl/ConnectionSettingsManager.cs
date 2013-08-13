@@ -11,7 +11,7 @@ using MMDB.DataService.Data.Settings;
 
 namespace MMDB.DataService.Data
 {
-	public class ConnectionSettingsManager
+	public class ConnectionSettingsManager : IConnectionSettingsManager
 	{
 		public IDocumentSession DocumentSession { get; set; }
 		private ConcurrentDictionary<string,IEnumerable<PropertyInfo>> PropertyDictionary;

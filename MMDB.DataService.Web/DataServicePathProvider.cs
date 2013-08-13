@@ -9,10 +9,10 @@ namespace MMDB.DataService.Web
 {
 	public class DataServicePathProvider : VirtualPathProvider
 	{
-		private DataServiceViewManager ViewManager { get; set; }
+		private IDataServiceViewManager ViewManager { get; set; }
 		public const string CacheKey = "DataServiceViewList";
 
-		public DataServicePathProvider(DataServiceViewManager viewManager)
+		public DataServicePathProvider(IDataServiceViewManager viewManager)
 		{
 			this.ViewManager = viewManager;
 		}

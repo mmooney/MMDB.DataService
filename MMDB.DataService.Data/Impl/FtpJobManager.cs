@@ -14,17 +14,17 @@ using System.Net;
 using FtpLib;
 using System.Collections;
 
-namespace MMDB.DataService.Data
+namespace MMDB.DataService.Data.Impl
 {
 	public class FtpJobManager : IFtpJobManager
 	{
 		private IDocumentSession DocumentSession { get; set; }
-		private ConnectionSettingsManager SettingsManager { get; set; }
+		private IConnectionSettingsManager SettingsManager { get; set; }
 		private IEventReporter EventReporter { get; set; }
 		private IFtpCommunicator FtpCommunicator { get; set; }
 		private IRavenManager RavenManager { get; set; }
 
-		public FtpJobManager(IDocumentSession documentSession, ConnectionSettingsManager settingsManager, IEventReporter eventReporter, IFtpCommunicator ftpCommunicator, IRavenManager ravenManager)
+		public FtpJobManager(IDocumentSession documentSession, IConnectionSettingsManager settingsManager, IEventReporter eventReporter, IFtpCommunicator ftpCommunicator, IRavenManager ravenManager)
 		{
 			this.DocumentSession = documentSession;
 			this.SettingsManager = settingsManager;

@@ -5,9 +5,9 @@ using System.Text;
 using Raven.Client;
 using MMDB.DataService.Data.Dto.Logging;
 
-namespace MMDB.DataService.Data
+namespace MMDB.DataService.Data.Impl
 {
-	public class DataServiceLogger
+	public class DataServiceLogger : IDataServiceLogger
 	{
 		private IDocumentSession DocumentSession { get; set; }
 

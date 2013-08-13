@@ -12,7 +12,7 @@ namespace MMDB.DataService.Data
 		string GetAttachmentString(string attachmentId);
 		void SetAttachment(string attachmentId, string attachmentData);
 		void SetAttachment(string attachmentId, Stream stream);
-
 		void DeleteAttachment(string attachmentId);
+		IEnumerable<Raven.Abstractions.Data.Attachment> GetAttachmentList();
 	}
 }

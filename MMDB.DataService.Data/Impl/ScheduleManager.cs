@@ -8,16 +8,16 @@ using MMDB.DataService.Data.Dto.Jobs;
 using Quartz.Impl;
 using Quartz.Impl.Triggers;
 
-namespace MMDB.DataService.Data
+namespace MMDB.DataService.Data.Impl
 {
-	public class ScheduleManager
+	public class ScheduleManager : IScheduleManager
 	{
 		private IScheduler Scheduler { get; set; }
 		private IJobManager JobManager { get; set; }
-		private EventReporter EventReporter { get; set; }
+		private IEventReporter EventReporter { get; set; }
 		private TypeLoader TypeLoader { get; set; }
 
-		public ScheduleManager(IJobManager jobManager, IScheduler scheduler, EventReporter eventReporter, TypeLoader typeLoader)
+		public ScheduleManager(IJobManager jobManager, IScheduler scheduler, IEventReporter eventReporter, TypeLoader typeLoader)
 		{
 			this.JobManager = jobManager;
 			this.Scheduler = scheduler;

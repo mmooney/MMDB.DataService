@@ -13,9 +13,9 @@ namespace MMDB.DataService.Web.Controllers
 {
     public class EventsController : Controller
     {
-		private DataServiceLogger Logger { get; set; }
+		private IDataServiceLogger Logger { get; set; }
 
-		public EventsController(DataServiceLogger logger)
+		public EventsController(IDataServiceLogger logger)
 		{
 			this.Logger = logger;
 		}

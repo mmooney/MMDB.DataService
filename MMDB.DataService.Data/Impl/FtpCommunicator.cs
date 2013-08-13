@@ -8,14 +8,14 @@ using System.Text;
 using MMDB.DataService.Data.Dto.Ftp;
 using MMDB.DataService.Data.Settings;
 
-namespace MMDB.DataService.Data
+namespace MMDB.DataService.Data.Impl
 {
 	public class FtpCommunicator : IFtpCommunicator
 	{
 		private IEventReporter EventReporter { get; set; }
-		private ConnectionSettingsManager ConnectionSettingsManager { get; set; }
+		private IConnectionSettingsManager ConnectionSettingsManager { get; set; }
 
-		public FtpCommunicator(ConnectionSettingsManager connectionSettingsManager, IEventReporter eventReporter)
+		public FtpCommunicator(IConnectionSettingsManager connectionSettingsManager, IEventReporter eventReporter)
 		{
 			this.ConnectionSettingsManager = connectionSettingsManager;
 			this.EventReporter = eventReporter;

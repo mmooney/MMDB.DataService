@@ -46,8 +46,8 @@ namespace MMDB.DataService.Web
 			RegisterGlobalFilters(GlobalFilters.Filters);
 			RegisterRoutes(RouteTable.Routes);
 
-			var pathProvider = App_Start.NinjectWebCommon.Get<DataServicePathProvider>();
-			HostingEnvironment.RegisterVirtualPathProvider(pathProvider);
+			//var pathProvider = App_Start.NinjectWebCommon.Get<DataServicePathProvider>();
+			//HostingEnvironment.RegisterVirtualPathProvider(pathProvider);
 
 			MvcApplication.NavigationItems.Add(new NavigationItem("Diagnostics", "Events"));
 			MvcApplication.NavigationItems.Add(new NavigationItem("JobManager", "JobManager"));

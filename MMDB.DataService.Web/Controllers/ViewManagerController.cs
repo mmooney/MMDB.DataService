@@ -9,9 +9,9 @@ namespace MMDB.DataService.Web.Controllers
 {
     public class ViewManagerController : Controller
     {
-		private DataServiceViewManager ViewManager { get; set; }
+		private IDataServiceViewManager ViewManager { get; set; }
 
-		public ViewManagerController(DataServiceViewManager viewManager)
+		public ViewManagerController(IDataServiceViewManager viewManager)
 		{
 			this.ViewManager = viewManager;
 		}

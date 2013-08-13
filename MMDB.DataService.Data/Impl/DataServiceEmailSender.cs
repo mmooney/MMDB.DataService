@@ -7,14 +7,14 @@ using MMDB.Data.DataService;
 using MMDB.DataService.Data.Settings;
 using MMDB.RazorEmail;
 
-namespace MMDB.DataService.Data
+namespace MMDB.DataService.Data.Impl
 {
 	public class DataServiceEmailSender : IDataServiceEmailSender
 	{
-		private ConnectionSettingsManager ConnectionSettingsManager { get; set; }
+		private IConnectionSettingsManager ConnectionSettingsManager { get; set; }
 		private RazorEmailEngine EmailEngine { get; set; }
 
-		public DataServiceEmailSender(ConnectionSettingsManager connectionSettingsManger, RazorEmailEngine emailEngine)
+		public DataServiceEmailSender(IConnectionSettingsManager connectionSettingsManger, RazorEmailEngine emailEngine)
 		{
 			this.ConnectionSettingsManager = connectionSettingsManger;
 			this.EmailEngine = emailEngine;

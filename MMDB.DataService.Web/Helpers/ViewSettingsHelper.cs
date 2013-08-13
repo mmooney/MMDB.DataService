@@ -13,7 +13,8 @@ namespace MMDB.DataService.Web.Helpers
 		{
 			get 
 			{
-				var settingsManager = NinjectWebCommon.Get<SettingsManager>();
+				//var settingsManager = NinjectWebCommon.Get<SettingsManager>();
+				var settingsManager = AutofacWebCommon.Get<ISettingsManager>();
 				var settings = settingsManager.TryGet<CoreDataServiceSettings>();
 				if(settings == null)
 				{
@@ -30,7 +31,8 @@ namespace MMDB.DataService.Web.Helpers
 		{
 			get 
 			{
-				var settingsManager = NinjectWebCommon.Get<SettingsManager>();
+				//var settingsManager = NinjectWebCommon.Get<SettingsManager>();
+				var settingsManager = AutofacWebCommon.Get<ISettingsManager>();
 				var settings = settingsManager.TryGet<CoreDataServiceSettings>();
 				if(settings == null)
 				{

@@ -7,7 +7,7 @@ using Raven.Abstractions.Data;
 using Raven.Client;
 using Raven.Client.Indexes;
 
-namespace MMDB.DataService.Data
+namespace MMDB.DataService.Data.Impl
 {
 	public class LogPurger : ILogPurger
 	{

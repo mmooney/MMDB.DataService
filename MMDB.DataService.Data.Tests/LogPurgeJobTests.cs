@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MMDB.DataService.Data.Dto.Logging;
+using MMDB.DataService.Data.Impl;
 using MMDB.DataService.Data.Jobs;
 using Moq;
 using NUnit.Framework;

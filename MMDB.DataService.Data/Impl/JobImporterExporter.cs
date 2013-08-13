@@ -7,7 +7,7 @@ using MMDB.DataService.Data.Dto.Jobs;
 using Raven.Client;
 using Raven.Imports.Newtonsoft.Json;
 
-namespace MMDB.DataService.Data
+namespace MMDB.DataService.Data.Impl
 {
 	public class JobImporterExporter : IJobImporterExporter
 	{

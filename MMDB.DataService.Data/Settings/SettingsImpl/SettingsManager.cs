@@ -5,7 +5,7 @@ using System.Text;
 using MMDB.Shared;
 using Raven.Client;
 
-namespace MMDB.DataService.Data.Settings
+namespace MMDB.DataService.Data.Settings.SettingsImpl
 {
 	public class SettingsManager : ISettingsManager
 	{

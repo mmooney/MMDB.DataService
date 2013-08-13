@@ -8,7 +8,7 @@ using Quartz.Impl;
 using Quartz.Impl.Triggers;
 using Tamir.SharpSsh.java.lang;
 
-namespace MMDB.DataService.Data
+namespace MMDB.DataService.Data.Impl
 {
 	public class JobScheduler : IJobScheduler
 	{

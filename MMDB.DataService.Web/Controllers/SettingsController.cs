@@ -11,9 +11,9 @@ namespace MMDB.DataService.Web.Controllers
 {
     public class SettingsController : Controller
     {
-		private SettingsManager SettingsManager { get; set; }
+		private ISettingsManager SettingsManager { get; set; }
 
-		public SettingsController(SettingsManager settingsManager)
+		public SettingsController(ISettingsManager settingsManager)
 		{
 			this.SettingsManager = settingsManager;
 		}

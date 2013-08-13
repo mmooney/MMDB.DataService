@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using MMDB.DataService.Data.Dto.Logging;
 
-namespace MMDB.DataService.Data
+namespace MMDB.DataService.Data.Impl
 {
 	public class EventReporter : IEventReporter
 	{
-		private DataServiceLogger Logger { get; set; }
-		private ExceptionReporter ExceptionReporter { get; set; }
+		private IDataServiceLogger Logger { get; set; }
+		private IExceptionReporter ExceptionReporter { get; set; }
 
-		public EventReporter(DataServiceLogger logger, ExceptionReporter exceptionReporter)
+		public EventReporter(IDataServiceLogger logger, IExceptionReporter exceptionReporter)
 		{
 			this.Logger = logger;
 			this.ExceptionReporter = exceptionReporter;
