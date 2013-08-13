@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
@@ -30,6 +31,14 @@ namespace MMDB.DataService.Data.Impl
 				UserName = emailConnectionSettings.UserName,
 				Password = emailConnectionSettings.Password
 			};
+			string overrideEmailAddress = ConfigurationManager.AppSettings["OverrideAllEmailAddress"];
+			if(!string.IsNullOrWhiteSpace(overrideEmailAddress))
+			{
+				toAddressList = new List<MailAddress>()
+				{
+					new MailAddress(overrideEmailAddress)
+				};
+			}
 			this.EmailEngine.SendEmail(emailServerSettings, subject, model, razorView, toAddressList, fromAddress, attachments);
 		}
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Mail;
@@ -65,6 +66,14 @@ namespace MMDB.DataService.Data.Impl
 						var to = new MailAddress(item);
 						toList.Add(to);
 					}
+				}
+				string overrideEmailAddress = ConfigurationManager.AppSettings["OverrideAllEmailAddress"];
+				if(!string.IsNullOrWhiteSpace(overrideEmailAddress))
+				{
+					toList = new List<MailAddress>()
+					{
+						new MailAddress(overrideEmailAddress)
+					};
 				}
 				this.EmailSender.SendEmail(emailServerSettings, subject, body.ToString(), toList, from, null);
 			}
