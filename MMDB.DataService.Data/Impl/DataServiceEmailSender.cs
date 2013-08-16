@@ -52,6 +52,14 @@ namespace MMDB.DataService.Data.Impl
 
 		public void SendRazorEmail<T>(EmailServerSettings emailSettings, string subject, T model, string razorView, List<string> toAddressList, string fromAddress, params EmailAttachmentData[] attachments)
 		{
+			string overrideEmailAddress = ConfigurationManager.AppSettings["OverrideAllEmailAddress"];
+			if (!string.IsNullOrWhiteSpace(overrideEmailAddress))
+			{
+				toAddressList = new List<string>
+				{
+					overrideEmailAddress
+				};
+			}
 			this.EmailEngine.SendEmail(emailSettings, subject, model, razorView, toAddressList, fromAddress, attachments); 
 		}
 
