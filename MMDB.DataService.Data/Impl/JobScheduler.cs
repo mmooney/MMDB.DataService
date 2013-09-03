@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using MMDB.DataService.Data.Dto.Jobs;
+using MMDB.DataService.Data.Jobs;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Triggers;
@@ -31,6 +32,9 @@ namespace MMDB.DataService.Data.Impl
 			foreach (var jobDefinition in jobDefintionList)
 			{
 				this.StartJob(jobDefinition);
+//#if DEBUG
+//break;
+//#endif
 			}
 			this.Scheduler.StartDelayed(TimeSpan.FromMilliseconds(100));
 		}
@@ -40,10 +44,14 @@ namespace MMDB.DataService.Data.Impl
 			this.Scheduler.Shutdown(true);
 		}
 
-		public void RunJobNow(int jobID)
+		public void RunJobNow(int jobID, Dictionary<string, string> overrideParams)
 		{
 			var jobDefinition = this.JobManager.GetJobDefinition(jobID);
-			this.StartJob(jobDefinition, runNow: true);
+			if(overrideParams != null)
+			{
+				ApplyOverrideParams(jobDefinition.Configuration, overrideParams);
+			}
+			this.StartJob(jobDefinition, runNow:true);
 			this.Scheduler.Start();
 			Thread.Sleep(1000);
 			while (this.Scheduler.GetCurrentlyExecutingJobs().Count > 0)
@@ -53,7 +61,33 @@ namespace MMDB.DataService.Data.Impl
 			this.StopJobs();
 		}
 
-
+		private void ApplyOverrideParams(JobConfigurationBase configuration, Dictionary<string, string> overrideParams)
+		{
+			foreach(string name in overrideParams.Keys)
+			{
+				var propInfo = configuration.GetType().GetProperty(name);
+				if(propInfo == null)
+				{
+					throw new ArgumentException(string.Format("Unable to override configuration {0} in type {1}, property not found", name, configuration.GetType().FullName));
+				}
+				var type = propInfo.PropertyType;
+				if(type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>))
+				{
+					type = type.GetGenericArguments()[0];
+				}
+				object newValue;
+				if(type == typeof(DateTime))
+				{
+					newValue = DateTime.Parse(overrideParams[name]).ToUniversalTime();
+				}
+				else 
+				{
+					newValue = Convert.ChangeType(overrideParams[name], type);
+				}
+				propInfo.SetValue(configuration, newValue, null);
+			}
+		}
+		
 		private void StartJob(JobDefinition jobDefinition, bool runNow = false)
 		{
 			this.EventReporter.Trace("Creating " + jobDefinition.JobName);

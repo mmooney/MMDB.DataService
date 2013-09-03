@@ -54,16 +54,35 @@ namespace MMDB.DataService.WindowsService
 					int jobID = 0;
 					if(args.Length < 2 || !int.TryParse(args[1], out jobID))
 					{
-						Console.WriteLine("/runjobname [jobid] - jobid must be an integer");
+						throw new ArgumentException("/runjobname [jobid] - jobid must be an integer");
 					}
 					var updater = new ContainerBuilder();
 					updater.RegisterType<ConsoleDataServiceLogger>().As<IDataServiceLogger>();
 					updater.Update(container);
 
+					Dictionary<string,string> overrideParams = new Dictionary<string,string>();
+					for(int i = 2; i < args.Length; i++)
+					{
+						if(!string.IsNullOrEmpty(args[i]))
+						{
+							int index = args[i].IndexOf(':');
+							if(index <= 0)
+							{
+								throw new ArgumentException("Override args must be formatted as name:value");
+							}
+							string name = args[i].Substring(0, index);
+							string value = args[i].Substring(index+1);
+							if(overrideParams.ContainsKey(name))
+							{
+								throw new ArgumentException("Override arg " + name + " defined more than once");
+							}
+							overrideParams.Add(name, value);
+						}
+					}
 					//NinjectBootstrapper.Kernel.Bind<IDataServiceLogger>().To<ConsoleDataServiceLogger>();
 					//var jobScheduler = NinjectBootstrapper.Kernel.Get<IJobScheduler>();
 					var jobScheduler = container.Resolve<IJobScheduler>();
-					jobScheduler.RunJobNow(jobID);
+					jobScheduler.RunJobNow(jobID, overrideParams);
 					System.Environment.Exit(0);
 				}
 				else if (args.Length > 0 && args[0].ToLower() == "/exportjobs")

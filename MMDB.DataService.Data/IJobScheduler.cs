@@ -9,6 +9,6 @@ namespace MMDB.DataService.Data
 	{
 		void StartJobs();
 		void StopJobs();
-		void RunJobNow(int jobID);
+		void RunJobNow(int jobID, Dictionary<string, string> overrideParams);
 	}
 }
