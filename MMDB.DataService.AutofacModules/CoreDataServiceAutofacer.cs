@@ -24,7 +24,7 @@ namespace MMDB.DataService.AutofacModules
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<RavenServerProvider>().As<IRavenProvider>();
+			//builder.RegisterType<RavenServerProvider>().As<raven>();
 			builder.RegisterType<DataServiceEmailSender>().As<IDataServiceEmailSender>();
 			builder.RegisterType<EventReporter>().As<IEventReporter>();
 			builder.RegisterType<FtpCommunicator>().As<IFtpCommunicator>();
@@ -64,7 +64,7 @@ namespace MMDB.DataService.AutofacModules
 					var scheduler = schedulerFactory.GetScheduler();
 					scheduler.JobFactory = ctx.Resolve<IJobFactory>();
 					return scheduler;
-				}).As<IScheduler>().SingleInstance();
+				}).As<IScheduler>();
 		}
 	}
 }

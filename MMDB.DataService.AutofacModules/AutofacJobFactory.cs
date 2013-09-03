@@ -11,12 +11,12 @@ namespace MMDB.DataService.AutofacModules
 {
 	public class AutofacJobFactory : IJobFactory
 	{
-		private IEventReporter EventReporter { get; set; }
+		//private IEventReporter EventReporter { get; set; }
 		private IComponentContext Context { get; set; }
 
-		public AutofacJobFactory(IEventReporter eventReporter, IComponentContext context)
+		public AutofacJobFactory(/*IEventReporter eventReporter, */IComponentContext context)
 		{
-			this.EventReporter = eventReporter;
+			//this.EventReporter = eventReporter;
 			this.Context = context;
 		}
 
@@ -29,7 +29,11 @@ namespace MMDB.DataService.AutofacModules
 			}
 			catch(Exception err)
 			{
-				this.EventReporter.ExceptionForObject(err, bundle.JobDetail);
+				//using(var scope = this.Context.BeginLifetimeScope())
+				//{
+				//	var reporter = scope.Resolve<IEventReporter>();
+				//	reporter.ExceptionForObject(err, bundle.JobDetail);
+				//}
 				throw;
 			}
 		}
