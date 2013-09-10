@@ -24,7 +24,10 @@ namespace MMDB.DataService.AutofacModules
 		{
 			try 
 			{
-				var x = this.Context.Resolve(bundle.JobDetail.JobType);
+				var genericType = typeof(AutofacJobWrapper<>);
+				Type[] typeArgs = { bundle.JobDetail.JobType };
+				var actualType = genericType.MakeGenericType(typeArgs);
+				var x = this.Context.Resolve(actualType);
 				return (IJob)x;
 			}
 			catch(Exception err)

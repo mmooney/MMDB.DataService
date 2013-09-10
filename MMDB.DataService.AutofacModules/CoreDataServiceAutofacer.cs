@@ -56,6 +56,7 @@ namespace MMDB.DataService.AutofacModules
 			builder.Register(ctx=>RavenHelper.CreateDocumentStore()).As<IDocumentStore>().SingleInstance();
 			builder.Register(ctx=>ctx.Resolve<IDocumentStore>().OpenSession()).As<IDocumentSession>();
 
+			builder.RegisterGeneric(typeof(AutofacJobWrapper<>)); 
 			builder.RegisterType<StdSchedulerFactory>().As<ISchedulerFactory>();
 			builder.RegisterType<AutofacJobFactory>().As<IJobFactory>();
 			builder.Register(ctx=>

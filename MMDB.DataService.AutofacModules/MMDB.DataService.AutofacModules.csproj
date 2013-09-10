@@ -74,10 +74,17 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Whitebox">
+      <HintPath>..\packages\Whitebox.0.1.1.6\lib\NET40\Whitebox.dll</HintPath>
+    </Reference>
+    <Reference Include="Whitebox.Containers.Autofac">
+      <HintPath>..\packages\Whitebox.Autofac.0.1.1.6\lib\NET40\Whitebox.Containers.Autofac.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutofacBuilder.cs" />
     <Compile Include="AutofacJobFactory.cs" />
+    <Compile Include="AutofacJobWrapper.cs" />
     <Compile Include="CoreDataServiceAutofacer.cs" />
     <Compile Include="DataServiceAutofacModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
