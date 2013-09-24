@@ -18,7 +18,7 @@ namespace MMDB.DataService.AutofacModules
 				var coreAutofacer = new CoreDataServiceAutofacer();
 				builder.RegisterModule(coreAutofacer);
 
-				builder.RegisterModule(new Whitebox.Containers.Autofac.WhiteboxProfilingModule());
+				//builder.RegisterModule(new Whitebox.Containers.Autofac.WhiteboxProfilingModule());
 
 				var processedTypes = new List<Type>
 				{
