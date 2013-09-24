@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Autofac.Features.OwnedInstances;
@@ -18,10 +19,18 @@ namespace MMDB.DataService.AutofacModules
 
 		public void Execute(IJobExecutionContext context)
 		{
-			using (var ownedJob = _jobFactory())
+			try 
 			{
-				var theJob = ownedJob.Value;
-				theJob.Execute(context);
+				using (var ownedJob = _jobFactory())
+				{
+					var theJob = ownedJob.Value;
+					theJob.Execute(context);
+				}
+			}
+			catch(Exception err)
+			{
+				Debug.WriteLine(err.ToString());
+				throw;
 			}
 		}
 	}

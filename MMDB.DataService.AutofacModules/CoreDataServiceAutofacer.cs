@@ -47,6 +47,7 @@ namespace MMDB.DataService.AutofacModules
 			builder.RegisterType<FtpDownloadJob>().AsSelf();
 			builder.RegisterType<FtpUploadJob>().AsSelf();
 			builder.RegisterType<LogPurgeJob>().AsSelf();
+			builder.RegisterType<GCFlushJob>().AsSelf();
 
 			builder.RegisterGeneric(typeof(JobWrapper<,>)).AsSelf();
 

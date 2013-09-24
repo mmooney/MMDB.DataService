@@ -110,6 +110,7 @@
     <Compile Include="Impl\JobImporterExporter.cs" />
     <Compile Include="Impl\JobScheduler.cs" />
     <Compile Include="Impl\LogPurger.cs" />
+    <Compile Include="Jobs\GCFlushJob.cs" />
     <Compile Include="Metadata\IDataObjectManager.cs" />
     <Compile Include="Metadata\IDataServiceViewManager.cs" />
     <Compile Include="Metadata\MetadataImpl\CustomControllerManager.cs" />

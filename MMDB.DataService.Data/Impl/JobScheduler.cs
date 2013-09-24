@@ -53,7 +53,7 @@ namespace MMDB.DataService.Data.Impl
 			}
 			this.StartJob(jobDefinition, runNow:true);
 			this.Scheduler.Start();
-			Thread.Sleep(1000);
+			Thread.Sleep(5000);
 			while (this.Scheduler.GetCurrentlyExecutingJobs().Count > 0)
 			{
 				Thread.Sleep(100);
