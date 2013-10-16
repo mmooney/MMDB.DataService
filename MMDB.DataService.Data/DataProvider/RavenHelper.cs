@@ -15,35 +15,43 @@ namespace MMDB.DataService.Data.DataProvider
 	{
 		public static IDocumentStore CreateDocumentStore()
 		{
-			ServiceStartupLogger.LogMessage("Start RavenHelper.CreateDocumentStore, creating document store");
-			var documentStore = new DocumentStore
+			try 
 			{
-				ConnectionStringName = "RavenDB",
-				Conventions =
+				ServiceStartupLogger.LogMessage("Start RavenHelper.CreateDocumentStore, creating document store");
+				var documentStore = new DocumentStore
 				{
-					FindTypeTagName = type =>
+					ConnectionStringName = "RavenDB",
+					Conventions =
 					{
-						if (typeof(SettingsBase).IsAssignableFrom(type))
+						FindTypeTagName = type =>
 						{
-							return "SettingsBases";
-						}
-						if (typeof(ConnectionSettingBase).IsAssignableFrom(type))
-						{
-							return "ConnectionSettingBases";
-						}
-						return DocumentConvention.DefaultTypeTagName(type);
-					},
-					MaxNumberOfRequestsPerSession = AppSettingsHelper.GetIntSetting("RavenMaxNumberOfRequestsPerSession", 3000)
-				}
-			};
-			ServiceStartupLogger.LogMessage("RavenHelper.CreateDocumentStore, calling Initialize");
-			documentStore.Initialize();
-			ServiceStartupLogger.LogMessage("RavenHelper.CreateDocumentStore, creating indexes");
-			IndexCreation.CreateIndexes(typeof(MMDB.DataService.Data.Jobs.DataServiceJobBase<>).Assembly, documentStore);
-			ServiceStartupLogger.LogMessage("RavenHelper.CreateDocumentStore, diabling all caching");
-			documentStore.DatabaseCommands.DisableAllCaching();
-			ServiceStartupLogger.LogMessage("Done RavenHelper.CreateDocumentStore");
-			return documentStore;
+							if (typeof(SettingsBase).IsAssignableFrom(type))
+							{
+								return "SettingsBases";
+							}
+							if (typeof(ConnectionSettingBase).IsAssignableFrom(type))
+							{
+								return "ConnectionSettingBases";
+							}
+							return DocumentConvention.DefaultTypeTagName(type);
+						},
+						MaxNumberOfRequestsPerSession = AppSettingsHelper.GetIntSetting("RavenMaxNumberOfRequestsPerSession", 3000)
+					}
+				};
+				ServiceStartupLogger.LogMessage("RavenHelper.CreateDocumentStore, calling Initialize");
+				documentStore.Initialize();
+				ServiceStartupLogger.LogMessage("RavenHelper.CreateDocumentStore, creating indexes");
+				IndexCreation.CreateIndexes(typeof(MMDB.DataService.Data.Jobs.DataServiceJobBase<>).Assembly, documentStore);
+				ServiceStartupLogger.LogMessage("RavenHelper.CreateDocumentStore, diabling all caching");
+				documentStore.DatabaseCommands.DisableAllCaching();
+				ServiceStartupLogger.LogMessage("Done RavenHelper.CreateDocumentStore");
+				return documentStore;
+			}
+			catch(Exception err)
+			{
+				ServiceStartupLogger.LogMessage("RavenHelper.CreateDocumentStore error: " + err.ToString());
+				throw;
+			}
 		}
 	}
 }
