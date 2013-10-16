@@ -135,6 +135,7 @@
     <Compile Include="MMDBJsonHelper.cs" />
     <Compile Include="NavigationItem.cs" />
     <Compile Include="Impl\RavenManager.cs" />
+    <Compile Include="ServiceStartupLogger.cs" />
     <Compile Include="Settings\EmailConnectionSettings.cs" />
     <Compile Include="Settings\FtpConnectionSettings.cs" />
     <Compile Include="Dto\Jobs\JobCronSchedule.cs" />

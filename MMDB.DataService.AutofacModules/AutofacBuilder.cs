@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Autofac;
+using MMDB.DataService.Data;
 
 namespace MMDB.DataService.AutofacModules
 {
@@ -14,6 +15,7 @@ namespace MMDB.DataService.AutofacModules
 		{
 			try 
 			{
+				ServiceStartupLogger.LogMessage("Start AutofacBuilder.SetupAll");
 				//Do me first
 				var coreAutofacer = new CoreDataServiceAutofacer();
 				builder.RegisterModule(coreAutofacer);
@@ -64,10 +66,12 @@ namespace MMDB.DataService.AutofacModules
 						}
 					}
 				}
+				ServiceStartupLogger.LogMessage("End AutofacBuilder.SetupAll");
 			}
 			catch(Exception err)
 			{
 				string x= err.ToString();
+				ServiceStartupLogger.LogMessage("Error in AutofacBuilder.SetupAll: " + x);
 				throw;
 			}
 		}

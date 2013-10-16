@@ -15,6 +15,7 @@ namespace MMDB.DataService.Data.DataProvider
 	{
 		public static IDocumentStore CreateDocumentStore()
 		{
+			ServiceStartupLogger.LogMessage("Start RavenHelper.CreateDocumentStore, creating document store");
 			var documentStore = new DocumentStore
 			{
 				ConnectionStringName = "RavenDB",
@@ -34,9 +35,14 @@ namespace MMDB.DataService.Data.DataProvider
 					},
 					MaxNumberOfRequestsPerSession = AppSettingsHelper.GetIntSetting("RavenMaxNumberOfRequestsPerSession", 3000)
 				}
-			}.RegisterListener(new UniqueConstraintsStoreListener()).Initialize();
+			};
+			ServiceStartupLogger.LogMessage("RavenHelper.CreateDocumentStore, calling Initialize");
+			documentStore.Initialize();
+			ServiceStartupLogger.LogMessage("RavenHelper.CreateDocumentStore, creating indexes");
 			IndexCreation.CreateIndexes(typeof(MMDB.DataService.Data.Jobs.DataServiceJobBase<>).Assembly, documentStore);
+			ServiceStartupLogger.LogMessage("RavenHelper.CreateDocumentStore, diabling all caching");
 			documentStore.DatabaseCommands.DisableAllCaching();
+			ServiceStartupLogger.LogMessage("Done RavenHelper.CreateDocumentStore");
 			return documentStore;
 		}
 	}

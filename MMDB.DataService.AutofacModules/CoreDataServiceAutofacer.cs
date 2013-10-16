@@ -24,6 +24,7 @@ namespace MMDB.DataService.AutofacModules
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
+			ServiceStartupLogger.LogMessage("Start CoreDataServiceAutofacter.Load");
 			//builder.RegisterType<RavenServerProvider>().As<raven>();
 			builder.RegisterType<DataServiceEmailSender>().As<IDataServiceEmailSender>();
 			builder.RegisterType<EventReporter>().As<IEventReporter>();
@@ -54,19 +55,37 @@ namespace MMDB.DataService.AutofacModules
 			builder.RegisterType<EmailSender>().AsSelf();
 			builder.RegisterType<RazorEmailEngine>().AsSelf();
 
-			builder.Register(ctx=>RavenHelper.CreateDocumentStore()).As<IDocumentStore>().SingleInstance();
-			builder.Register(ctx=>ctx.Resolve<IDocumentStore>().OpenSession()).As<IDocumentSession>();
+			builder.Register(ctx =>
+			{
+				ServiceStartupLogger.LogMessage("Resolving IDocumentSession");
+				var store = RavenHelper.CreateDocumentStore();
+				ServiceStartupLogger.LogMessage("Done Resolving IDocumentSession");
+				return store;
+			}
+			).As<IDocumentStore>().SingleInstance();
+			builder.Register(ctx=>
+			{
+				ServiceStartupLogger.LogMessage("Resolving IDocumentSession, getting IDocumentStore");
+				var store = ctx.Resolve<IDocumentStore>();
+				ServiceStartupLogger.LogMessage("Resolving IDocumentSession, got IDocumentStore, calling open session");
+				var session = ctx.Resolve<IDocumentStore>().OpenSession();
+				ServiceStartupLogger.LogMessage("Done Resolving IDocumentSession");
+				return session;
+			}).As<IDocumentSession>();
 
 			builder.RegisterGeneric(typeof(AutofacJobWrapper<>)); 
 			builder.RegisterType<StdSchedulerFactory>().As<ISchedulerFactory>();
 			builder.RegisterType<AutofacJobFactory>().As<IJobFactory>();
 			builder.Register(ctx=>
 				{
+					ServiceStartupLogger.LogMessage("Resolving IScheduler");
 					var schedulerFactory = ctx.Resolve<ISchedulerFactory>();
 					var scheduler = schedulerFactory.GetScheduler();
 					scheduler.JobFactory = ctx.Resolve<IJobFactory>();
+					ServiceStartupLogger.LogMessage("Done Resolving IScheduler");
 					return scheduler;
 				}).As<IScheduler>();
+			ServiceStartupLogger.LogMessage("End CoreDataServiceAutofacter.Load");
 		}
 	}
 }

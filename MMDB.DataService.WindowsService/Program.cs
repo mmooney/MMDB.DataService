@@ -28,13 +28,13 @@ namespace MMDB.DataService.WindowsService
 			try
 			{
 				Console.WriteLine("Starting MMDB.DataService.WindowsService");
-				//Console.WriteLine("\t-Initializing Ninject...");
-				//NinjectBootstrapper.Initialize();
-				//Console.WriteLine("\t-Ninject initialization complete...");
+				ServiceStartupLogger.LogMessage("Starting MMDB.DataService.WindowsService");
+
 				var builder = new ContainerBuilder();
 				AutofacBuilder.SetupAll(builder);
 				builder.RegisterType<WinService>().AsSelf();
 				var container = builder.Build();
+				ServiceStartupLogger.LogMessage("Done building autofac container");
 			
 				if (args.Length > 0 && args[0].ToLower() == "/debug")
 				{
