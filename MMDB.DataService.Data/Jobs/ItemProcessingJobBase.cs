@@ -52,6 +52,7 @@ namespace MMDB.DataService.Data.Jobs
 					catch (Exception err)
 					{
 						this.MarkItemFailed(jobData, err);
+                        this.EventReporter.ExceptionForObject(err, jobData);
 					}
 				}
 			}
