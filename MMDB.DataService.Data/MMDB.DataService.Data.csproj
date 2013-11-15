@@ -93,6 +93,7 @@
   <ItemGroup>
     <Compile Include="AssemblyManager.cs" />
     <Compile Include="BaseCustomController.cs" />
+    <Compile Include="Dto\Jobs\JobException.cs" />
     <Compile Include="Impl\DataServiceEmailSender.cs" />
     <Compile Include="Impl\FtpCommunicator.cs" />
     <Compile Include="IConnectionSettingsManager.cs" />

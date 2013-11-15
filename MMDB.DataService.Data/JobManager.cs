@@ -305,10 +305,10 @@ namespace MMDB.DataService.Data
 					existingJob.Schedule = newJob.Schedule;
 					existingJob.Configuration = newJob.Configuration;
 					var newJson = Raven.Imports.Newtonsoft.Json.JsonConvert.SerializeObject(existingJob);
-					if(oldJson != newJson)
-					{
-						int i = 0;
-					}
+                    //if(oldJson != newJson)
+                    //{
+                    //    int i = 0;
+                    //}
 				}
 				this.DocumentSession.SaveChanges();
 			}

@@ -188,6 +188,7 @@ namespace MMDB.DataService.Data.Impl
 		{
 			var errorObject = this.EventReporter.ExceptionForObject(err, jobData);
 			jobData.Status = EnumJobStatus.Error;
+            jobData.AddException(err);
 			jobData.ExceptionIdList.Add(errorObject.Id);
 			this.DocumentSession.SaveChanges();	
 		}
