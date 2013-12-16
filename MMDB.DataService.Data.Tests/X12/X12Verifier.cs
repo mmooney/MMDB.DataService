@@ -15,7 +15,7 @@ namespace MMDB.DataService.Data.Tests.X12
 			this.LineSeperators = lineSeperators;
 		}
 
-		public void VerifyLine(string expectedData, string actualData, string segmentID, IEnumerable<string> preceedingTags = null, int expectedOccurance = 0)
+		public void VerifyLine(string expectedData, string actualData, string segmentID, IEnumerable<string> preceedingTags = null, int expectedOccurance = 0, char fieldSeperator='*')
 		{
 			Assert.IsNotNullOrEmpty(actualData);
 			string[] arrLines = actualData.Split(this.LineSeperators, StringSplitOptions.RemoveEmptyEntries);
@@ -26,12 +26,12 @@ namespace MMDB.DataService.Data.Tests.X12
 				if(preceedingQueue.Count > 0)
 				{
 					string nextExpectedTag = preceedingQueue.Peek();
-					if(line.StartsWith(nextExpectedTag + "*"))
+					if(line.StartsWith(nextExpectedTag + fieldSeperator))
 					{
 						preceedingQueue.Dequeue();
 					}
 				}
-				if(line.StartsWith(segmentID + "*"))
+                if (line.StartsWith(segmentID + fieldSeperator))
 				{
 					if(expectedOccurance == actualOccurances)
 					{
