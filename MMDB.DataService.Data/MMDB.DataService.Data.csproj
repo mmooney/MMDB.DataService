@@ -44,26 +44,31 @@
     <Reference Include="ftplib">
       <HintPath>..\packages\ftplib.1.0.1.2\lib\net35\ftplib.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CompilerServices.AsyncTargetingPack.Net4, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.CompilerServices.AsyncTargetingPack.1.0.1\lib\net40\Microsoft.CompilerServices.AsyncTargetingPack.Net4.dll</HintPath>
+    </Reference>
     <Reference Include="MMDB.RazorEmail">
       <HintPath>..\packages\MMDB.RazorEmail.1.0.0.7\lib\net40\MMDB.RazorEmail.dll</HintPath>
     </Reference>
     <Reference Include="MMDB.Shared">
       <HintPath>..\packages\MMDB.Shared.2.0.0.18\lib\net35\MMDB.Shared.dll</HintPath>
     </Reference>
+    <Reference Include="PagedList, Version=1.17.0.0, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\PagedList.1.17.0.0\lib\net40\PagedList.dll</HintPath>
+    </Reference>
     <Reference Include="Quartz, Version=2.1.2.400, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Quartz.2.1.2\lib\net40\Quartz.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+    <Reference Include="Raven.Abstractions, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Abstractions.dll</HintPath>
+      <HintPath>..\packages\RavenDB.Client.2.5.2750\lib\net40\Raven.Abstractions.dll</HintPath>
     </Reference>
-    <Reference Include="Raven.Client.Lightweight, Version=2.0.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
+    <Reference Include="Raven.Client.Lightweight, Version=2.5.0.0, Culture=neutral, PublicKeyToken=37f41c7f99471593, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\RavenDB.Client.2.0.2261\lib\net40\Raven.Client.Lightweight.dll</HintPath>
-    </Reference>
-    <Reference Include="Raven.Client.UniqueConstraints">
-      <HintPath>..\packages\RavenDB.Client.UniqueConstraints.2.0.2261\lib\net40\Raven.Client.UniqueConstraints.dll</HintPath>
+      <HintPath>..\packages\RavenDB.Client.2.5.2750\lib\net40\Raven.Client.Lightweight.dll</HintPath>
     </Reference>
     <Reference Include="RazorEngine">
       <HintPath>..\packages\RazorEngine.2.1\lib\.NetFramework 4.0\RazorEngine.dll</HintPath>
@@ -94,6 +99,8 @@
     <Compile Include="AssemblyManager.cs" />
     <Compile Include="BaseCustomController.cs" />
     <Compile Include="Dto\Jobs\JobException.cs" />
+    <Compile Include="Dto\ListOptions.cs" />
+    <Compile Include="Dto\PagedSortedList.cs" />
     <Compile Include="Impl\DataServiceEmailSender.cs" />
     <Compile Include="Impl\FtpCommunicator.cs" />
     <Compile Include="IConnectionSettingsManager.cs" />
@@ -136,6 +143,7 @@
     <Compile Include="MMDBJsonHelper.cs" />
     <Compile Include="NavigationItem.cs" />
     <Compile Include="Impl\RavenManager.cs" />
+    <Compile Include="RavenQueryExtensions.cs" />
     <Compile Include="ServiceStartupLogger.cs" />
     <Compile Include="Settings\EmailConnectionSettings.cs" />
     <Compile Include="Settings\FtpConnectionSettings.cs" />

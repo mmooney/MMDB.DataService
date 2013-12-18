@@ -7,7 +7,6 @@ using MMDB.Shared;
 using Raven.Client;
 using Raven.Client.Document;
 using Raven.Client.Indexes;
-using Raven.Client.UniqueConstraints;
 
 namespace MMDB.DataService.Data.DataProvider
 {
