@@ -93,6 +93,17 @@ namespace Raven.Client
             return returnValue;
         }
 
+        public static T LoadEnsureNoCache<T>(this IDocumentSession documentSession, int id)
+        {
+            var returnValue = documentSession.Load<T>(id);
+            if (returnValue == null)
+            {
+                throw new RecordNotFoundException(typeof(T), "Id", id);
+            }
+            documentSession.Advanced.Evict(returnValue);
+            return returnValue;
+        }
+
         public static T StoreSaveEvict<T>(this IDocumentSession documentSession, T data)
         {
             documentSession.Store(data);
