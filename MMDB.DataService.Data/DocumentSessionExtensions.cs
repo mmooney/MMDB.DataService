@@ -78,6 +78,16 @@ namespace Raven.Client
             return returnValue;
         }
 
+        public static T LoadEnsure<T>(this IDocumentSession documentSession, int id)
+        {
+            var returnValue = documentSession.Load<T>(id);
+            if (returnValue == null)
+            {
+                throw new RecordNotFoundException(typeof(T), id);
+            }
+            return returnValue;
+        }
+
         public static T LoadEnsureNoCache<T>(this IDocumentSession documentSession, string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -98,7 +108,7 @@ namespace Raven.Client
             var returnValue = documentSession.Load<T>(id);
             if (returnValue == null)
             {
-                throw new RecordNotFoundException(typeof(T), "Id", id);
+                throw new RecordNotFoundException(typeof(T), id);
             }
             documentSession.Advanced.Evict(returnValue);
             return returnValue;

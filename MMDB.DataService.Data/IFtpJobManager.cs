@@ -16,5 +16,7 @@ namespace MMDB.DataService.Data
 		void MarkItemFailed(FtpOutboundData jobData, Exception err);
 		FtpOutboundData QueueUploadItem(string fileData, string targetDirectory, string targetFileName, string ftpSettingsKey, EnumSettingSource ftpSettingsSource);
 		List<FtpDownloadMetadata> GetAvailableDownloadList(FtpDownloadSettings ftpDownloadSettings);
-	}
+
+        FtpOutboundData GetOutboundData(int id);
+    }
 }

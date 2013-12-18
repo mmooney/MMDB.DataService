@@ -18,19 +18,19 @@ namespace MMDB.DataService.Data.Impl
 {
 	public class FtpJobManager : IFtpJobManager
 	{
-		private IDocumentSession DocumentSession { get; set; }
-		private IConnectionSettingsManager SettingsManager { get; set; }
-		private IEventReporter EventReporter { get; set; }
-		private IFtpCommunicator FtpCommunicator { get; set; }
-		private IRavenManager RavenManager { get; set; }
+        private readonly IDocumentSession _documentSession;
+        private readonly IConnectionSettingsManager _settingsManager;
+        private readonly IEventReporter _eventReporter;
+        private readonly IFtpCommunicator _ftpCommunicator;
+		private readonly IRavenManager _ravenManager;
 
 		public FtpJobManager(IDocumentSession documentSession, IConnectionSettingsManager settingsManager, IEventReporter eventReporter, IFtpCommunicator ftpCommunicator, IRavenManager ravenManager)
 		{
-			this.DocumentSession = documentSession;
-			this.SettingsManager = settingsManager;
-			this.EventReporter = eventReporter;
-			this.FtpCommunicator = ftpCommunicator;
-			this.RavenManager = ravenManager;
+			_documentSession = documentSession;
+			_settingsManager = settingsManager;
+			_eventReporter = eventReporter;
+			_ftpCommunicator = ftpCommunicator;
+			_ravenManager = ravenManager;
 		}
 
 		public FtpOutboundData GetNextUploadItem()
@@ -38,22 +38,22 @@ namespace MMDB.DataService.Data.Impl
 			FtpOutboundData returnValue;
 			using(var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel=IsolationLevel.Serializable }))
 			{
-				returnValue = this.DocumentSession.Query<FtpOutboundData>()
+				returnValue = _documentSession.Query<FtpOutboundData>()
 													.Customize(i => i.WaitForNonStaleResultsAsOfNow(TimeSpan.FromSeconds(120)))
 													.OrderByDescending(i => i.QueuedDateTimeUtc)
 													.FirstOrDefault(i => i.Status == EnumJobStatus.New);
 				if(returnValue != null)
 				{
-					returnValue = this.DocumentSession.Load<FtpOutboundData>(returnValue.Id);
+					returnValue = _documentSession.Load<FtpOutboundData>(returnValue.Id);
 					if (returnValue.Status != EnumJobStatus.New)
 					{
-						this.EventReporter.WarningForObject("FtpOutboundData was returned as New from query but was really " + returnValue.Status.ToString(), returnValue);
+						_eventReporter.WarningForObject("FtpOutboundData was returned as New from query but was really " + returnValue.Status.ToString(), returnValue);
 						return null;
 					}
 					else 
 					{
 						returnValue.Status = EnumJobStatus.InProcess;
-						this.DocumentSession.SaveChanges();
+						_documentSession.SaveChanges();
 						transaction.Complete();
 					}
 				}
@@ -67,7 +67,7 @@ namespace MMDB.DataService.Data.Impl
 
 			using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
 			{
-				bool anyExistingItems = this.DocumentSession.Query<FtpOutboundData>()
+				bool anyExistingItems = _documentSession.Query<FtpOutboundData>()
 											.Customize(i => i.WaitForNonStaleResultsAsOfNow(TimeSpan.FromSeconds(120)))
 											.Where(i=>i.TargetFileName == targetFileName)
 											.Any();
@@ -75,7 +75,7 @@ namespace MMDB.DataService.Data.Impl
 				{
 					throw new Exception(string.Format("FtpOutputData record for file name {0} already exists", targetFileName));
 				}
-				this.RavenManager.SetAttachment(attachmentID, fileData);
+				_ravenManager.SetAttachment(attachmentID, fileData);
 				var newItem = new FtpOutboundData
 				{
 					AttachmentId = attachmentID,
@@ -86,8 +86,8 @@ namespace MMDB.DataService.Data.Impl
 					TargetDirectory = targetDirectory,
 					TargetFileName = targetFileName
 				};
-				this.DocumentSession.Store(newItem);
-				this.DocumentSession.SaveChanges();
+				_documentSession.Store(newItem);
+				_documentSession.SaveChanges();
 				transaction.Complete();
 
 				return newItem;
@@ -104,7 +104,7 @@ namespace MMDB.DataService.Data.Impl
 			}
 			foreach(string pattern in patternList)
 			{
-				var list = this.FtpCommunicator.GetFileList(ftpDownloadSettings.SettingSource, ftpDownloadSettings.SettingKey, ftpDownloadSettings.DownloadDirectory, pattern);
+				var list = _ftpCommunicator.GetFileList(ftpDownloadSettings.SettingSource, ftpDownloadSettings.SettingKey, ftpDownloadSettings.DownloadDirectory, pattern);
 				if(list != null && list.Count > 0)
 				{
 					foreach(string fileName in list)
@@ -149,11 +149,11 @@ namespace MMDB.DataService.Data.Impl
 			string tempPath = Path.Combine(tempDirectory, Guid.NewGuid().ToString() + "." + item.FileName);
 			try
 			{
-				this.FtpCommunicator.DownloadFile(item.Settings.SettingSource, item.Settings.SettingKey, ftpFilePath, tempPath);
+				_ftpCommunicator.DownloadFile(item.Settings.SettingSource, item.Settings.SettingKey, ftpFilePath, tempPath);
 				string attachmentID = Guid.NewGuid().ToString();
 				using(FileStream stream = new FileStream(tempPath, FileMode.Open))
 				{
-					this.RavenManager.SetAttachment(attachmentID, stream);
+					_ravenManager.SetAttachment(attachmentID, stream);
 				}
 				return attachmentID;
 			}
@@ -173,24 +173,24 @@ namespace MMDB.DataService.Data.Impl
 
 		public void UploadFile(FtpOutboundData jobItem)
 		{
-			var settings = this.SettingsManager.Load<FtpConnectionSettings>(jobItem.SettingSource, jobItem.SettingKey);
-			var attachmentData = this.RavenManager.GetAttachment(jobItem.AttachmentId);
-			this.FtpCommunicator.UploadFile(jobItem.SettingSource, jobItem.SettingKey, jobItem.TargetFileName, jobItem.TargetDirectory, attachmentData);
+			var settings = _settingsManager.Load<FtpConnectionSettings>(jobItem.SettingSource, jobItem.SettingKey);
+			var attachmentData = _ravenManager.GetAttachment(jobItem.AttachmentId);
+			_ftpCommunicator.UploadFile(jobItem.SettingSource, jobItem.SettingKey, jobItem.TargetFileName, jobItem.TargetDirectory, attachmentData);
 		}
 
 		public void MarkItemSuccessful(FtpOutboundData jobData)
 		{
 			jobData.Status = EnumJobStatus.Complete;
-			this.DocumentSession.SaveChanges();
+			_documentSession.SaveChanges();
 		}
 
 		public void MarkItemFailed(FtpOutboundData jobData, Exception err)
 		{
-			var errorObject = this.EventReporter.ExceptionForObject(err, jobData);
+			var errorObject = _eventReporter.ExceptionForObject(err, jobData);
 			jobData.Status = EnumJobStatus.Error;
             jobData.AddException(err);
 			jobData.ExceptionIdList.Add(errorObject.Id);
-			this.DocumentSession.SaveChanges();	
+			_documentSession.SaveChanges();	
 		}
 
 		public FtpInboundData TryCreateJobData(FtpDownloadMetadata item, out bool jobAlreadyExisted)
@@ -200,7 +200,7 @@ namespace MMDB.DataService.Data.Impl
 			{
 				using (var transaction = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
 				{
-					returnValue = this.DocumentSession.Query<FtpInboundData>()
+					returnValue = _documentSession.Query<FtpInboundData>()
 														.Customize(i => i.WaitForNonStaleResultsAsOfLastWrite(TimeSpan.FromSeconds(120)))
 														.SingleOrDefault(i => i.Directory == item.Directory && i.FileName == item.FileName);
 					if (returnValue == null)
@@ -215,8 +215,8 @@ namespace MMDB.DataService.Data.Impl
 						};
 						jobAlreadyExisted = false;
 
-						this.DocumentSession.Store(returnValue);
-						this.DocumentSession.SaveChanges();
+						_documentSession.Store(returnValue);
+						_documentSession.SaveChanges();
 						transaction.Complete();
 					}
 					else
@@ -237,10 +237,16 @@ namespace MMDB.DataService.Data.Impl
 				};
 				jobAlreadyExisted = false;
 
-				this.DocumentSession.Store(returnValue);
-				this.DocumentSession.SaveChanges();
+				_documentSession.Store(returnValue);
+				_documentSession.SaveChanges();
 			}
 			return returnValue;
 		}
-	}
+
+
+        public FtpOutboundData GetOutboundData(int id)
+        {
+            return _documentSession.LoadEnsureNoCache<FtpOutboundData>(id);
+        }
+    }
 }
