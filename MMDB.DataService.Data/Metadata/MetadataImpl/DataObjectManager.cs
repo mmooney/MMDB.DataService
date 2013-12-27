@@ -11,9 +11,9 @@ namespace MMDB.DataService.Data.Metadata.MetadataImpl
 	public class DataObjectManager : IDataObjectManager
 	{
 		private IDocumentSession DocumentSession { get; set; }
-		private TypeLoader TypeLoader { get; set; }
+		private ITypeLoader TypeLoader { get; set; }
 
-		public DataObjectManager(IDocumentSession documentSession, TypeLoader typeLoader)
+		public DataObjectManager(IDocumentSession documentSession, ITypeLoader typeLoader)
 		{
 			this.DocumentSession = documentSession;
 			this.TypeLoader = typeLoader;

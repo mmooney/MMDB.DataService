@@ -18,5 +18,6 @@ namespace MMDB.DataService.Data
 		List<FtpDownloadMetadata> GetAvailableDownloadList(FtpDownloadSettings ftpDownloadSettings);
 
         FtpOutboundData GetOutboundData(int id);
+        FtpInboundData GetInboundData(int id);
     }
 }

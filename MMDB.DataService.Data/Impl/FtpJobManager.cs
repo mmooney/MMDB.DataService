@@ -248,5 +248,10 @@ namespace MMDB.DataService.Data.Impl
         {
             return _documentSession.LoadEnsureNoCache<FtpOutboundData>(id);
         }
+
+        public FtpInboundData GetInboundData(int id)
+        {
+            return _documentSession.LoadEnsureNoCache<FtpInboundData>(id);
+        }
     }
 }
