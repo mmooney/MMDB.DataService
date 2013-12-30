@@ -39,7 +39,20 @@ namespace MMDB.DataService.Data.Impl
 					new MailAddress(overrideEmailAddress)
 				};
 			}
-			this.EmailEngine.SendEmail(emailServerSettings, subject, model, razorView, toAddressList, fromAddress, attachments);
+            try 
+            {
+    			this.EmailEngine.SendEmail(emailServerSettings, subject, model, razorView, toAddressList, fromAddress, attachments);
+            }
+            catch(RazorEngine.Templating.TemplateCompilationException ex)
+            {
+                var sb = new StringBuilder();
+                sb.AppendLine("Error(s) compiling template for email: ");
+                foreach(var item in ex.Errors)
+                {
+                    sb.AppendLine("-" + item.Line.ToString() + ": " + item.ErrorText);
+                }
+                throw new Exception(sb.ToString(), ex);
+            }
 		}
 
 		public void SendRazorEmail<T>(EnumSettingSource settingsSource, string settingsKey, string subject, T model, string razorView, List<string> toAddressList, string fromAddress, params EmailAttachmentData[] attachments)
