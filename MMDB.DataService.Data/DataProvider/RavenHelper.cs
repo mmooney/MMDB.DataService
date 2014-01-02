@@ -34,7 +34,7 @@ namespace MMDB.DataService.Data.DataProvider
 							}
 							return DocumentConvention.DefaultTypeTagName(type);
 						},
-						MaxNumberOfRequestsPerSession = AppSettingsHelper.GetIntSetting("RavenMaxNumberOfRequestsPerSession", 3000)
+						MaxNumberOfRequestsPerSession = AppSettingsHelper.GetIntSetting("RavenMaxNumberOfRequestsPerSession", 30000)
 					}
 				};
 				ServiceStartupLogger.LogMessage("RavenHelper.CreateDocumentStore, calling Initialize");
