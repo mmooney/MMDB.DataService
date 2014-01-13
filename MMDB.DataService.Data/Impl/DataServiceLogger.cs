@@ -31,8 +31,8 @@ namespace MMDB.DataService.Data.Impl
 				MessageDateTimeUtc = DateTime.UtcNow,
 				DataObjectJson = (dataObject!=null) ? dataObject.ToJson() : null
 			};
-			this.DocumentSession.Store(traceMessage);
-			this.DocumentSession.SaveChanges();
+            //this.DocumentSession.Store(traceMessage);
+            this.DocumentSession.SaveChanges();
 			return traceMessage;
 		}
 
@@ -46,8 +46,8 @@ namespace MMDB.DataService.Data.Impl
 				MessageDateTimeUtc = DateTime.UtcNow,
 				DataObjectJson = (dataObject!=null) ? dataObject.ToJson() : null
 			};
-			this.DocumentSession.Store(infoMessage);
-			this.DocumentSession.SaveChanges();
+            //this.DocumentSession.Store(infoMessage);
+            this.DocumentSession.SaveChanges();
 			return infoMessage;
 		}
 
@@ -66,8 +66,8 @@ namespace MMDB.DataService.Data.Impl
 				MessageDateTimeUtc = DateTime.UtcNow,
 				DataObjectJson = (dataObject != null) ? dataObject.ToJson() : null
 			};
-			this.DocumentSession.Store(warningMessage);
-			this.DocumentSession.SaveChanges();
+            //this.DocumentSession.Store(warningMessage);
+            this.DocumentSession.SaveChanges();
 			return warningMessage;
 		}
 
