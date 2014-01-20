@@ -78,7 +78,7 @@ namespace MMDB.DataService.Data.Impl
 				object newValue;
 				if(type == typeof(DateTime))
 				{
-					newValue = DateTime.Parse(overrideParams[name]).ToUniversalTime();
+					newValue = DateTime.SpecifyKind(DateTime.Parse(overrideParams[name]), DateTimeKind.Utc);
 				}
 				else 
 				{
