@@ -40,7 +40,7 @@ namespace MMDB.DataService.Data.Impl
 			{
 				returnValue = _documentSession.Query<FtpOutboundData>()
 													.Customize(i => i.WaitForNonStaleResultsAsOfNow(TimeSpan.FromSeconds(120)))
-													.OrderByDescending(i => i.QueuedDateTimeUtc)
+													.OrderBy(i => i.QueuedDateTimeUtc)
 													.FirstOrDefault(i => i.Status == EnumJobStatus.New);
 				if(returnValue != null)
 				{

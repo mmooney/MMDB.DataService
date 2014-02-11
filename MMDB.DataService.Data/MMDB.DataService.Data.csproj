@@ -98,13 +98,17 @@
   <ItemGroup>
     <Compile Include="AssemblyManager.cs" />
     <Compile Include="BaseCustomController.cs" />
+    <Compile Include="Dto\Email\DataServiceMailAddress.cs" />
+    <Compile Include="Dto\Email\EmailJobData.cs" />
     <Compile Include="Dto\Jobs\JobException.cs" />
     <Compile Include="Dto\ListOptions.cs" />
     <Compile Include="Dto\PagedSortedList.cs" />
-    <Compile Include="Impl\DataServiceEmailSender.cs" />
+    <Compile Include="IEmailManager.cs" />
+    <Compile Include="IEmailQueuer.cs" />
+    <Compile Include="Impl\EmailManager.cs" />
+    <Compile Include="Impl\EmailQueuer.cs" />
     <Compile Include="Impl\FtpCommunicator.cs" />
     <Compile Include="IConnectionSettingsManager.cs" />
-    <Compile Include="IDataServiceEmailSender.cs" />
     <Compile Include="IDataServiceLogger.cs" />
     <Compile Include="IExceptionReporter.cs" />
     <Compile Include="IFtpCommunicator.cs" />
@@ -118,6 +122,7 @@
     <Compile Include="Impl\JobImporterExporter.cs" />
     <Compile Include="Impl\JobScheduler.cs" />
     <Compile Include="Impl\LogPurger.cs" />
+    <Compile Include="Jobs\EmailSenderJob.cs" />
     <Compile Include="Jobs\GCFlushJob.cs" />
     <Compile Include="Metadata\IDataObjectManager.cs" />
     <Compile Include="Metadata\IDataServiceViewManager.cs" />

@@ -11,6 +11,8 @@ namespace MMDB.DataService.Data.Dto.Jobs
 		public List<int> ExceptionIdList { get; set; }
         public List<JobException> ExceptionList { get; set; }
 		public EnumJobStatus Status { get; set; }
+        public DateTime QueuedDateTimeUtc { get; set; }
+        public int FailureCount { get; set; }
 
 		public JobData()
 		{

@@ -10,11 +10,14 @@ namespace MMDB.DataService.Data.Jobs
 {
 	public abstract class ItemProcessingJob<ConfigType, JobDataType> : QueueJobBase<ConfigType, JobDataType> where ConfigType:JobConfigurationBase where JobDataType:JobData
 	{
-		protected IEventReporter EventReporter { get; private set; }
+		protected readonly IEventReporter _eventReporter;
+        private readonly bool _singletonJob;
+        private static volatile bool _isRunning = false;
 
-		public ItemProcessingJob(IEventReporter eventReporter) : base()
+		public ItemProcessingJob(IEventReporter eventReporter, bool singletonJob = false) : base()
 		{
-			this.EventReporter = eventReporter;
+			_eventReporter = eventReporter;
+            _singletonJob = singletonJob;
 		}
 
 		public Type GetQueueDataType()
@@ -24,38 +27,64 @@ namespace MMDB.DataService.Data.Jobs
 
 		public override void Run(ConfigType configuration)
 		{
-			this.EventReporter.Trace(this.GetType().Name + ": job run started");
-			bool done = false;
-			int counter = 0;
-			int maxItemsToProcess = this.GetMaxItemsToProcess(configuration);
-			while (!done)
-			{
-				if(counter > maxItemsToProcess)
-				{
-					done = true;
-				}
-				JobDataType jobData = this.GetNextItemToProcess(configuration);
-				if (jobData == null)
-				{
-					done = true;
-					this.EventReporter.Trace(this.GetType().Name + ": job run done");
-				}
-				else
-				{
-					try
-					{
-						this.EventReporter.InfoForObject(this.GetType().Name + ": processing item", jobData);
-						this.ProcessItem(configuration, jobData);
-						this.MarkItemSuccessful(jobData);
-						this.EventReporter.InfoForObject(this.GetType().Name + ": item done", jobData);
-					}
-					catch (Exception err)
-					{
-						this.MarkItemFailed(jobData, err);
-                        this.EventReporter.ExceptionForObject(err, jobData);
-					}
-				}
-			}
+			_eventReporter.Trace(this.GetType().Name + ": job run started");
+            if(_singletonJob)
+            {
+                lock (typeof(EmailSenderJob))
+                {
+                    if (_isRunning)
+                    {
+                        _eventReporter.Info("EmailSenderJob already running");
+                        return;
+                    }
+                    else
+                    {
+                        _isRunning = true;
+                    }
+                }
+            }
+            try 
+            {
+                bool done = false;
+			    int counter = 0;
+			    int maxItemsToProcess = this.GetMaxItemsToProcess(configuration);
+			    while (!done)
+			    {
+				    if(counter > maxItemsToProcess)
+				    {
+					    done = true;
+				    }
+				    JobDataType jobData = this.GetNextItemToProcess(configuration);
+				    if (jobData == null)
+				    {
+					    done = true;
+					    _eventReporter.Trace(this.GetType().Name + ": job run done");
+				    }
+				    else
+				    {
+					    try
+					    {
+						    _eventReporter.InfoForObject(this.GetType().Name + ": processing item", jobData);
+						    this.ProcessItem(configuration, jobData);
+						    this.MarkItemSuccessful(jobData);
+						    _eventReporter.InfoForObject(this.GetType().Name + ": item done", jobData);
+					    }
+					    catch (Exception err)
+					    {
+						    this.MarkItemFailed(jobData, err);
+                            _eventReporter.ExceptionForObject(err, jobData);
+					    }
+				    }
+			    }
+            }
+            catch (Exception err)
+            {
+                _eventReporter.Exception(err);
+            }
+            finally
+            {
+                _isRunning = false;
+            }
 		}
 
 		protected virtual int GetMaxItemsToProcess(ConfigType configuration)

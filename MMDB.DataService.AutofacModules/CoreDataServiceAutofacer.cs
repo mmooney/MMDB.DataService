@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Autofac;
-using MMDB.Data.DataService;
 using MMDB.DataService.Data;
 using MMDB.DataService.Data.DataProvider;
 using MMDB.DataService.Data.Impl;
@@ -26,8 +25,7 @@ namespace MMDB.DataService.AutofacModules
 		{
 			ServiceStartupLogger.LogMessage("Start CoreDataServiceAutofacter.Load");
 			//builder.RegisterType<RavenServerProvider>().As<raven>();
-			builder.RegisterType<DataServiceEmailSender>().As<IDataServiceEmailSender>();
-			builder.RegisterType<EventReporter>().As<IEventReporter>();
+            builder.RegisterType<EventReporter>().As<IEventReporter>();
 			builder.RegisterType<FtpCommunicator>().As<IFtpCommunicator>();
 			builder.RegisterType<FtpJobManager>().As<IFtpJobManager>();
 			builder.RegisterType<LogPurger>().As<ILogPurger>();
@@ -44,11 +42,14 @@ namespace MMDB.DataService.AutofacModules
 			builder.RegisterType<ExceptionReporter>().As<IExceptionReporter>();
 			builder.RegisterType<ConnectionSettingsManager>().As<IConnectionSettingsManager>();
 			builder.RegisterType<ScheduleManager>().As<IScheduleManager>();
+            builder.RegisterType<EmailManager>().As<IEmailManager>();
+            builder.RegisterType<EmailQueuer>().As<IEmailQueuer>();
 
 			builder.RegisterType<FtpDownloadJob>().AsSelf();
 			builder.RegisterType<FtpUploadJob>().AsSelf();
 			builder.RegisterType<LogPurgeJob>().AsSelf();
 			builder.RegisterType<GCFlushJob>().AsSelf();
+            builder.RegisterType<EmailSenderJob>().AsSelf();
 
 			builder.RegisterGeneric(typeof(JobWrapper<,>)).AsSelf();
 

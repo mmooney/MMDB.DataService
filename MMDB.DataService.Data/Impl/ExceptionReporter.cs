@@ -13,15 +13,15 @@ namespace MMDB.DataService.Data.Impl
 {
 	public class ExceptionReporter : IExceptionReporter
 	{
-		private ISettingsManager SettingsManager { get; set; }
-		private IConnectionSettingsManager ConnectionSettingsManager { get; set; }
-		private EmailSender EmailSender { get; set; }
+		private readonly ISettingsManager _settingsManager;
+        private readonly IConnectionSettingsManager _connectionSettingsManager;
+        private readonly IEmailQueuer _emailQueuer;
 
-		public ExceptionReporter(ISettingsManager settingsManager, EmailSender emailSender, IConnectionSettingsManager connectionSettingsManager)
+		public ExceptionReporter(ISettingsManager settingsManager, IEmailQueuer emailQueuer, IConnectionSettingsManager connectionSettingsManager)
 		{
-			this.SettingsManager = settingsManager;
-			this.EmailSender = emailSender;
-			this.ConnectionSettingsManager = connectionSettingsManager;
+			_settingsManager = settingsManager;
+			_emailQueuer = emailQueuer;
+			_connectionSettingsManager = connectionSettingsManager;
 		}
 
 		public void Exception(ServiceMessage exception)
@@ -41,22 +41,8 @@ namespace MMDB.DataService.Data.Impl
 					body.AppendLine(exception.DataObjectJson);
 				}
 
-				var settings = this.SettingsManager.Get<CoreDataServiceSettings>();
-				//var emailSettings = new EmailServerSettings 
-				//{
-				//	Host = settings.Email.Host,
-				//	Port = settings.Email.Port,
-				//	UserName = settings.Email.UserName,
-				//	Password = settings.Email.Password
-				//};
-				var emailSettings = this.ConnectionSettingsManager.Load<EmailConnectionSettings>(settings.EmailSettingSource, settings.EmailSettingKey);
-				var emailServerSettings = new EmailServerSettings
-				{
-					Host = emailSettings.Host,
-					Password = emailSettings.Password,
-					Port = emailSettings.Port,
-					UserName = emailSettings.UserName
-				};
+				var settings = _settingsManager.Get<CoreDataServiceSettings>();
+
 				var from = new MailAddress(settings.ExceptionNotificationFromEmailAddress);
 				var toList = new List<MailAddress>();
 				if(settings.ExceptionNotificationFromEmailAddress != null)
@@ -67,15 +53,7 @@ namespace MMDB.DataService.Data.Impl
 						toList.Add(to);
 					}
 				}
-				string overrideEmailAddress = ConfigurationManager.AppSettings["OverrideAllEmailAddress"];
-				if(!string.IsNullOrWhiteSpace(overrideEmailAddress))
-				{
-					toList = new List<MailAddress>()
-					{
-						new MailAddress(overrideEmailAddress)
-					};
-				}
-				this.EmailSender.SendEmail(emailServerSettings, subject, body.ToString(), toList, from, null);
+                _emailQueuer.SendEmail(settings.EmailSettingSource, settings.EmailSettingKey, subject, body.ToString(), toList, from, null);
 			}
 			catch (Exception err)
 			{
