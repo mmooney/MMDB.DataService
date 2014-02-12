@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{6324FAF8-42AF-4C47-AE53-DD41B5F7D87A}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
@@ -28,8 +30,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMDB.DataService.Deployment", "MMDB.DataService.Deployment\MMDB.DataService.Deployment.csproj", "{9B6D802F-9962-4617-8404-00AAF64DFCF0}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMDB.DataService.NinjectModules", "MMDB.DataService.NinjectModules\MMDB.DataService.NinjectModules.csproj", "{ED804B84-257E-4E4A-8906-CC280239C9D8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MMDB.DataService.AutofacModules", "MMDB.DataService.AutofacModules\MMDB.DataService.AutofacModules.csproj", "{E6F7B3E4-0FD9-4415-82AE-29BE582E5101}"
 EndProject
@@ -103,16 +103,6 @@ Global
 		{9B6D802F-9962-4617-8404-00AAF64DFCF0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{9B6D802F-9962-4617-8404-00AAF64DFCF0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{9B6D802F-9962-4617-8404-00AAF64DFCF0}.Release|x86.ActiveCfg = Release|Any CPU
-		{ED804B84-257E-4E4A-8906-CC280239C9D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ED804B84-257E-4E4A-8906-CC280239C9D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ED804B84-257E-4E4A-8906-CC280239C9D8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{ED804B84-257E-4E4A-8906-CC280239C9D8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{ED804B84-257E-4E4A-8906-CC280239C9D8}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{ED804B84-257E-4E4A-8906-CC280239C9D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ED804B84-257E-4E4A-8906-CC280239C9D8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ED804B84-257E-4E4A-8906-CC280239C9D8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{ED804B84-257E-4E4A-8906-CC280239C9D8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{ED804B84-257E-4E4A-8906-CC280239C9D8}.Release|x86.ActiveCfg = Release|Any CPU
 		{E6F7B3E4-0FD9-4415-82AE-29BE582E5101}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E6F7B3E4-0FD9-4415-82AE-29BE582E5101}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6F7B3E4-0FD9-4415-82AE-29BE582E5101}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
