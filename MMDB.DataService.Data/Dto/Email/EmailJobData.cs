@@ -17,6 +17,7 @@ namespace MMDB.DataService.Data.Dto.Email
         public List<DataServiceMailAddress> ToAddressList { get; set; }
         public DataServiceMailAddress FromAddress { get; set; }
         public List<EmailAttachmentData> Attachments { get; set; }
+        public int FailureCount { get; set; }
 
         public EmailJobData()
         {
