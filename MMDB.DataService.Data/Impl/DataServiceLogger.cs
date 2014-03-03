@@ -29,12 +29,26 @@ namespace MMDB.DataService.Data.Impl
 				Message = message,
 				Detail = message,
 				MessageDateTimeUtc = DateTime.UtcNow,
-				DataObjectJson = (dataObject!=null) ? dataObject.ToJson() : null
+				DataObjectJson = GetDataObjectJson(dataObject)
 			};
             //this.DocumentSession.Store(traceMessage);
             this.DocumentSession.SaveChanges();
 			return traceMessage;
 		}
+
+        private static string GetDataObjectJson(object dataObject)
+        {
+            string dataObjectJson = null;
+            try
+            {
+                dataObjectJson = (dataObject != null) ? dataObject.ToJson() : null;
+            }
+            catch (Exception err)
+            {
+                dataObjectJson = "Error Generating JSON: " + err.Message;
+            }
+            return dataObjectJson;
+        }
 
 		public virtual ServiceMessage InfoForObject(string message, object dataObject)
 		{
@@ -44,7 +58,7 @@ namespace MMDB.DataService.Data.Impl
 				Message = message,
 				Detail = message,
 				MessageDateTimeUtc = DateTime.UtcNow,
-				DataObjectJson = (dataObject!=null) ? dataObject.ToJson() : null
+				DataObjectJson = GetDataObjectJson(dataObject)
 			};
             //this.DocumentSession.Store(infoMessage);
             this.DocumentSession.SaveChanges();
@@ -64,7 +78,7 @@ namespace MMDB.DataService.Data.Impl
 				Message = message,
 				Detail = message,
 				MessageDateTimeUtc = DateTime.UtcNow,
-				DataObjectJson = (dataObject != null) ? dataObject.ToJson() : null
+				DataObjectJson = GetDataObjectJson(dataObject)
 			};
             //this.DocumentSession.Store(warningMessage);
             this.DocumentSession.SaveChanges();
@@ -79,7 +93,7 @@ namespace MMDB.DataService.Data.Impl
 				Message = err.Message,
 				Detail = err.ToString(),
 				MessageDateTimeUtc = DateTime.UtcNow,
-				DataObjectJson = (dataObject != null) ? dataObject.ToJson(true) : null
+                DataObjectJson = GetDataObjectJson(dataObject)
 			};
 			this.DocumentSession.Store(exceptionMessage);
 			this.DocumentSession.SaveChanges();
