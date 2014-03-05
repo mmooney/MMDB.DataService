@@ -103,6 +103,12 @@
     <Compile Include="Dto\Jobs\JobException.cs" />
     <Compile Include="Dto\ListOptions.cs" />
     <Compile Include="Dto\PagedSortedList.cs" />
+    <Compile Include="HealthCheck\HealthCheckImpl\HealthChecker.cs" />
+    <Compile Include="HealthCheck\IHealthChecker.cs" />
+    <Compile Include="HealthCheck\QueueJobDetailsResult.cs" />
+    <Compile Include="HealthCheck\QueueJobDetailsResultItem.cs" />
+    <Compile Include="HealthCheck\QueueJobSummaryResult.cs" />
+    <Compile Include="HealthCheck\QueueJobSummaryResultItem.cs" />
     <Compile Include="IEmailManager.cs" />
     <Compile Include="IEmailQueuer.cs" />
     <Compile Include="Impl\EmailManager.cs" />

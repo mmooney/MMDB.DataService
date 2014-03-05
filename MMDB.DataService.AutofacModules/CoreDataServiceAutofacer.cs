@@ -16,6 +16,8 @@ using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
 using Raven.Client;
+using MMDB.DataService.Data.HealthCheck;
+using MMDB.DataService.Data.HealthCheck.HealthCheckImpl;
 
 namespace MMDB.DataService.AutofacModules
 {
@@ -44,6 +46,7 @@ namespace MMDB.DataService.AutofacModules
 			builder.RegisterType<ScheduleManager>().As<IScheduleManager>();
             builder.RegisterType<EmailManager>().As<IEmailManager>();
             builder.RegisterType<EmailQueuer>().As<IEmailQueuer>();
+            builder.RegisterType<HealthChecker>().As<IHealthChecker>();
 
 			builder.RegisterType<FtpDownloadJob>().AsSelf();
 			builder.RegisterType<FtpUploadJob>().AsSelf();
