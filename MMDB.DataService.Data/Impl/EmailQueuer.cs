@@ -18,6 +18,13 @@ namespace MMDB.DataService.Data.Impl
             _documentSession = documentSession;
         }
 
+        public EmailJobData SendEmail(EnumSettingSource settingsSource, string settingsKey, string subject, string body, List<string> toAddressList, string fromAddress, params EmailAttachmentData[] attachments)
+        {
+            var toList = toAddressList.Select(i=>new MailAddress(i)).ToList();
+            var from = new MailAddress(fromAddress);
+            return SendEmail(settingsSource, settingsKey, subject, body, toList, from, attachments);
+        }
+
         public EmailJobData SendEmail(EnumSettingSource settingsSource, string settingsKey, string subject, string body, IEnumerable<MailAddress> toAddressList, MailAddress fromAddress, params EmailAttachmentData[] attachments)
         {
             var jobData = new EmailJobData
@@ -62,5 +69,6 @@ namespace MMDB.DataService.Data.Impl
             var from = new MailAddress(fromAddress);
             return this.SendRazorEmail(settingsSource, settingsKey, subject, model, razorView, toList, from, attachments);
         }
+
     }
 }
