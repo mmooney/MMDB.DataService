@@ -24,6 +24,7 @@ using dropkick.Configuration.Dsl.RoundhousE;
 using dropkick.Configuration.Dsl.Security;
 using dropkick.Configuration.Dsl.WinService;
 using dropkick.Wmi;
+using System;
 
 namespace MMDB.DataService.Deployment
 {
@@ -105,10 +106,16 @@ namespace MMDB.DataService.Deployment
 									   //    //o.ForPath(Path.Combine(settings.TargetServiceDirectory,"logs"), fs => fs.GrantReadWrite(settings.ServiceUserName));
 									   });
                                        s.WinService(serviceName).Delete();
-									   s.WinService(serviceName).Create().WithCredentials(settings.ServiceUserName, settings.ServiceUserPassword).WithDisplayName("{{ServiceName}}").WithServicePath(@"{{TargetServiceDirectory}}\MMDB.DataService.WindowsService.exe").
-                                           WithStartMode(settings.ServiceStartMode)
-                                           //.AddDependency("MSMQ")
-                                           ;
+									   var service = s.WinService(serviceName).Create().WithCredentials(settings.ServiceUserName, settings.ServiceUserPassword).WithDisplayName("{{ServiceName}}").WithServicePath(@"{{TargetServiceDirectory}}\MMDB.DataService.WindowsService.exe").
+                                           WithStartMode(settings.ServiceStartMode);
+                                        if(!string.IsNullOrEmpty(settings.ServiceDependencies))
+                                        {
+                                            var list = settings.ServiceDependencies.Split(new char[] {';'}, StringSplitOptions.RemoveEmptyEntries);
+                                            foreach(var item in list)
+                                            {
+                                                service = service.AddDependency(item);
+                                            }
+                                        }
 
 									   if (settings.ServiceStartMode != ServiceStartMode.Disabled && settings.ServiceStartMode != ServiceStartMode.Manual)
 									   {

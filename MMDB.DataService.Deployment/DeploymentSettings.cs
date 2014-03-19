@@ -33,6 +33,7 @@ namespace MMDB.DataService.Deployment
 		public ServiceStartMode ServiceStartMode { get; set; }
 		public string ServiceUserName { get; set; }
 		public string ServiceUserPassword { get; set; }
+        public string ServiceDependencies { get; set; }
 
 		#endregion
 	}
