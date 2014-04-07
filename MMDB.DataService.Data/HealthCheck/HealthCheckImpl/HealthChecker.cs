@@ -24,7 +24,7 @@ namespace MMDB.DataService.Data.HealthCheck.HealthCheckImpl
                 .SelectMany(s => s.GetTypes())
                 .Where(p => baseType.IsAssignableFrom(p)
                         && p.IsClass).ToList();
-            DateTime tenMinuetsAgo = DateTime.UtcNow.AddMinutes(-10);
+            DateTime oneHourAgo = DateTime.UtcNow.AddMinutes(-60);
             foreach (var type in typeList)
             {
                 bool any = _documentSession.Advanced.LuceneQuery<object>()
@@ -49,7 +49,7 @@ namespace MMDB.DataService.Data.HealthCheck.HealthCheckImpl
                     item.SuspectInProcessCount = _documentSession.Advanced.LuceneQuery<object>()
                                 .WhereEquals("@metadata.Raven-Entity-Name", _documentSession.Advanced.DocumentStore.Conventions.GetTypeTagName(type))
                                 .AndAlso().WhereEquals("Status", EnumJobStatus.InProcess)
-                                .AndAlso().WhereLessThan("QueuedDateTimeUtc", tenMinuetsAgo)
+                                .AndAlso().WhereLessThan("QueuedDateTimeUtc", oneHourAgo)
                                 .WaitForNonStaleResultsAsOfNow(TimeSpan.FromSeconds(120))
                                 .QueryResult.TotalResults;
                     returnValue.Items.Add(item);
