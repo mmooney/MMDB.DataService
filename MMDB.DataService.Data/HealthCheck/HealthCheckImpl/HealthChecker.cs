@@ -49,7 +49,7 @@ namespace MMDB.DataService.Data.HealthCheck.HealthCheckImpl
                     item.SuspectInProcessCount = _documentSession.Advanced.LuceneQuery<object>()
                                 .WhereEquals("@metadata.Raven-Entity-Name", _documentSession.Advanced.DocumentStore.Conventions.GetTypeTagName(type))
                                 .AndAlso().WhereEquals("Status", EnumJobStatus.InProcess)
-                                .AndAlso().WhereLessThan("QueuedDateTimeUtc", oneHourAgo)
+                                .AndAlso().WhereGreaterThan("QueuedDateTimeUtc", oneHourAgo)
                                 .WaitForNonStaleResultsAsOfNow(TimeSpan.FromSeconds(120))
                                 .QueryResult.TotalResults;
                     returnValue.Items.Add(item);
