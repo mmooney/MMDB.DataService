@@ -77,7 +77,12 @@ namespace MMDB.DataService.Data.Impl
             }
             try
             {
-                _emailSender.SendEmail(emailServerSettings, jobItem.Subject, jobItem.Body, toAddressList, jobItem.FromAddress.ToMailAddress(), jobItem.Attachments.ToArray());
+                EmailAttachmentData[] attachments = null;
+                if(jobItem.Attachments != null)
+                {
+                    attachments = jobItem.Attachments.ToArray();
+                }
+                _emailSender.SendEmail(emailServerSettings, jobItem.Subject, jobItem.Body, toAddressList, jobItem.FromAddress.ToMailAddress(), attachments);
             }
             catch (RazorEngine.Templating.TemplateCompilationException ex)
             {

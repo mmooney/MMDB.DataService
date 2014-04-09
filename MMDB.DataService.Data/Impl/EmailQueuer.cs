@@ -35,7 +35,7 @@ namespace MMDB.DataService.Data.Impl
                 Body = body,
                 FromAddress = new DataServiceMailAddress(fromAddress),
                 ToAddressList = DataServiceMailAddress.GetList(toAddressList),
-                Attachments = attachments.ToList(),
+                Attachments = (attachments!=null) ? attachments.ToList() : null,
                 Status = EnumJobStatus.New,
                 QueuedDateTimeUtc = DateTime.UtcNow,
                 FailureCount = 0
