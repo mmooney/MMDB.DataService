@@ -290,7 +290,9 @@ namespace MMDB.DataService.Data
 		{
 			foreach(var newJob in list)
 			{
-				var existingJob = this.DocumentSession.Query<JobDefinition>().Customize(i=>i.WaitForNonStaleResultsAsOfNow()).FirstOrDefault(i=>i.JobGuid == newJob.JobGuid);
+				var existingJob = this.DocumentSession.Query<JobDefinition>()
+                                        .Customize(i=>i.WaitForNonStaleResultsAsOfNow(TimeSpan.FromMinutes(2)))
+                                        .FirstOrDefault(i=>i.JobGuid == newJob.JobGuid);
 				if(existingJob == null)
 				{
 					newJob.Id = 0;
