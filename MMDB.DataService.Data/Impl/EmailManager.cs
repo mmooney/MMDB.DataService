@@ -75,6 +75,7 @@ namespace MMDB.DataService.Data.Impl
                     new MailAddress(overrideEmailAddress)
                 };
             }
+            string subject = FilterSubject(jobItem.Subject);
             try
             {
                 EmailAttachmentData[] attachments = null;
@@ -82,7 +83,7 @@ namespace MMDB.DataService.Data.Impl
                 {
                     attachments = jobItem.Attachments.ToArray();
                 }
-                _emailSender.SendEmail(emailServerSettings, jobItem.Subject, jobItem.Body, toAddressList, jobItem.FromAddress.ToMailAddress(), attachments);
+                _emailSender.SendEmail(emailServerSettings, subject, jobItem.Body, toAddressList, jobItem.FromAddress.ToMailAddress(), attachments);
             }
             catch (RazorEngine.Templating.TemplateCompilationException ex)
             {
@@ -93,6 +94,18 @@ namespace MMDB.DataService.Data.Impl
                     sb.AppendLine("-" + item.Line.ToString() + ": " + item.ErrorText);
                 }
                 throw new Exception(sb.ToString(), ex);
+            }
+        }
+
+        private string FilterSubject(string value)
+        {
+            if(string.IsNullOrEmpty(value))
+            {
+                return value;
+            }
+            else 
+            {
+                return value.Replace("\r\n", " ").Replace("\r"," ").Replace("\n"," ");
             }
         }
 
